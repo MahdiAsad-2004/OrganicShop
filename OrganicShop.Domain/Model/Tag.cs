@@ -9,8 +9,10 @@ namespace OrganicShop.Domain.Model
 {
     public class Tag : BaseEntity<int>
     {
-        public string Name { get; set; }
-        public ICollection<Product> Products { get; set; }
+        public string Title { get; set; }
+
+
+        public ICollection<Product>? Products { get; set; }
 
     }
 }

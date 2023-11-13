@@ -15,8 +15,11 @@ namespace OrganicShop.Domain.Model
         public int Priority { get; set; }
         public CategoryType Type { get; set; }
         public int? CategoryId { get; set; }
-        public ICollection<Category> Subs { get; set; }
-        public ICollection<Product> Products { get; set; }
+
+
+        
+        public ICollection<Category>? Subs { get; set; }
+        public ICollection<Product>? Products { get; set; }
 
     }
 }

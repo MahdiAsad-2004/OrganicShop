@@ -14,8 +14,11 @@ namespace OrganicShop.Domain.Model
         public string PostCode { get; set; }
         public string Phone { get; set; }
         public long UserId { get; set; }
+
+
+
         public User User { get; set; }
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Order>? Orders { get; set; }
 
 
 

@@ -16,10 +16,13 @@ namespace OrganicShop.Domain.Model
         public long AddressId { get; set; }
         public DateTime DeliveryTime { get; set; }
         public DeliveryType DeliveryType { get; set; }
-        public OrderStatus Status { get; set; }
+
+
+
         public Address Address { get; set; }
         public User Receiver { get; set; }
-        public ICollection<OrderDescription> Descriptions { get; set; }
-        public ICollection<CoProduct> Products { get; set; }
+        public ICollection<OrderStatus>? OrderStatuses { get; set; }
+        public ICollection<OrderTrack>? OrderTracks { get; set; }
+        public ICollection<CoProduct>? CoProducts { get; set; }
     }
 }

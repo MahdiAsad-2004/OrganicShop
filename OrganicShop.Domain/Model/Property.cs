@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Model
 {
-    public class Property : BaseEntity<long>
+    public class Property : BaseEntity<int>
     {
         public string Title { get; set; }
         public string Value { get; set; }
-        public ICollection<Product> Products { get; set; }
+
+
+
+        public ICollection<Product>? Products { get; set; }
 
 
     }

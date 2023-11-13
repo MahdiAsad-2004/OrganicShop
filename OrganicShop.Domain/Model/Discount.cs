@@ -13,8 +13,10 @@ namespace OrganicShop.Domain.Model
         public int Count { get; set; }
         public int? FixedValue { get; set; }
         public int? Percent { get; set; }
-        public ICollection<Product> Products { get; set; }
-        public ICollection<User> Users { get; set; }
+
+
+        public ICollection<Product>? Products { get; set; }
+        public ICollection<User>? Users { get; set; }
 
     }
 }
