@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+
+<html lang="fa" dir="rtl">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+          content="Fastkart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
+    <meta name="keywords"
+          content="admin template, Fastkart admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="author" content="pixelstrap">
+    <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+    <title>OrganicShop Management - مدیریت ارگانیک شاپ</title>
+
+    <partial name="_AdminStyles" />
+
+</head>
+<body>
+
+    <!-- tap on top start -->
+    <div class="tap-top">
+        <span class="lnr lnr-chevron-up"></span>
+    </div>
+    <!-- tap on tap end -->
+
+    <div class="page-wrapper compact-wrapper" id="pageWrapper">
+
+        @await Component.InvokeAsync("AdminHeader")
+
+        <div class="page-body-wrapper">
+
+            @await Component.InvokeAsync("AdminSideBar")
+
+            <!-- index body start -->
+            <div class="page-body">
+                @RenderBody()
+            </div>
+            <!-- index body end -->
+
+        </div>
+    </div>
+
+    <partial name="_AdminScripts" />
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -17,7 +17,7 @@ namespace OrganicShop.DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "7.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -37,55 +37,13 @@ namespace OrganicShop.DAL.Migrations
                     b.ToTable("CategoryProduct");
                 });
 
-            modelBuilder.Entity("DiscountProduct", b =>
-                {
-                    b.Property<int>("DiscountId")
-                        .HasColumnType("int");
-
-                    b.Property<long>("ProductsId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("DiscountId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("DiscountProduct");
-                });
-
-            modelBuilder.Entity("DiscountUser", b =>
-                {
-                    b.Property<int>("DiscountsId")
-                        .HasColumnType("int");
-
-                    b.Property<long>("UsersId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("DiscountsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("DiscountUser");
-                });
-
-            modelBuilder.Entity("OrganicShop.Domain.Model.Address", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Address", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -113,7 +71,7 @@ namespace OrganicShop.DAL.Migrations
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Article", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Article", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -121,24 +79,12 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.ToTable("Articles");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.BankCard", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.BankCard", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -146,23 +92,11 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Cvv2")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("ExpireDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Number")
@@ -183,7 +117,31 @@ namespace OrganicShop.DAL.Migrations
                     b.ToTable("BankCards");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Category", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Basket", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TotalPrice")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Baskets");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,43 +149,28 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EnName")
+                    b.Property<string>("EnTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.CoProduct", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.CoProduct", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -235,61 +178,45 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("BuyPrice")
-                        .HasColumnType("int");
+                    b.Property<long?>("BasketId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
+                    b.Property<bool>("IsOrdered")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
 
                     b.Property<long?>("OrderId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<long>("ProductId1")
+                    b.Property<long>("ProductId")
                         .HasColumnType("bigint");
+
+                    b.Property<int?>("UpdatedPrice")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BasketId");
+
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId1");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CoProducts");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Comment", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Comment", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("Rate")
                         .HasColumnType("int");
@@ -311,16 +238,18 @@ namespace OrganicShop.DAL.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.ContactUs", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.ContactUs", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
 
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email1")
                         .IsRequired()
@@ -328,12 +257,6 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Property<string>("Email2")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Office1")
                         .IsRequired()
@@ -368,9 +291,21 @@ namespace OrganicShop.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ContactUs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (byte)1,
+                            Address = "Address",
+                            Description = "Descriptions",
+                            Email1 = "OrganicShop@gmail.com",
+                            Office1 = "Tehran",
+                            Phone1 = "02134658899",
+                            PhoneNumber1 = "09121234455"
+                        });
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Discount", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Discount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -379,26 +314,16 @@ namespace OrganicShop.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Count")
+                    b.Property<int?>("Count")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int?>("FixedValue")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDelete")
+                    b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
 
                     b.Property<int?>("Percent")
                         .HasColumnType("int");
@@ -408,28 +333,16 @@ namespace OrganicShop.DAL.Migrations
                     b.ToTable("Discounts");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Faq", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Faq", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
 
-                    b.Property<string>("Answer")
+                    b.Property<string>("AnswerText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Question")
+                    b.Property<string>("QuestionText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -438,7 +351,7 @@ namespace OrganicShop.DAL.Migrations
                     b.ToTable("Faqs");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Image", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Operation", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -446,43 +359,33 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreaeteDate")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("EntityNewData")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                    b.Property<string>("EntityOldData")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("EntityTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("ProductId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SizeMB")
-                        .HasColumnType("real");
-
-                    b.Property<long?>("UserId")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("UserId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
-
-                    b.ToTable("Images");
+                    b.ToTable("Operations");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Order", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Order", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -490,31 +393,25 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("AddressId")
+                    b.Property<long>("AddressId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DeliveryTime")
+                    b.Property<DateTime>("DeliveryDatePredicate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DeliveryType")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
 
                     b.Property<long>("ReceiverId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("TotalPrice")
+                    b.Property<int>("TotalPrice")
                         .HasColumnType("int");
 
                     b.Property<string>("TrackingCode")
@@ -530,7 +427,50 @@ namespace OrganicShop.DAL.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.OrderStatus", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Permission", b =>
+                {
+                    b.Property<byte>("Id")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("EnTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte?>("ParentId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Permission");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (byte)1,
+                            EnTitle = "Main Admin",
+                            Title = "مدیر سایت"
+                        },
+                        new
+                        {
+                            Id = (byte)2,
+                            EnTitle = "Users Admin",
+                            Title = "مدیریت کاربران"
+                        },
+                        new
+                        {
+                            Id = (byte)3,
+                            EnTitle = "Products Admin",
+                            Title = "مدیریت محصولات"
+                        });
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Picture", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -538,38 +478,187 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DoneDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDone")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("OrderId")
+                    b.Property<long?>("ProductId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Status")
+                    b.Property<float>("SizeMB")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Product", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Barcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MainImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ShortDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SoldCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdatedPrice")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderStatuses");
+                    b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.OrderTrack", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Property", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsBase")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Properties");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountProducts", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DiscountId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DiscountId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("DiscountProducts");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountUsers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DiscountId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DiscountId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("DiscountUsers");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.PermissionUsers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte>("PermissionId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PermissionUsers");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.TrackingDescription", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -577,19 +666,7 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Location")
@@ -607,10 +684,10 @@ namespace OrganicShop.DAL.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderTracks");
+                    b.ToTable("TrackingDescriptions");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Product", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.TrackingStatus", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -618,131 +695,39 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreaeteDate")
+                    b.Property<DateTime?>("DoneDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Price")
+                    b.Property<int>("DoneStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("SoldCount")
-                        .HasColumnType("int");
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("Stock")
+                    b.Property<int>("Step")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("TrackingStatuses");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Property", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Properties");
-                });
-
-            modelBuilder.Entity("OrganicShop.Domain.Model.Tag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
-                });
-
-            modelBuilder.Entity("OrganicShop.Domain.Model.User", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreaeteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DelteDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
@@ -753,28 +738,35 @@ namespace OrganicShop.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
+                    b.Property<string>("ProfileImage")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
 
-            modelBuilder.Entity("ProductProperty", b =>
-                {
-                    b.Property<long>("ProductsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("PropertiesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsId", "PropertiesId");
-
-                    b.HasIndex("PropertiesId");
-
-                    b.ToTable("ProductProperty");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Email = "mas1379as@gmail.com",
+                            Name = "Mahdi Asadi",
+                            Password = "123456",
+                            PhoneNumber = "09369753041",
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Email = "TestEmail@gmail.com",
+                            Name = "AmirAli",
+                            Password = "1234",
+                            PhoneNumber = "09331234566",
+                            Role = 2
+                        });
                 });
 
             modelBuilder.Entity("ProductTag", b =>
@@ -794,97 +786,597 @@ namespace OrganicShop.DAL.Migrations
 
             modelBuilder.Entity("CategoryProduct", b =>
                 {
-                    b.HasOne("OrganicShop.Domain.Model.Category", null)
+                    b.HasOne("OrganicShop.Domain.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OrganicShop.Domain.Model.Product", null)
+                    b.HasOne("OrganicShop.Domain.Entities.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DiscountProduct", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Address", b =>
                 {
-                    b.HasOne("OrganicShop.Domain.Model.Discount", null)
-                        .WithMany()
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OrganicShop.Domain.Model.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DiscountUser", b =>
-                {
-                    b.HasOne("OrganicShop.Domain.Model.Discount", null)
-                        .WithMany()
-                        .HasForeignKey("DiscountsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OrganicShop.Domain.Model.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("OrganicShop.Domain.Model.Address", b =>
-                {
-                    b.HasOne("OrganicShop.Domain.Model.User", "User")
+                    b.HasOne("OrganicShop.Domain.Entities.User", "User")
                         .WithMany("Addresses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("AddressId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("AddressId");
+
+                            b1.ToTable("Addresses");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AddressId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("AddressId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("AddressId");
+
+                            b1.ToTable("Addresses");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AddressId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.BankCard", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Article", b =>
                 {
-                    b.HasOne("OrganicShop.Domain.Model.User", "User")
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<int>("ArticleId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("ArticleId");
+
+                            b1.ToTable("Articles");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ArticleId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<int>("ArticleId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("ArticleId");
+
+                            b1.ToTable("Articles");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ArticleId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.BankCard", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.User", "User")
                         .WithMany("BankCards")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("BankCardId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("BankCardId");
+
+                            b1.ToTable("BankCards");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BankCardId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("BankCardId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("BankCardId");
+
+                            b1.ToTable("BankCards");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BankCardId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Category", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Basket", b =>
                 {
-                    b.HasOne("OrganicShop.Domain.Model.Category", null)
-                        .WithMany("Subs")
-                        .HasForeignKey("CategoryId");
-                });
-
-            modelBuilder.Entity("OrganicShop.Domain.Model.CoProduct", b =>
-                {
-                    b.HasOne("OrganicShop.Domain.Model.Order", null)
-                        .WithMany("CoProducts")
-                        .HasForeignKey("OrderId");
-
-                    b.HasOne("OrganicShop.Domain.Model.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId1")
+                    b.HasOne("OrganicShop.Domain.Entities.User", "User")
+                        .WithMany("Baskets")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("BasketId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("BasketId");
+
+                            b1.ToTable("Baskets");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BasketId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("BasketId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("BasketId");
+
+                            b1.ToTable("Baskets");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BasketId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Comment", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Category", b =>
                 {
-                    b.HasOne("OrganicShop.Domain.Model.User", "User")
-                        .WithMany()
+                    b.HasOne("OrganicShop.Domain.Entities.Category", "Parent")
+                        .WithMany("Subs")
+                        .HasForeignKey("ParentId");
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<int>("CategoryId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("CategoryId");
+
+                            b1.ToTable("Categories");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CategoryId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<int>("CategoryId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("CategoryId");
+
+                            b1.ToTable("Categories");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CategoryId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.CoProduct", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.Basket", "Basket")
+                        .WithMany("CoProducts")
+                        .HasForeignKey("BasketId");
+
+                    b.HasOne("OrganicShop.Domain.Entities.Order", "Order")
+                        .WithMany("CoProducts")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("OrganicShop.Domain.Entities.Product", "Product")
+                        .WithMany("CoProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("CoProductId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("CoProductId");
+
+                            b1.ToTable("CoProducts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CoProductId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("CoProductId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("CoProductId");
+
+                            b1.ToTable("CoProducts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CoProductId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("Basket");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("CommentId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("CommentId");
+
+                            b1.ToTable("Comments");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CommentId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("CommentId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("CommentId");
+
+                            b1.ToTable("Comments");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CommentId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.ContactUs", b =>
+                {
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<byte>("ContactUsId")
+                                .HasColumnType("tinyint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("ContactUsId");
+
+                            b1.ToTable("ContactUs");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ContactUsId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    ContactUsId = (byte)1,
+                                    CreateDate = new DateTime(2024, 1, 28, 2, 9, 8, 195, DateTimeKind.Local).AddTicks(7856),
+                                    IsActive = true,
+                                    LastModified = new DateTime(2024, 1, 28, 2, 9, 8, 195, DateTimeKind.Local).AddTicks(7979)
+                                });
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<byte>("ContactUsId")
+                                .HasColumnType("tinyint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("ContactUsId");
+
+                            b1.ToTable("ContactUs");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ContactUsId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    ContactUsId = (byte)1,
+                                    IsDelete = false
+                                });
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Discount", b =>
+                {
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<int>("DiscountId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("DiscountId");
+
+                            b1.ToTable("Discounts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DiscountId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<int>("DiscountId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("DiscountId");
+
+                            b1.ToTable("Discounts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DiscountId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Faq", b =>
+                {
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<byte>("FaqId")
+                                .HasColumnType("tinyint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("FaqId");
+
+                            b1.ToTable("Faqs");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FaqId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<byte>("FaqId")
+                                .HasColumnType("tinyint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("FaqId");
+
+                            b1.ToTable("Faqs");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FaqId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Operation", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.User", "User")
+                        .WithMany("Operations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -892,121 +1384,853 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Image", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("OrganicShop.Domain.Model.Product", "Product")
-                        .WithMany("Images")
+                    b.HasOne("OrganicShop.Domain.Entities.Address", "Address")
+                        .WithMany("Orders")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrganicShop.Domain.Entities.User", "Receiver")
+                        .WithMany("Orders")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("OrderId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("OrderId");
+
+                            b1.ToTable("Orders");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OrderId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("OrderId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("OrderId");
+
+                            b1.ToTable("Orders");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OrderId");
+                        });
+
+                    b.Navigation("Address");
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Permission", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.Permission", "Parent")
+                        .WithMany("Subs")
+                        .HasForeignKey("ParentId");
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<byte>("PermissionId")
+                                .HasColumnType("tinyint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("PermissionId");
+
+                            b1.ToTable("Permission");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PermissionId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    PermissionId = (byte)1,
+                                    CreateDate = new DateTime(2024, 1, 28, 2, 9, 8, 201, DateTimeKind.Local).AddTicks(1016),
+                                    IsActive = true,
+                                    LastModified = new DateTime(2024, 1, 28, 2, 9, 8, 201, DateTimeKind.Local).AddTicks(1059)
+                                },
+                                new
+                                {
+                                    PermissionId = (byte)2,
+                                    CreateDate = new DateTime(2024, 1, 28, 2, 9, 8, 201, DateTimeKind.Local).AddTicks(1342),
+                                    IsActive = true,
+                                    LastModified = new DateTime(2024, 1, 28, 2, 9, 8, 201, DateTimeKind.Local).AddTicks(1352)
+                                },
+                                new
+                                {
+                                    PermissionId = (byte)3,
+                                    CreateDate = new DateTime(2024, 1, 28, 2, 9, 8, 201, DateTimeKind.Local).AddTicks(1562),
+                                    IsActive = true,
+                                    LastModified = new DateTime(2024, 1, 28, 2, 9, 8, 201, DateTimeKind.Local).AddTicks(1569)
+                                });
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<byte>("PermissionId")
+                                .HasColumnType("tinyint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("PermissionId");
+
+                            b1.ToTable("Permission");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PermissionId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    PermissionId = (byte)1,
+                                    IsDelete = true
+                                },
+                                new
+                                {
+                                    PermissionId = (byte)2,
+                                    IsDelete = true
+                                },
+                                new
+                                {
+                                    PermissionId = (byte)3,
+                                    IsDelete = true
+                                });
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Picture", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.Product", "Product")
+                        .WithMany("Pictures")
                         .HasForeignKey("ProductId");
 
-                    b.HasOne("OrganicShop.Domain.Model.User", "User")
-                        .WithOne("ProfileImage")
-                        .HasForeignKey("OrganicShop.Domain.Model.Image", "UserId");
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("PictureId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("PictureId");
+
+                            b1.ToTable("ProductImages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PictureId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("PictureId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("PictureId");
+
+                            b1.ToTable("ProductImages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PictureId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Product", b =>
+                {
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("ProductId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("ProductId");
+
+                            b1.ToTable("Products");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("ProductId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("ProductId");
+
+                            b1.ToTable("Products");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Property", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.Product", "Product")
+                        .WithMany("Properties")
+                        .HasForeignKey("ProductId");
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<int>("PropertyId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("PropertyId");
+
+                            b1.ToTable("Properties");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PropertyId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<int>("PropertyId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("PropertyId");
+
+                            b1.ToTable("Properties");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PropertyId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountProducts", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.Discount", "Discount")
+                        .WithMany("DiscountProducts")
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrganicShop.Domain.Entities.Product", "Product")
+                        .WithMany("DiscountProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<int>("DiscountProductsId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("DiscountProductsId");
+
+                            b1.ToTable("DiscountProducts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DiscountProductsId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<int>("DiscountProductsId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("DiscountProductsId");
+
+                            b1.ToTable("DiscountProducts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DiscountProductsId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("Discount");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountUsers", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.Discount", "Discount")
+                        .WithMany("DiscountUsers")
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrganicShop.Domain.Entities.User", "User")
+                        .WithMany("DiscountUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<int>("DiscountUsersId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("DiscountUsersId");
+
+                            b1.ToTable("DiscountUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DiscountUsersId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<int>("DiscountUsersId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("DiscountUsersId");
+
+                            b1.ToTable("DiscountUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DiscountUsersId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("Discount");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Order", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.PermissionUsers", b =>
                 {
-                    b.HasOne("OrganicShop.Domain.Model.Address", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("AddressId");
-
-                    b.HasOne("OrganicShop.Domain.Model.User", "Receiver")
-                        .WithMany("Orders")
-                        .HasForeignKey("ReceiverId")
+                    b.HasOne("OrganicShop.Domain.Entities.Permission", "Permission")
+                        .WithMany("PermissionUsers")
+                        .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Receiver");
+                    b.HasOne("OrganicShop.Domain.Entities.User", "User")
+                        .WithMany("PermissionUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<int>("PermissionUsersId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("PermissionUsersId");
+
+                            b1.ToTable("PermissionUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PermissionUsersId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<int>("PermissionUsersId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("PermissionUsersId");
+
+                            b1.ToTable("PermissionUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PermissionUsersId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.OrderStatus", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Tag", b =>
                 {
-                    b.HasOne("OrganicShop.Domain.Model.Order", "Order")
-                        .WithMany("OrderStatuses")
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<int>("TagId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("TagId");
+
+                            b1.ToTable("Tags");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TagId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<int>("TagId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("TagId");
+
+                            b1.ToTable("Tags");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TagId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.TrackingDescription", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.Order", "Order")
+                        .WithMany("TrackingDescriptions")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("TrackingDescriptionId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("TrackingDescriptionId");
+
+                            b1.ToTable("TrackingDescriptions");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TrackingDescriptionId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("TrackingDescriptionId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("TrackingDescriptionId");
+
+                            b1.ToTable("TrackingDescriptions");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TrackingDescriptionId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
                     b.Navigation("Order");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.OrderTrack", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.TrackingStatus", b =>
                 {
-                    b.HasOne("OrganicShop.Domain.Model.Order", "Order")
-                        .WithMany("OrderTracks")
+                    b.HasOne("OrganicShop.Domain.Entities.Order", "Order")
+                        .WithMany("TrackingStatuses")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Order");
-                });
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("TrackingStatusId")
+                                .HasColumnType("bigint");
 
-            modelBuilder.Entity("ProductProperty", b =>
-                {
-                    b.HasOne("OrganicShop.Domain.Model.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("TrackingStatusId");
+
+                            b1.ToTable("TrackingStatuses");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TrackingStatusId");
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("TrackingStatusId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("TrackingStatusId");
+
+                            b1.ToTable("TrackingStatuses");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TrackingStatusId");
+                        });
+
+                    b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.HasOne("OrganicShop.Domain.Model.Property", null)
-                        .WithMany()
-                        .HasForeignKey("PropertiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.Navigation("Order");
+
+                    b.Navigation("SoftDelete")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.User", b =>
+                {
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<long>("UserId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = 1L,
+                                    CreateDate = new DateTime(2024, 1, 28, 2, 9, 8, 204, DateTimeKind.Local).AddTicks(8705),
+                                    IsActive = true,
+                                    LastModified = new DateTime(2024, 1, 28, 2, 9, 8, 204, DateTimeKind.Local).AddTicks(8756)
+                                },
+                                new
+                                {
+                                    UserId = 2L,
+                                    CreateDate = new DateTime(2024, 1, 28, 2, 9, 8, 204, DateTimeKind.Local).AddTicks(9052),
+                                    IsActive = true,
+                                    LastModified = new DateTime(2024, 1, 28, 2, 9, 8, 204, DateTimeKind.Local).AddTicks(9062)
+                                });
+                        });
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                        {
+                            b1.Property<long>("UserId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<DateTime?>("DalateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = 1L,
+                                    IsDelete = false
+                                },
+                                new
+                                {
+                                    UserId = 2L,
+                                    IsDelete = true
+                                });
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("SoftDelete")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("ProductTag", b =>
                 {
-                    b.HasOne("OrganicShop.Domain.Model.Product", null)
+                    b.HasOne("OrganicShop.Domain.Entities.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OrganicShop.Domain.Model.Tag", null)
+                    b.HasOne("OrganicShop.Domain.Entities.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Address", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Address", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Category", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Basket", b =>
+                {
+                    b.Navigation("CoProducts");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Subs");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Order", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Discount", b =>
+                {
+                    b.Navigation("DiscountProducts");
+
+                    b.Navigation("DiscountUsers");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Order", b =>
                 {
                     b.Navigation("CoProducts");
 
-                    b.Navigation("OrderStatuses");
+                    b.Navigation("TrackingDescriptions");
 
-                    b.Navigation("OrderTracks");
+                    b.Navigation("TrackingStatuses");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.Product", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Permission", b =>
                 {
-                    b.Navigation("Images");
+                    b.Navigation("PermissionUsers");
+
+                    b.Navigation("Subs");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Model.User", b =>
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Product", b =>
+                {
+                    b.Navigation("CoProducts");
+
+                    b.Navigation("DiscountProducts");
+
+                    b.Navigation("Pictures");
+
+                    b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.User", b =>
                 {
                     b.Navigation("Addresses");
 
                     b.Navigation("BankCards");
 
+                    b.Navigation("Baskets");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("DiscountUsers");
+
+                    b.Navigation("Operations");
+
                     b.Navigation("Orders");
 
-                    b.Navigation("ProfileImage");
+                    b.Navigation("PermissionUsers");
                 });
 #pragma warning restore 612, 618
         }
