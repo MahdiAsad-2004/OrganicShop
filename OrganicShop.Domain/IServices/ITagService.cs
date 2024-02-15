@@ -1,19 +1,19 @@
 ﻿using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.TagDtos;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.Domain.IServices
 {
-    public interface ITagService
+    public interface ITagService : IService<Tag>
     {
         Task<PageDto<Tag , TagListDto,int>> GetAll(FilterTagDto filter , SortTagDto sort , PagingDto paging);
 
-        Task<EntityResultCreate> Create(CreateTagDto create);
+        Task<ServiceResponse> Create(CreateTagDto create);
 
-        Task<EntityResultUpdate> Update(UpdateTagDto update);
+        Task<ServiceResponse> Update(UpdateTagDto update);
         
-        Task<EntityResultDelete> Delete(int delete);
+        Task<ServiceResponse> Delete(int delete);
         
     }
 }

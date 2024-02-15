@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.PermissionDtos
 {
-    public class UpdatePermissionDto : BaseDto<byte>
+    public class UpdatePermissionDto : BaseListDto<byte>
     {
         public string Title { get; set; }
         public string EnTitle { get; set; }

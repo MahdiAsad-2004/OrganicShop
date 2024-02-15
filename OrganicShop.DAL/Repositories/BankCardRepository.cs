@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.DAL.Repositories
 {
-    public class BankCardRepository : CrudRepository<BankCard, long> , IBankCardRepository
+    public class BankCardRepository : CrudRepository<BankCard, long>, IBankCardRepository
     {
-            
+        public BankCardRepository(OrganicShopDbContext organicShopDbContext) : base(organicShopDbContext)
+        {
+        }
     }
 
-    
+
 }

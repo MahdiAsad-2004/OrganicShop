@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Entities
 {
+    [DisplayName("سفارش")]
     public class Order : EntityId<long>
     {
         public string TrackingCode { get; set; }

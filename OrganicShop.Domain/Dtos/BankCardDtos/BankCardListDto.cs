@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.BankCardDtos
 {
-    public class BankCardListDto : BaseDto<long>
+    public class BankCardListDto : BaseListDto<long>
     {
         public string Cvv2 { get; set; }
         public string Number { get; set; }

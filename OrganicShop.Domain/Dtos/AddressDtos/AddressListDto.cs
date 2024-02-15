@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.AddressDtos
 {
-    public class AddressListDto : BaseDto<long>
+    public class AddressListDto : BaseListDto<long>
     {
         public string Title { get; set; }
         public string Text { get; set; }

@@ -1,8 +1,9 @@
-﻿using OrganicShop.Domain.Enums;
+﻿using OrganicShop.Domain.Dtos.Base;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.UserDtos
 {
-    public record CreateUserDto
+    public class CreateUserDto : BaseDto
     {
         public string Name { get; set; }
         public string Password { get; set; }

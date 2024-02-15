@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.BankCardDtos
 {
-    public class UpdateBankCardDto : BaseDto<long>
+    public class UpdateBankCardDto : BaseListDto<long>
     {
         public string Cvv2 { get; set; }
         public string Number { get; set; }

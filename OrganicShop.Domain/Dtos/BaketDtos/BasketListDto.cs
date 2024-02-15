@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.BaketDtos
 {
-    public class BasketListDto : BaseDto<long>
+    public class BasketListDto : BaseListDto<long>
     {
         public int TotalPrice { get; set; }
         public bool IsMain { get; set; }

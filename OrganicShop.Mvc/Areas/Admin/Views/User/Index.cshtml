@@ -1,0 +1,105 @@
+﻿@using OrganicShop.Domain.Dtos.UserDtos
+@model PageDto<User,UserListDto,long>
+
+@section Styles {
+    <!-- Data Table css -->
+    <link rel="stylesheet" type="text/css" href="assets/css/datatables.css">
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="title-header option-title">
+                        <h5>لیست کاربران</h5>
+                        <form class="d-inline-flex">
+                            <a href="add-new-user.html" class="align-items-center btn btn-theme d-flex">
+                                <i data-feather="plus"></i>افزودن کاربر جدید
+                            </a>
+                        </form>
+                    </div>
+
+                    <div class="table-responsive table-product">
+                        <table class="table all-package theme-table" id="table_id">
+                            <thead>
+                                <tr>
+                                    <th>تصویر</th>
+                                    <th>نام</th>
+                                    <th>شماره تماس</th>
+                                    <th>ایمیل</th>
+                                    <th>تنظیمات</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in Model.List)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="~/media/images/user/@item.ProfileImage" class="img-fluid"
+                                                     alt="@item.Name">
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="user-name">
+                                                <span>@item.Name</span>
+                                                <span>@item.Role.ToStringValue()</span>
+                                            </div>
+                                        </td>
+
+                                        <td>@item.PhoneNumber</td>
+
+                                        <td>@item.Email</td>
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <!-- all checkbox select js -->
+    <script src="~/admin/assets/js/checkbox-all-check.js"></script>
+
+    <!-- Data table js -->
+    <script src="~/admin/assets/js/jquery.dataTables.js"></script>
+    <script src="~/admin/assets/js/custom-data-table.js"></script>
+}

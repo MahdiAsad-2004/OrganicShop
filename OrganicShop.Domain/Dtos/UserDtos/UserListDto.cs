@@ -4,7 +4,7 @@ using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.UserDtos
 {
-    public class UserListDto : BaseDto<long>
+    public class UserListDto : BaseListDto<long>
     {
         public string Name { get; set; }
         public string PhoneNumber { get; set; }

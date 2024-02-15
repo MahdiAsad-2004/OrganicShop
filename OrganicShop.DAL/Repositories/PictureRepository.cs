@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.DAL.Repositories
 {
-    public class PictureRepository : CrudRepository<Picture, long> , IPictureRepository
+    public class PictureRepository : CrudRepository<Picture, long>, IPictureRepository
     {
-            
+        public PictureRepository(OrganicShopDbContext organicShopDbContext) : base(organicShopDbContext)
+        {
+        }
     }
 
-    
+
 }

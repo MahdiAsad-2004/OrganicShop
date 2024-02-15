@@ -1,8 +1,9 @@
-﻿using OrganicShop.Domain.Enums;
+﻿using OrganicShop.Domain.Dtos.Base;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.CategoryDtos
 {
-    public record CreateCategoryDto
+    public class CreateCategoryDto : BaseDto
     {
         public string Title { get; set; }
         public string EnTitle { get; set; }

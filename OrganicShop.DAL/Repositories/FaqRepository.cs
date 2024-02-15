@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.DAL.Repositories
 {
-    public class FaqRepository : CrudRepository<Faq, byte> , IFaqRepository
+    public class FaqRepository : CrudRepository<Faq, byte>, IFaqRepository
     {
-            
+        public FaqRepository(OrganicShopDbContext organicShopDbContext) : base(organicShopDbContext)
+        {
+        }
     }
 
-    
+
 }

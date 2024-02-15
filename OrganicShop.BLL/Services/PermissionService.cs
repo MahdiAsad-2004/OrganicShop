@@ -3,9 +3,10 @@ using OrganicShop.BLL.Mappers;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.PermissionDtos;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,6 +16,7 @@ namespace OrganicShop.BLL.Services
 
         private readonly IPermissionRepository _PermissionRepository;
         private readonly IPermissionUsersRepository _PermissionUsersRepository;
+        public Message<Permission> _Message { init; get; }
 
         public PermissionService(IPermissionRepository permissionRepository , IPermissionUsersRepository permissionUsersRepository)
         {
@@ -61,13 +63,14 @@ namespace OrganicShop.BLL.Services
 
             PageDto<Permission, PermissionListDto, byte> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreatePermissionDto create)
+        public async Task<ServiceResponse> Create(CreatePermissionDto create)
         {
             Permission Permission = create.ToModel();
 
@@ -76,51 +79,51 @@ namespace OrganicShop.BLL.Services
             if (create.ParentId != null)
             {
                 if (_PermissionRepository.GetQueryable().Any(a => a.Id == create.ParentId) == false)
-                    return EntityResultCreate.Failed;
+                    return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
                 Permission.ParentId = create.ParentId;
             }
 
             #endregion
 
             await _PermissionRepository.Add(Permission,1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdatePermissionDto update)
+        public async Task<ServiceResponse> Update(UpdatePermissionDto update)
         {
             Permission? Permission = await _PermissionRepository.GetAsTracking(update.Id);
 
             if (Permission == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
 
             #region relation
 
             if (update.ParentId != null)
             {
                 if (_PermissionRepository.GetQueryable().Any(a => a.Id == update.ParentId) == false)
-                    return EntityResultUpdate.Failed;
+                    return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
             }
 
             #endregion
 
             await _PermissionRepository.Update(update.ToModel(Permission), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(byte delete)
+        public async Task<ServiceResponse> Delete(byte delete)
         {
 
             Permission? Permission = await _PermissionRepository.GetAsTracking(delete);
 
             if (Permission == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _PermissionRepository.SoftDelete(Permission, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

@@ -1,19 +1,19 @@
 ﻿using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.PermissionDtos;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.Domain.IServices
 {
-    public interface IPermissionService
+    public interface IPermissionService : IService<Permission>
     {
         Task<PageDto<Permission,PermissionListDto,byte>> GetAll(FilterPermissionDto filter, SortPermissionDto sort,PagingDto paging);
 
-        Task<EntityResultCreate> Create(CreatePermissionDto create);
+        Task<ServiceResponse> Create(CreatePermissionDto create);
 
-        Task<EntityResultUpdate> Update(UpdatePermissionDto update);
+        Task<ServiceResponse> Update(UpdatePermissionDto update);
         
-        Task<EntityResultDelete> Delete(byte delete);
+        Task<ServiceResponse> Delete(byte delete);
         
     }
 }

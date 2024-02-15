@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.PermissionDtos
 {
-    public class PermissionListDto : BaseDto<byte>
+    public class PermissionListDto : BaseListDto<byte>
     {
         public string Title { get; set; }
         public string EnTitle { get; set; }

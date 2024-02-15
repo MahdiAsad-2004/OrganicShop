@@ -1,6 +1,8 @@
-﻿namespace OrganicShop.Domain.Dtos.PermissionDtos
+﻿using OrganicShop.Domain.Dtos.Base;
+
+namespace OrganicShop.Domain.Dtos.PermissionDtos
 {
-    public record CreatePermissionDto
+    public class CreatePermissionDto : BaseDto
     {
         public string Title { get; set; }
         public string EnTitle { get; set; }

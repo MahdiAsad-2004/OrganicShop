@@ -1,12 +1,14 @@
 ﻿using OrganicShop.Domain.Entities.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Entities
 {
+    [DisplayName("ویژگی")]
     public class Property : EntityId<int>
     {
         public string Title { get; set; }

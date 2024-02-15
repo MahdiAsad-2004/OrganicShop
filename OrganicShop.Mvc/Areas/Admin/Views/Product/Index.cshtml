@@ -1,0 +1,611 @@
+﻿@using OrganicShop.Domain.Dtos.ProductDtos
+@model PageDto<Product,ProductListDto,long>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="title-header option-title d-sm-flex d-block">
+                        <h5>لیست محصولات</h5>
+                        <div class="right-options">
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0)">درون ریزی</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">برون بری</a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-solid" href="/admin/product/create">افزودن محصول جدید</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="table-responsive">
+                            <div id="table_id_filter" class="dataTables_filter"><label>جستجو : <input type="search" class="" placeholder="" aria-controls="table_id"></label></div>
+                            <table class="table all-package theme-table table-product" id="table_id">
+                                <thead>
+                                    <tr>
+                                        <th>تصویر محصول</th>
+                                        <th>نام محصول</th>
+                                        <th>دسته</th>
+                                        <th>تعداد فعلی</th>
+                                        <th>قیمت</th>
+                                        <th>وضعیت</th>
+                                        <th>تنظیمات</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @foreach (var pr in Model.List)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="table-image">
+                                                    <img src="~/media/images/product/@pr.MainImage" class="img-fluid"
+                                                         alt="">
+                                                </div>
+                                            </td>
+
+                                            <td>@pr.Title</td>
+
+                                            <td>@pr.CategoryTitle</td>
+
+                                            <td>@pr.Stock</td>
+
+                                            <td class="td-price">@pr.Price.ToToman()</td>
+
+                                            <td class="@(pr.IsActive == true ? "status-close" : "status-danger")">
+                                                <span>@(pr.IsActive == true ? "تأیید شد" : "در انتظار")</span>
+                                            </td>
+
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href="order-detail.html">
+                                                            <i class="ri-eye-line"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="javascript:void(0)">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                           data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    }
+
+
+
+
+
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/1.png" class="img-fluid"
+                                                     alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>بیسکویت عطا</td>
+
+                                        <td>بیسکوییت</td>
+
+                                        <td>12</td>
+
+                                        <td class="td-price">95000 تومان</td>
+
+                                        <td class="status-danger">
+                                            <span>در انتظار</span>
+                                        </td>
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+
+
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/2.png" class="img-fluid"
+                                                     alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>قهوه سرد ایرلندی</td>
+
+                                        <td>نوشیدنی</td>
+
+                                        <td>10</td>
+
+                                        <td class="td-price">125000 تومان</td>
+
+                                        <td class="status-close">
+                                            <span>تأیید شد</span>
+                                        </td>
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/3.png" class="img-fluid"
+                                                     alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>کوکی پرتقالی</td>
+
+                                        <td>کوکی</td>
+
+                                        <td>9</td>
+
+                                        <td class="td-price">56000 تومان</td>
+
+                                        <td class="status-close">
+                                            <span>تأیید شد</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/4.png" class="img-fluid"
+                                                     alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>سیب پرتقال</td>
+
+                                        <td>نوشیدنی</td>
+
+                                        <td>8</td>
+
+                                        <td class="td-price">95000 تومان</td>
+
+                                        <td class="status-danger">
+                                            <span>در انتظار</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/5.png" class="img-fluid"
+                                                     alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>چیپس گوجه ای</td>
+
+                                        <td>چیپس</td>
+
+                                        <td>23</td>
+
+                                        <td class="td-price">95000 تومان</td>
+
+                                        <td class="status-close">
+                                            <span>تأیید شد</span>
+                                        </td>
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/6.png" class="img-fluid"
+                                                     alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>خردل سفید</td>
+
+                                        <td>سس</td>
+
+                                        <td>50</td>
+
+                                        <td class="td-price">95000 تومان</td>
+
+                                        <td class="status-close">
+                                            <span>تأیید شد</span>
+                                        </td>
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/7.png" class="img-fluid"
+                                                     alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>شیر گاو</td>
+
+                                        <td>شیر</td>
+
+                                        <td>25</td>
+
+                                        <td class="td-price">121000 تومان</td>
+
+                                        <td class="status-close">
+                                            <span>تأیید شد</span>
+                                        </td>
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/11.png"
+                                                     class="img-fluid" alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>نان سفید</td>
+
+                                        <td>نان</td>
+
+                                        <td>6</td>
+
+                                        <td class="td-price">95000 تومان</td>
+
+                                        <td class="status-danger">
+                                            <span>در انتظار</span>
+                                        </td>
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/8.png" class="img-fluid"
+                                                     alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>غذای سگ</td>
+
+                                        <td>پت شاپ</td>
+
+                                        <td>11</td>
+
+                                        <td class="td-price">95000 تومان</td>
+
+                                        <td class="status-close">
+                                            <span>تأیید شد</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/9.png" class="img-fluid"
+                                                     alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>گوشت منجمد</td>
+
+                                        <td>گوشت</td>
+
+                                        <td>18</td>
+
+                                        <td class="td-price">95000 تومان</td>
+
+                                        <td class="status-close">
+                                            <span>تأیید شد</span>
+                                        </td>
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="table-image">
+                                                <img src="assets/images/product/10.png"
+                                                     class="img-fluid" alt="">
+                                            </div>
+                                        </td>
+
+                                        <td>قهوه ساده</td>
+
+                                        <td>نوشیدنی</td>
+
+                                        <td>25</td>
+
+                                        <td class="td-price">568000 تومان</td>
+
+                                        <td class="status-close">
+                                            <span>تأیید شد</span>
+                                        </td>
+
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="order-detail.html">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <!-- slick slider js -->
+    <script src="~/admin/assets/js/slick.min.js"></script>
+    <script src="~/admin/assets/js/custom-slick.js"></script>
+
+
+    <!-- ratio js -->
+    <script src="~/admin/assets/js/ratio.js"></script>
+
+
+    <!-- Apexchar js -->
+    <script src="~/admin/assets/js/chart/apex-chart/apex-chart1.js"></script>
+    <script src="~/admin/assets/js/chart/apex-chart/moment.min.js"></script>
+    <script src="~/admin/assets/js/chart/apex-chart/apex-chart.js"></script>
+    <script src="~/admin/assets/js/chart/apex-chart/stock-prices.js"></script>
+    <script src="~/admin/assets/js/chart/apex-chart/chart-custom1.js"></script>
+
+
+    <!-- tooltip init js -->
+    <script src="~/admin/assets/js/tooltip-init.js"></script>
+}

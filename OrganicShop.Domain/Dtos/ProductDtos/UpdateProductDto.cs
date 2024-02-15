@@ -4,12 +4,12 @@ using OrganicShop.Domain.Entities;
 
 namespace OrganicShop.Domain.Dtos.ProductDtos
 {
-    public class UpdateProductDto : BaseDto<long>
+    public class UpdateProductDto : BaseListDto<long>
     {
         public string Title { get; set; }
         public int Stock { get; set; }
         public int Price { get; set; }
-        public string MainImage { get; set; }
+        public IFormFile MainImage { get; set; }
         public string ShortDescription { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }

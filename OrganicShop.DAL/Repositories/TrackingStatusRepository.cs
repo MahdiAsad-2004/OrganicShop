@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.DAL.Repositories
 {
-    public class TrackingStatusRepository : CrudRepository<TrackingStatus, long> , ITrackingStatusRepository
+    public class TrackingStatusRepository : CrudRepository<TrackingStatus, long>, ITrackingStatusRepository
     {
-            
+        public TrackingStatusRepository(OrganicShopDbContext organicShopDbContext) : base(organicShopDbContext)
+        {
+        }
     }
 
-    
+
 }

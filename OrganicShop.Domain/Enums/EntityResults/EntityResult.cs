@@ -6,22 +6,21 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Enums.EntityResults
 {
-    public enum EntityResultUpdate
+    public enum EntityResult
     {
-        success = 1,
+        Success = 1,
 
-        EntityExist = 2,
+        MaxCreate = 2,
 
-        EmailExist = 3,
+        EntityExist = 3,
 
-        NotFound = 4,
-        
-        WrongPassword = 5,
-        
+        WrongPassword = 4,
+
+        NotFound = 5,
+
         NoAccess = 6,
 
         Failed = 7,
-
 
     }
 }

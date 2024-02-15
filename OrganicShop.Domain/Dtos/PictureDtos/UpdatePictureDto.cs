@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.PictureDtos
 {
-    public class UpdatePictureDto : BaseDto<long>
+    public class UpdatePictureDto : BaseListDto<long>
     {
         public string Title { get; set; }
     }

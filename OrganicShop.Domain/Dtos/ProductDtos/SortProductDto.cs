@@ -4,10 +4,10 @@ namespace OrganicShop.Domain.Dtos.ProductDtos
 {
     public class SortProductDto : BaseSortDto<Entities.Product, long>
     {
-        public bool? Title { get; set; }
-        public bool? Price { get; set; }
-        public bool? SoldCount { get; set; }
-        public bool? Discount { get; set; }
+        public bool? Title { get; set; } = null;
+        public bool? Price { get; set; } = null;
+        public bool? SoldCount { get; set; } = null;
+        public bool? Discount { get; set; } = null;
     }
 
 

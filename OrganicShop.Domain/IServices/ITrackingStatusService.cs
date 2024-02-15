@@ -1,19 +1,19 @@
 ﻿using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.TrackingStatusDtos;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.Domain.IServices
 {
-    public interface ITrackingStatusService
+    public interface ITrackingStatusService : IService<TrackingStatus>
     {
         Task<PageDto<TrackingStatus , TrackingStatusListDto , long>> GetAll(FilterTrackingStatusDto filter , SortTrackingStatusDto sort , PagingDto paging);
 
-        Task<EntityResultCreate> Create(CreateTrackingStatusDto create);
+        Task<ServiceResponse> Create(CreateTrackingStatusDto create);
 
-        Task<EntityResultUpdate> Update(UpdateTrackingStatusDto update);
+        Task<ServiceResponse> Update(UpdateTrackingStatusDto update);
         
-        Task<EntityResultDelete> Delete(long delete);
+        Task<ServiceResponse> Delete(long delete);
         
     }
 }

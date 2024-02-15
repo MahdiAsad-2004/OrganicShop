@@ -6,6 +6,7 @@ using DryIoc.Microsoft.DependencyInjection;
 using OrganicShop.Ioc;
 using OrganicShop.BLL.Services;
 using Microsoft.EntityFrameworkCore;
+using OrganicShop.Mvc.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,17 +14,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
+RegisterServices(builder.Services);
+
 
 #region config DbContex
 
 builder.Services.AddDbContext<OrganicShopDbContext>(options =>
 {
     options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("OrganicShopConnectionString"),
+    //options.UseSqlServer(connectionString: "Server=.;Database=OrganicShopDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True",
+    //options.UseSqlServer(connectionString: "Server=.;Database=OrganicShopDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True",
     sqlServerOptions => sqlServerOptions.CommandTimeout(6000));
-    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
 #endregion
+
 
 
 
@@ -45,6 +51,8 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+//app.UseMiddleware<CurrentUserProviderMiddleware>(app);
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -63,9 +71,6 @@ void RegisterServices(IServiceCollection services)
     builder.Host.UseServiceProviderFactory(new DryIocServiceProviderFactory(InversionOfControl.GetContainer()))
          .ConfigureContainer<Container>(builder =>{});
 }
-
-
-RegisterServices(builder.Services);
 
 #endregion
 

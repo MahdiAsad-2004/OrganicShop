@@ -1,6 +1,8 @@
-﻿namespace OrganicShop.Domain.Dtos.BankCardDtos
+﻿using OrganicShop.Domain.Dtos.Base;
+
+namespace OrganicShop.Domain.Dtos.BankCardDtos
 {
-    public record CreateBankCardDto
+    public class CreateBankCardDto : BaseDto
     {
         public string Cvv2 { get; set; }
         public string Number { get; set; }

@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace OrganicShop.Domain.Entities
 {
+    [DisplayName("نظر")]
     public class Comment: EntityId<long>
     {
         public int Rate { get; set; }

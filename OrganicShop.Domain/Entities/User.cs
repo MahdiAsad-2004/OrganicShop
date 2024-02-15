@@ -6,9 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OrganicShop.Domain.Entities.Relations;
+using System.ComponentModel;
 
 namespace OrganicShop.Domain.Entities
 {
+    [DisplayName("کاربر")]
     public class User : EntityId<long>
     {
         public string Name { get; set; }

@@ -1,19 +1,19 @@
 ﻿using OrganicShop.Domain.Dtos.BankCardDtos;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.Domain.IServices
 {
-    public interface IBankCardService
+    public interface IBankCardService : IService<BankCard>
     {
         Task<PageDto<BankCard,BankCardListDto,long>> GetAll(FilterBankCardDto filter , SortBankCardDto sort, PagingDto paging);
 
-        Task<EntityResultCreate> Create(CreateBankCardDto create);
+        Task<ServiceResponse> Create(CreateBankCardDto create);
 
-        Task<EntityResultUpdate> Update(UpdateBankCardDto update);
+        Task<ServiceResponse> Update(UpdateBankCardDto update);
         
-        Task<EntityResultDelete> Delete(long delete);
+        Task<ServiceResponse> Delete(long delete);
         
     }
 }

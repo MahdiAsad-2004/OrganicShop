@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.ProductDtos
 {
-    public class ProductDetailDto : BaseDto<long>
+    public class ProductDetailDto : BaseListDto<long>
     {
         public string Title { get; set; }
         public int Stock { get; set; }

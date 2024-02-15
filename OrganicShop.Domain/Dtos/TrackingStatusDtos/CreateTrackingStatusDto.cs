@@ -1,6 +1,8 @@
-﻿namespace OrganicShop.Domain.Dtos.TrackingStatusDtos
+﻿using OrganicShop.Domain.Dtos.Base;
+
+namespace OrganicShop.Domain.Dtos.TrackingStatusDtos
 {
-    public record CreateTrackingStatusDto
+    public class CreateTrackingStatusDto : BaseDto
     {
         public long OrderId { get; set; }
     }

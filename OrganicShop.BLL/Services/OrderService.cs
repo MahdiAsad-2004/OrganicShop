@@ -4,9 +4,10 @@ using OrganicShop.Domain.Dtos.OrderDtos;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.TrackingStatusDtos;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -19,6 +20,7 @@ namespace OrganicShop.BLL.Services
         private readonly ICoProductRepository _CoProductRepository;
         private readonly IBasketRepository _BasketRepository;
         private readonly ITrackingStatusService _TrackingStatusesService;
+        public Message<Order> _Message { init; get; }
 
         public OrderService(IOrderRepository OrderRepository, IAddressRepository addressRepository, ICoProductRepository coProductRepository, 
             IBasketRepository basketRepository, ITrackingStatusService trackingStatusesService)
@@ -70,18 +72,20 @@ namespace OrganicShop.BLL.Services
 
             PageDto<Order, OrderListDto, long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateOrderDto create)
+        public async Task<ServiceResponse> Create(CreateOrderDto create)
         {
             Order Order = create.ToModel();
             var address = await _AddressRepository.GetAsNoTracking(create.AddressId);
+
             if (address == null)
-                return EntityResultCreate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             Order.Address = address;
             long orderId = await _OrderRepository.Add(Order, 1);
@@ -126,34 +130,36 @@ namespace OrganicShop.BLL.Services
             #endregion
 
 
-            if (result1 != EntityResultCreate.success) return EntityResultCreate.Failed;
-            return EntityResultCreate.success;
+            if (result1.Result != EntityResult.Success) 
+                return new ServiceResponse(EntityResult.NotFound, _Message.SuccessUpdate());
+
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateOrderDto update)
+        public async Task<ServiceResponse> Update(UpdateOrderDto update)
         {
             Order? Order = await _OrderRepository.GetAsTracking(update.Id);
 
             if (Order == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.SuccessUpdate());
 
             await _OrderRepository.Update(update.ToModel(Order), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(long delete)
+        public async Task<ServiceResponse> Delete(long delete)
         {
             Order? Order = await _OrderRepository.GetAsTracking(delete);
 
             if (Order == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.SuccessUpdate());
 
             await _OrderRepository.SoftDelete(Order, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

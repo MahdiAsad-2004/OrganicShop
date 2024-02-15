@@ -1,25 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OrganicShop.BLL.Mappers;
+using OrganicShop.BLL.Providers;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using System.Dynamic;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using OrganicShop.Domain.Models;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
+
+
     public class AddressService : IAddressService
     {
         #region ctor
 
+        //public CurrentUser _User {private get; init; }
         private readonly IAddressRepository _AddressRepository;
+        public Message<Address> _Message { get; }
 
-        public AddressService(IAddressRepository AddressRepository)
+        public AddressService(/*CurrentUserProvider currentUserProvider,*/ IAddressRepository AddressRepository)
         {
             this._AddressRepository = AddressRepository;
+            //this._User = currentUserProvider._User;
+            
         }
 
         #endregion
@@ -48,50 +55,55 @@ namespace OrganicShop.BLL.Services
 
             PageDto<Address, AddressListDto, long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
+
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateAddressDto create)
+        public async Task<ServiceResponse> Create(CreateAddressDto create)
         {
             if (await _AddressRepository.GetQueryable().Where(a => a.UserId == create.UserId).CountAsync() > 4)
-                return EntityResultCreate.MaxCreate;
+                return new ServiceResponse(EntityResult.MaxCreate , _Message.MaxCreate(4));
 
             Address Address = create.ToModel();
             await _AddressRepository.Add(Address,1);
-            return EntityResultCreate.success;
+            
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateAddressDto update)
+        public async Task<ServiceResponse> Update(UpdateAddressDto update)
         {
             Address? Address = await _AddressRepository.GetAsTracking(update.Id);
-            
+
             if (Address == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             if (Address.UserId != update.UserId)
-                return EntityResultUpdate.NoAccess;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NoAccess());
 
             await _AddressRepository.Update(update.ToModel(Address), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success , _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(long delete)
+        public async Task<ServiceResponse> Delete(long delete)
         {
 
             Address? Address = await _AddressRepository.GetAsTracking(delete);
 
             if (Address == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _AddressRepository.SoftDelete(Address, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
+
+
     }
 }

@@ -3,9 +3,10 @@ using OrganicShop.BLL.Mappers;
 using OrganicShop.Domain.Dtos.FaqDtos;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,6 +15,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IFaqRepository _FaqRepository;
+        public Message<Faq> _Message { init; get; }
 
         public FaqService(IFaqRepository FaqRepository)
         {
@@ -47,44 +49,45 @@ namespace OrganicShop.BLL.Services
 
             PageDto<Faq, FaqListDto, byte> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateFaqDto create)
+        public async Task<ServiceResponse> Create(CreateFaqDto create)
         {
             Faq Faq = create.ToModel();
             await _FaqRepository.Add(Faq,1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateFaqDto update)
+        public async Task<ServiceResponse> Update(UpdateFaqDto update)
         {
             Faq? Faq = await _FaqRepository.GetAsTracking(update.Id);
             
             if (Faq == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _FaqRepository.Update(update.ToModel(Faq), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(byte delete)
+        public async Task<ServiceResponse> Delete(byte delete)
         {
 
             Faq? Faq = await _FaqRepository.GetAsTracking(delete);
 
             if (Faq == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _FaqRepository.SoftDelete(Faq, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

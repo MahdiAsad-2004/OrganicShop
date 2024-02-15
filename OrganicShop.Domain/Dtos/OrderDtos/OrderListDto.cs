@@ -3,7 +3,7 @@ using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.OrderDtos
 {
-    public class OrderListDto : BaseDto<long>
+    public class OrderListDto : BaseListDto<long>
     {
         public int TotalPrice { get; set; }
         public string UserName { get; set; }

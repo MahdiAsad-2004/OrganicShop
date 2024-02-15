@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.PictureDtos
 {
-    public class PictureListDto : BaseDto<long>
+    public class PictureListDto : BaseListDto<long>
     {
         public string Name { get; set; }
         public int SizeMb { get; set; }

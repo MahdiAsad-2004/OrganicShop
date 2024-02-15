@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.Base
 {
-    public class BaseDto<TKey> where TKey : struct
+    public class BaseDto
     {
-        public TKey Id { get; set; }
     }
 }

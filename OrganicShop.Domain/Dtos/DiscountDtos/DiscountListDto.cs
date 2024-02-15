@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.DiscountDtos
 {
-    public class DiscountListDto : BaseDto<int>
+    public class DiscountListDto : BaseListDto<int>
     {
         public bool IsDefault { get; set; }
         public bool IsActive { get; set; }

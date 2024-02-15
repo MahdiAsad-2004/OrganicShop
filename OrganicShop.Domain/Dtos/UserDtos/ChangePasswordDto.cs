@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.UserDtos
 {
-    public class ChangePasswordDto : BaseDto<long>
+    public class ChangePasswordDto : BaseListDto<long>
     {
         public string Password { get; set; }
         public string NewPassword { get; set; }

@@ -6,9 +6,10 @@ using OrganicShop.Domain.Dtos.ProductDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Entities.Base;
 using OrganicShop.Domain.Entities.Relations;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -19,6 +20,8 @@ namespace OrganicShop.BLL.Services
         private readonly IProductRepository _ProductRepository;
         private readonly ICategoryRepository _CategoryRepository;
         private readonly IDiscountProductsRepository _DiscountProductRepository;
+        public Message<Product> _Message { init; get; }
+
         public ProductService(IProductRepository ProductRepository, ICategoryRepository categoryRepository, IDiscountProductsRepository discountProductRepository)
         {
             _ProductRepository = ProductRepository;
@@ -32,7 +35,9 @@ namespace OrganicShop.BLL.Services
 
         public async Task<PageDto<Product, ProductListDto, long>> GetAll(FilterProductDto filter, SortProductDto sort, PagingDto paging)
         {
-            var query = _ProductRepository.GetQueryable();
+            var query = _ProductRepository.GetQueryable()
+                .Include(a => a.Category)
+                .AsQueryable();
 
             #region filter
 
@@ -67,7 +72,6 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-
             #region sort
 
             if (sort.Title == true) query = query.OrderBy(o => o.Title);
@@ -86,30 +90,42 @@ namespace OrganicShop.BLL.Services
 
             PageDto<Product, ProductListDto, long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateProductDto create)
+        public async Task<ServiceResponse> Create(CreateProductDto create)
         {
             Product Product = create.ToModel();
             Product.UpdatedPrice = null;
 
             #region discounts
 
-            if (create.Discount.FixedValue != null || create.Discount.Percent != null)
+            if (create.UpdatedPrice < create.Price)
             {
+                var discount = new Discount
+                {
+                    FixedValue = create.Price - create.UpdatedPrice,
+                    BaseEntity = new BaseEntity(true),
+                    SoftDelete = new SoftDelete(true),
+                    IsDefault = true,
+                };
+
+                if(create.DiscountCount > 0)
+                    discount.Count = create.DiscountCount;
+                
                 Product.DiscountProducts = new List<DiscountProducts> { new DiscountProducts
                     {
-                        Discount = create.Discount,
+                        Discount = discount,
                         Product = Product,
                         BaseEntity = new BaseEntity(true),
                         SoftDelete = new SoftDelete(true),
                     }
                 };
-                Product.UpdatedPrice = create.Discount.ApplyDiscount(Product.Price);
+                Product.UpdatedPrice = discount.ApplyDiscount(Product.Price);
             }
 
             #endregion
@@ -168,17 +184,17 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             await _ProductRepository.Add(Product, 1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateProductDto update)
+        public async Task<ServiceResponse> Update(UpdateProductDto update)
         {
             Product? Product = await _ProductRepository.GetAsTracking(update.Id);
 
             if (Product == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             #region discounts
 
@@ -251,20 +267,20 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             await _ProductRepository.Update(update.ToModel(Product), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(long delete)
+        public async Task<ServiceResponse> Delete(long delete)
         {
             Product? Product = await _ProductRepository.GetAsTracking(delete);
 
             if (Product == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _ProductRepository.SoftDelete(Product, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

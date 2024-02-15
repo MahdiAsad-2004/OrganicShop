@@ -7,9 +7,14 @@ namespace OrganicShop.Mvc.Controllers
 {
     public class HomeController : Controller
     {
+        #region ctor
+
         public HomeController()
         {
         }
+
+        #endregion
+
 
         public IActionResult Index()
         {

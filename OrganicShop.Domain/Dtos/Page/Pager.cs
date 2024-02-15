@@ -27,15 +27,15 @@ namespace OrganicShop.Domain.Dtos.Page
         {
             AllItemsCount = query.Count();
             PageItemNumberEnd = AllItemsCount > PageItemCount ? (PageItemCount * PageNumber) : AllItemsCount;
-            PageItemNumberStart = (PageNumber - 1) * PageItemCount + 1;
+            PageItemNumberStart = ((PageNumber - 1) * PageItemCount) + 1;
             LastPageNumber = AllItemsCount % PageItemCount == 0 ? (AllItemsCount / PageItemCount) : (AllItemsCount / PageItemCount) + 1;
         }
-        public Pager(int PageNumber, int PageItemCount, int AllItemsCount)
-        {
-            this.AllItemsCount = AllItemsCount;
-            PageItemNumberEnd = AllItemsCount > PageItemCount ? (PageItemCount * PageNumber) : AllItemsCount;
-            PageItemNumberStart = (PageNumber - 1) * PageItemCount + 1;
-            LastPageNumber = AllItemsCount % PageItemCount == 0 ? (AllItemsCount / PageItemCount) : (AllItemsCount / PageItemCount) + 1;
-        }
+        //public Pager(int PageNumber, int PageItemCount, int AllItemsCount)
+        //{
+        //    this.AllItemsCount = AllItemsCount;
+        //    PageItemNumberEnd = AllItemsCount > PageItemCount ? (PageItemCount * PageNumber) : AllItemsCount;
+        //    PageItemNumberStart = (PageNumber - 1) * PageItemCount + 1;
+        //    LastPageNumber = AllItemsCount % PageItemCount == 0 ? (AllItemsCount / PageItemCount) : (AllItemsCount / PageItemCount) + 1;
+        //}
     }
 }

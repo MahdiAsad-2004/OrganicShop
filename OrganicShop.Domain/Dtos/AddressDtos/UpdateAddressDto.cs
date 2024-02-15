@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.AddressDtos
 {
-    public class UpdateAddressDto : BaseDto<long>
+    public class UpdateAddressDto : BaseListDto<long>
     {
         public string Title { get; set; }
         public string Text { get; set; }

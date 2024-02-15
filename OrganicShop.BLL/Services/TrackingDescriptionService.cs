@@ -3,9 +3,10 @@ using OrganicShop.BLL.Mappers;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.TrackingDescriptionDtos;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,6 +16,7 @@ namespace OrganicShop.BLL.Services
 
         private readonly ITrackingDescriptionRepository _TrackingDescriptionRepository;
         private readonly IOrderRepository _OrderRepository;
+        public Message<TrackingDescription> _Message { init; get; }
 
         public TrackingDescriptionService(ITrackingDescriptionRepository TrackingDescriptionRepository,IOrderRepository orderRepository)
         {
@@ -59,58 +61,59 @@ namespace OrganicShop.BLL.Services
 
             PageDto<TrackingDescription, TrackingDescriptionListDto,long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query , paging).Select(a => a.ToListDto()).ToList();
-            
+            pageDto.Pager = pageDto.SetPager(query, paging);
+
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateTrackingDescriptionDto create)
+        public async Task<ServiceResponse> Create(CreateTrackingDescriptionDto create)
         {
             TrackingDescription TrackingDescription = create.ToModel();
 
             #region relation
 
             if (await _OrderRepository.GetQueryable().AnyAsync(a => a.Id == create.OrderId) == false)
-                return EntityResultCreate.Failed;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound(typeof(Order)));
 
             #endregion
 
             await _TrackingDescriptionRepository.Add(TrackingDescription,1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateTrackingDescriptionDto update)
+        public async Task<ServiceResponse> Update(UpdateTrackingDescriptionDto update)
         {
             TrackingDescription? TrackingDescription = await _TrackingDescriptionRepository.GetAsTracking(update.Id);
             
             if (TrackingDescription == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             #region relation
 
             if (await _OrderRepository.GetQueryable().AnyAsync(a => a.Id == update.OrderId) == false)
-                return EntityResultUpdate.Failed;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound(typeof(Order)));
 
             #endregion
 
             await _TrackingDescriptionRepository.Update(update.ToModel(TrackingDescription), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(long delete)
+        public async Task<ServiceResponse> Delete(long delete)
         {
             TrackingDescription? TrackingDescription = await _TrackingDescriptionRepository.GetAsTracking(delete);
 
             if (TrackingDescription == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound())      ;
 
             await _TrackingDescriptionRepository.SoftDelete(TrackingDescription, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

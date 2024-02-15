@@ -1,11 +1,12 @@
 ﻿using OrganicShop.Domain.Dtos.ContactUsDtos;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Entities;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.Domain.IServices
 {
-    public interface IContactUsService
+    public interface IContactUsService : IService<ContactUs>
     {
-        Task<EntityResultUpdate> Update(UpdateContactUsDto update);
+        Task<ServiceResponse> Update(UpdateContactUsDto update);
        
         Task<UpdateContactUsDto> Get();
     }

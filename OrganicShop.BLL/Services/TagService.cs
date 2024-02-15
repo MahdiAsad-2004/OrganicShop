@@ -3,9 +3,10 @@ using OrganicShop.BLL.Mappers;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.TagDtos;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,6 +15,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly ITagRepository _TagRepository;
+        public Message<Tag> _Message { init; get; }
 
         public TagService(ITagRepository TagRepository)
         {
@@ -48,50 +50,51 @@ namespace OrganicShop.BLL.Services
 
             PageDto<Tag, TagListDto,int> pageDto = new();
             pageDto.List = pageDto.SetPaging(query , paging).Select(a => a.ToListDto()).ToList();
-            
+            pageDto.Pager = pageDto.SetPager(query, paging);
+
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateTagDto create)
+        public async Task<ServiceResponse> Create(CreateTagDto create)
         {
             Tag Tag = create.ToModel();
 
             if (await _TagRepository.GetQueryable().AnyAsync(a => a.Title.Contains(create.Title, StringComparison.OrdinalIgnoreCase)))
-                return EntityResultCreate.EntityExist;
+                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create,a => nameof(a.Title)));
 
             await _TagRepository.Add(Tag,1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateTagDto update)
+        public async Task<ServiceResponse> Update(UpdateTagDto update)
         {
             Tag? Tag = await _TagRepository.GetAsTracking(update.Id);
             
             if (Tag == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             if (await _TagRepository.GetQueryable().AnyAsync(a => a.Title.Contains(update.Title, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
-                return EntityResultUpdate.EntityExist;
+                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Title)));
 
             await _TagRepository.Update(update.ToModel(Tag), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(int delete)
+        public async Task<ServiceResponse> Delete(int delete)
         {
             Tag? Tag = await _TagRepository.GetAsTracking(delete);
 
             if (Tag == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _TagRepository.SoftDelete(Tag, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

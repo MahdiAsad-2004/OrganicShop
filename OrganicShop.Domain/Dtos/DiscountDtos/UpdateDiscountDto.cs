@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.DiscountDtos
 {
-    public class UpdateDiscountDto : BaseDto<int>
+    public class UpdateDiscountDto : BaseListDto<int>
     {
         public bool IsDefault { get; set; }
         public string? Code { get; set; }

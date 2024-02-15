@@ -18,4 +18,19 @@ namespace OrganicShop.Mvc.Areas.Admin
 
 
     }
+
+
+
+    public class StateService
+    {
+        public int Id { get; set; } = 0;
+        public string Username { get; set; } = string.Empty;
+
+
+        public StateService(HttpContext context)
+        {
+            Username = context.User.Identity.Name;
+        }
+    }
+
 }

@@ -3,9 +3,10 @@ using OrganicShop.BLL.Mappers;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.PropertyDtos;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,6 +15,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IPropertyRepository _PropertyRepository;
+        public Message<Property> _Message { init; get; }
 
         public PropertyService(IPropertyRepository PropertyRepository)
         {
@@ -50,50 +52,51 @@ namespace OrganicShop.BLL.Services
 
             PageDto<Property, PropertyListDto, int> pageDto = new();
             pageDto.List = pageDto.SetPaging(query,paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreatePropertyDto create)
+        public async Task<ServiceResponse> Create(CreatePropertyDto create)
         {
             Property Property = create.ToModel();
 
             if ((create.IsBase == false && create.ProductId == null) || (create.IsBase == true && create.ProductId != null))
-                return EntityResultCreate.Failed;
+                return new ServiceResponse(EntityResult.Failed, "Property is not valid");
 
             await _PropertyRepository.Add(Property,1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdatePropertyDto update)
+        public async Task<ServiceResponse> Update(UpdatePropertyDto update)
         {
             Property? Property = await _PropertyRepository.GetAsTracking(update.Id);
             
             if (Property == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             if ((update.IsBase == false && update.ProductId == null) || (update.IsBase == true && update.ProductId != null))
-                return EntityResultUpdate.Failed;
+                return new ServiceResponse(EntityResult.Failed, "Property is not valid");
 
             await _PropertyRepository.Update(update.ToModel(Property), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(int delete)
+        public async Task<ServiceResponse> Delete(int delete)
         {
             Property? Property = await _PropertyRepository.GetAsTracking(delete);
 
             if (Property == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _PropertyRepository.SoftDelete(Property, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

@@ -3,12 +3,14 @@ using OrganicShop.Domain.Entities.Relations;
 using OrganicShop.Domain.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Entities
 {
+    [DisplayName("تخفیف")]
     public class Discount : EntityId<int>
     {
         public bool IsDefault { get; set; } 

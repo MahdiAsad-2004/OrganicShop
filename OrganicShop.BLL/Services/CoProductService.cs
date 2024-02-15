@@ -3,9 +3,10 @@ using OrganicShop.BLL.Mappers;
 using OrganicShop.Domain.Dtos.CoProductDtos;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,6 +16,7 @@ namespace OrganicShop.BLL.Services
 
         private readonly ICoProductRepository _CoProductRepository;
         private readonly IBasketRepository _BasketRepository;
+        public Message<CoProduct> _Message { init; get; }
 
         public CoProductService(ICoProductRepository CoProductRepository, IBasketRepository basketRepository)
         {
@@ -25,7 +27,7 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<CoProduct,CoProductListDto,long>> GetAll(FilterCoProductDto filter , SortCoProductDto sort , PagingDto paging)
+        public async Task<PageDto<CoProduct, CoProductListDto, long>> GetAll(FilterCoProductDto filter, SortCoProductDto sort, PagingDto paging)
         {
             var query = _CoProductRepository.GetQueryable();
 
@@ -61,25 +63,39 @@ namespace OrganicShop.BLL.Services
 
             PageDto<CoProduct, CoProductListDto, long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CoProductCreateDto create)
+        public async Task<ServiceResponse> Create(CreateCoProductDto create)
         {
-            if (await _CoProductRepository.GetQueryable().Include(a => a.Product).AnyAsync(a => a.ProductId == create.ProductId))
-                return EntityResultCreate.EntityExist;
+            CoProduct? CoProduct = new();
 
-            if(_BasketRepository.GetQueryable().Any(a => a.Id == create.BasketId) == false)
-                return EntityResultCreate.Failed;
+            CoProduct = await _CoProductRepository.GetQueryable()
+                .AsTracking()
+                .Include(a => a.Product)
+                .FirstOrDefaultAsync(a => a.ProductId == create.ProductId && a.BasketId == create.BasketId);
+            if (CoProduct != null)
+            {
+                CoProduct.Count += create.Count;
+                if (CoProduct.Count > CoProduct.Product.Stock)
+                {
+                    CoProduct.Count = CoProduct.Product.Stock; ;
+                }
+                CoProduct.IsOrdered = false;
+                await _CoProductRepository.Update(CoProduct, 1);
+            }
+            else
+            {
+                CoProduct = create.ToModel();
+                CoProduct.IsOrdered = false;
+                await _CoProductRepository.Add(CoProduct, 1);
 
-            CoProduct CoProduct = create.ToModel();
-            CoProduct.IsOrdered = false;
 
-            await _CoProductRepository.Add(CoProduct, 1);
-
+            }
 
             #region update basket
 
@@ -96,18 +112,17 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateCoProductDto update)
+        public async Task<ServiceResponse> Update(UpdateCoProductDto update)
         {
             CoProduct? CoProduct = await _CoProductRepository.GetAsTracking(update.Id);
 
             if (CoProduct == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             if (update.OrderId != null && update.BasketId == null)
             {
@@ -140,23 +155,23 @@ namespace OrganicShop.BLL.Services
             #endregion
 
 
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(long id)
+        public async Task<ServiceResponse> Delete(long id)
         {
 
             CoProduct? CoProduct = await _CoProductRepository.GetAsTracking(id);
 
             if (CoProduct == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             CoProduct.BasketId = null;
 
             await _CoProductRepository.SoftDelete(CoProduct, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

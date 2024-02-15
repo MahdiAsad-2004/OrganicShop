@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.PropertyDtos
 {
-    public class PropertyListDto : BaseDto<int>
+    public class PropertyListDto : BaseListDto<int>
     {
         public string Title { get; set; }
         public string Value { get; set; }

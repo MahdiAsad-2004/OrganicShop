@@ -15,6 +15,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using StructureMap.TypeRules;
 using static System.Net.Mime.MediaTypeNames;
+using System.Linq.Expressions;
+using System.ComponentModel;
+using OrganicShop.Domain.Dtos.Base;
 
 Console.WriteLine("Hello, World!\n");
 
@@ -22,7 +25,39 @@ Console.WriteLine("Hello, World!\n");
 
 
 
-var typess = new List<Type>();
+
+//var type = typeof(IProductService);
+//Console.WriteLine(type.IsAssignableTo(typeof(IService<IAggregateRoot>)));
+
+
+
+
+
+
+//object address = new Address();
+//Console.WriteLine(address.GetType().Name);
+//address = typeof(Address);
+//Console.WriteLine(address.GetType().Name);
+
+
+//var x = new Expression<Func>>
+
+//var a = typeof(Product);
+
+//List<Product> products = new();
+
+//products.OrderBy(a => a.Barcode);
+
+//Func<Product, object> func = (a) => a.Barcode;
+
+
+
+
+
+
+
+
+//var typess = new List<Type>();
 
 //foreach (var assembly in assemblies)
 //{
@@ -36,24 +71,24 @@ var typess = new List<Type>();
 //Console.WriteLine(typess.Count);
 
 
-var types = new List<Type>();
-var allAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith(nameof(OrganicShop)));
-foreach (var assembly in allAssemblies)
-{
-    Console.WriteLine(assembly.FullName);
-    //Console.WriteLine(assembly.GetTypes().Count());
-    //foreach (var type in assembly.GetTypes()/*.Where(a => a.IsClass && (a.Name.EndsWith("Service") || a.Name.EndsWith("Repository")))*/)
-    //{
-        
-    //        Console.WriteLine(type.FullName);
-    //    if (type is not null)
-    //    {
-    //        //types.Add(type);
-    //    }
-    //}
-}
+//var types = new List<Type>();
+//var allAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith(nameof(OrganicShop)));
+//foreach (var assembly in allAssemblies)
+//{
+//    Console.WriteLine(assembly.FullName);
+//    //Console.WriteLine(assembly.GetTypes().Count());
+//    //foreach (var type in assembly.GetTypes()/*.Where(a => a.IsClass && (a.Name.EndsWith("Service") || a.Name.EndsWith("Repository")))*/)
+//    //{
 
-Console.WriteLine("-----------------------------------------------------------------------");
+//    //        Console.WriteLine(type.FullName);
+//    //    if (type is not null)
+//    //    {
+//    //        //types.Add(type);
+//    //    }
+//    //}
+//}
+
+//Console.WriteLine("-----------------------------------------------------------------------");
 
 
 //var services = ourProjectAssemblies
@@ -301,10 +336,5 @@ Console.WriteLine("-------------------------------------------------------------
 
 //dbContext.Users.AddRange(add_users);
 //dbContext.SaveChanges();
-
-
-
-
-
 
 

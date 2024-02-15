@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.DAL.Repositories
 {
-    public class CommentRepository : CrudRepository<Comment, long> , ICommentRepository
+    public class CommentRepository : CrudRepository<Comment, long>, ICommentRepository
     {
-            
+        public CommentRepository(OrganicShopDbContext organicShopDbContext) : base(organicShopDbContext)
+        {
+        }
     }
 
-    
+
 }

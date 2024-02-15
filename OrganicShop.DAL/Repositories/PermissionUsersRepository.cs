@@ -12,6 +12,9 @@ namespace OrganicShop.DAL.Repositories
 {
     public class PermissionUsersRepository : CrudRepository<PermissionUsers, int>, IPermissionUsersRepository
     {
+        public PermissionUsersRepository(OrganicShopDbContext organicShopDbContext) : base(organicShopDbContext)
+        {
+        }
     }
 
 

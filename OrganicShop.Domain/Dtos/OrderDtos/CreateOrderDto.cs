@@ -1,8 +1,9 @@
-﻿using OrganicShop.Domain.Enums;
+﻿using OrganicShop.Domain.Dtos.Base;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.OrderDtos
 {
-    public record CreateOrderDto
+    public class CreateOrderDto : BaseDto
     {
         public DeliveryType DeliveryType { get; set; }
         public PaymentMethod PaymentMethod { get; set; }

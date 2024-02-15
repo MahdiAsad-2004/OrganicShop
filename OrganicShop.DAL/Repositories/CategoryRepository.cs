@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.DAL.Repositories
 {
-    public class CategoryRepository : CrudRepository<Category, int> , ICategoryRepository
+    public class CategoryRepository : CrudRepository<Category, int>, ICategoryRepository
     {
-            
+        public CategoryRepository(OrganicShopDbContext organicShopDbContext) : base(organicShopDbContext)
+        {
+        }
     }
 
-    
+
 }

@@ -19,10 +19,16 @@ namespace OrganicShop.DAL.Repositories
         where TKey : struct
     {
 
+
+
         public required OrganicShopDbContext _context { protected get; init; }
+        public CrudRepository(OrganicShopDbContext organicShopDbContext)
+        {
+            _context = organicShopDbContext;
+        }
 
 
-        public async Task<TKey> Add(TEntity entity, long id)
+        public async Task<TKey> Add(TEntity entity, long id , string? operationDescription = null)
         {
             entity.SoftDelete = new SoftDelete { IsDelete = false, DalateDate = null };
             entity.BaseEntity = new BaseEntity { CreateDate = DateTime.Now, LastModified = DateTime.Now, IsActive = true };
@@ -34,6 +40,7 @@ namespace OrganicShop.DAL.Repositories
                 EntityTitle = entity.GetType().Name,
                 Type = Domain.Enums.OperationType.Create,
                 UserId = id,
+                Description = operationDescription,
             };
             await _context.AddAsync(entity);
             await _context.Operations.AddAsync(operation);
@@ -41,7 +48,7 @@ namespace OrganicShop.DAL.Repositories
             return entity.Id;
         }
 
-        public async Task Add(List<TEntity> entities, long id)
+        public async Task Add(List<TEntity> entities, long id , string? operationDescription = null)
         {
             foreach (var entity in entities)
             {
@@ -56,13 +63,14 @@ namespace OrganicShop.DAL.Repositories
                 EntityTitle = entities.GetType().Name,
                 Type = Domain.Enums.OperationType.Create,
                 UserId = id,
+                Description = operationDescription,
             };
             await _context.AddRangeAsync(entities);
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(TEntity entity, long id)
+        public async Task Update(TEntity entity, long id, string? operationDescription = null)
         {
             entity.BaseEntity.LastModified = DateTime.Now;
             var operation = new Domain.Entities.Operation
@@ -73,12 +81,33 @@ namespace OrganicShop.DAL.Repositories
                 EntityTitle = entity.GetType().Name,
                 Type = Domain.Enums.OperationType.Update,
                 UserId = id,
+                Description = operationDescription,
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateNoTrackng(TEntity entity, long id)
+        public async Task Update(List<TEntity> entities, long id, string? operationDescription = null)
+        {
+            foreach (var entity in entities)
+            {
+                entity.BaseEntity.LastModified = DateTime.Now;
+            }
+            var operation = new Domain.Entities.Operation
+            {
+                Date = DateTime.Now,
+                EntityNewData = null,
+                EntityOldData = null,
+                EntityTitle = entities.GetType().Name,
+                Type = Domain.Enums.OperationType.Update,
+                UserId = id,
+                Description = operationDescription,
+            };
+            await _context.Operations.AddAsync(operation);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateNoTrackng(TEntity entity, long id, string? operationDescription = null)
         {
             entity.BaseEntity.LastModified = DateTime.Now;
             var operation = new Domain.Entities.Operation
@@ -89,6 +118,7 @@ namespace OrganicShop.DAL.Repositories
                 EntityTitle = entity.GetType().Name,
                 Type = Domain.Enums.OperationType.Update,
                 UserId = id,
+                Description = operationDescription,
             };
             _context.Update(entity);
             await _context.Operations.AddAsync(operation);
@@ -96,7 +126,7 @@ namespace OrganicShop.DAL.Repositories
         }
 
 
-        public async Task SoftDelete(TEntity entity, long id)
+        public async Task SoftDelete(TEntity entity, long id, string? operationDescription = null)
         {
             _context.Entry(entity).Entity.SoftDelete.DalateDate = DateTime.Now;
             _context.Entry(entity).Entity.SoftDelete.IsDelete = true;
@@ -108,12 +138,13 @@ namespace OrganicShop.DAL.Repositories
                 EntityTitle = entity.GetType().Name,
                 Type = Domain.Enums.OperationType.SoftDelete,
                 UserId = id,
+                Description = operationDescription,
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
         }
 
-        public async Task SoftDelete(TKey key, long id)
+        public async Task SoftDelete(TKey key, long id, string? operationDescription = null)
         {
             TEntity entity = await GetAsNoTracking(key);
             _context.Entry(entity).Entity.SoftDelete.DalateDate = DateTime.Now;
@@ -126,6 +157,7 @@ namespace OrganicShop.DAL.Repositories
                 EntityTitle = entity.GetType().Name,
                 Type = Domain.Enums.OperationType.SoftDelete,
                 UserId = id,
+                Description = operationDescription,
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
@@ -157,7 +189,7 @@ namespace OrganicShop.DAL.Repositories
         }
 
 
-        public async Task Delete(TEntity entity, long id)
+        public async Task Delete(TEntity entity, long id, string? operationDescription = null)
         {
             _context.Remove(entity);
             var operation = new Domain.Entities.Operation
@@ -168,12 +200,13 @@ namespace OrganicShop.DAL.Repositories
                 EntityTitle = entity.GetType().Name,
                 Type = Domain.Enums.OperationType.SoftDelete,
                 UserId = id,
+                Description = operationDescription,
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(TKey key, long id)
+        public async Task Delete(TKey key, long id, string? operationDescription = null )
         {
             TEntity entity = await GetAsNoTracking(key);
             _context.Remove(entity);
@@ -185,6 +218,7 @@ namespace OrganicShop.DAL.Repositories
                 EntityTitle = entity.GetType().Name,
                 Type = Domain.Enums.OperationType.SoftDelete,
                 UserId = id,
+                Description = operationDescription,
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();

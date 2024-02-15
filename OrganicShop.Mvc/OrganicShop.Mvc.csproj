@@ -412,4 +412,9 @@
     <ProjectReference Include="..\OrganicShop.Ioc\OrganicShop.Ioc.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\media\images\user\" />
+    <Folder Include="wwwroot\media\images\product\" />
+  </ItemGroup>
+
 </Project>

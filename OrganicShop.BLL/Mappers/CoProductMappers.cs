@@ -19,7 +19,7 @@ namespace OrganicShop.BLL.Mappers
             return coProductListDto;
         }
 
-        public static CoProduct ToModel(this CoProductCreateDto create)
+        public static CoProduct ToModel(this CreateCoProductDto create)
         {
             return new CoProduct()
             {

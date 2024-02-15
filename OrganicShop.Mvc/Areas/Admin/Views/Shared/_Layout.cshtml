@@ -16,6 +16,8 @@
 
     <partial name="_AdminStyles" />
 
+     @await RenderSectionAsync("Styles", false)
+
 </head>
 <body>
 
@@ -43,6 +45,8 @@
     </div>
 
     <partial name="_AdminScripts" />
+
+    @await RenderSectionAsync("Scripts", false)
 
 </body>
 </html>

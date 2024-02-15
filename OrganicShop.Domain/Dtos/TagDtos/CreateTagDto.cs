@@ -1,6 +1,8 @@
-﻿namespace OrganicShop.Domain.Dtos.TagDtos
+﻿using OrganicShop.Domain.Dtos.Base;
+
+namespace OrganicShop.Domain.Dtos.TagDtos
 {
-    public record CreateTagDto
+    public class CreateTagDto : BaseDto
     {
         public string Title { get; set; }
     }

@@ -3,10 +3,11 @@ using OrganicShop.BLL.Mappers;
 using OrganicShop.DAL.Repositories;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Dtos.BaketDtos;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,6 +16,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IBasketRepository _BasketRepository;
+        public Message<Basket> _Message { init; get; }
 
         public BasketService(IBasketRepository BasketRepository)
         {
@@ -49,51 +51,53 @@ namespace OrganicShop.BLL.Services
 
             PageDto<Basket, BasketListDto, long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
+
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateBasketDto create)
+        public async Task<ServiceResponse> Create(CreateBasketDto create)
         {
-            if (await _BasketRepository.GetQueryable().Where(a => a.UserId == create.UserId).CountAsync() >= 2)
-                return EntityResultCreate.MaxCreate;
+            if (await _BasketRepository.GetQueryable().Where(a => a.UserId == create.UserId).CountAsync() > 2)
+                return new ServiceResponse(EntityResult.MaxCreate, _Message.MaxCreate(2));
 
             Basket Basket = create.ToModel();
 
             await _BasketRepository.Add(Basket,1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateBasketDto update)
+        public async Task<ServiceResponse> Update(UpdateBasketDto update)
         {
             Basket? Basket = await _BasketRepository.GetAsTracking(update.Id);
             
             if (Basket == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _BasketRepository.Update(update.ToModel(Basket), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(long delete)
+        public async Task<ServiceResponse> Delete(long delete)
         {
             Basket? Basket = await _BasketRepository.GetAsTracking(delete);
 
             if (Basket == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _BasketRepository.SoftDelete(Basket, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
 
- 
-        
+
+
 
     }
 }

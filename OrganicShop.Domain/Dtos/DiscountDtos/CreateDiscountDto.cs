@@ -1,7 +1,9 @@
-﻿namespace OrganicShop.Domain.Dtos.DiscountDtos
+﻿using OrganicShop.Domain.Dtos.Base;
+
+namespace OrganicShop.Domain.Dtos.DiscountDtos
 {
-    public record CreateDiscountDto
-    {
+    public class CreateDiscountDto : BaseDto
+     {
         public bool IsDefault { get; set; }
         public string? Code { get; set; }
         public int? Count { get; set; }

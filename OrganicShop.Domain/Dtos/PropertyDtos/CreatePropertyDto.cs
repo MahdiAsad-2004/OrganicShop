@@ -1,6 +1,8 @@
-﻿namespace OrganicShop.Domain.Dtos.PropertyDtos
+﻿using OrganicShop.Domain.Dtos.Base;
+
+namespace OrganicShop.Domain.Dtos.PropertyDtos
 {
-    public record CreatePropertyDto
+    public class CreatePropertyDto : BaseDto
     {
         public string Title { get; set; }
         public string Value { get; set; }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.Base
 {
-    public class BaseSortDto<Entity, key> where Entity : EntityId<key> where key : struct
+    public class BaseSortDto<Entity, key> : BaseDto where Entity : EntityId<key> where key : struct
     {
         public BaseSortType BaseSortType { get; set; } = BaseSortType.None;
 

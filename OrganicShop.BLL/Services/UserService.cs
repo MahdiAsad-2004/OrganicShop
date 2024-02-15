@@ -3,11 +3,12 @@ using OrganicShop.BLL.Mappers;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.UserDtos;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
 using System.Dynamic;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -16,6 +17,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IUserRepository _userRepository;
+        public Message<User> _Message { get; }
 
         public UserService(IUserRepository userRepository)
         {
@@ -60,70 +62,71 @@ namespace OrganicShop.BLL.Services
 
             PageDto<User, UserListDto, long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
-            
+            pageDto.Pager = pageDto.SetPager(query, paging);
+
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateUserDto create)
+        public async Task<ServiceResponse> Create(CreateUserDto create)
         {
             if (await _userRepository.GetQueryable().AnyAsync(a => a.PhoneNumber == create.PhoneNumber))
-                return EntityResultCreate.PhoneNumberExist;
+                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create,a => nameof(a.PhoneNumber)));
 
             if(await _userRepository.GetQueryable().AnyAsync(a => a.Email == create.Email))
-                return EntityResultCreate.EmailExist;
+                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create, a => nameof(a.Email)));
 
             User user = create.ToModel();
             await _userRepository.Add(user,1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateUserDto update)
+        public async Task<ServiceResponse> Update(UpdateUserDto update)
         {
             if (await _userRepository.GetQueryable().AnyAsync(a => a.Id != update.Id && a.Email == update.Email))
-                return EntityResultUpdate.EmailExist;
+                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Email)));
 
             User? user = await _userRepository.GetAsTracking(update.Id);
             
             if (user == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _userRepository.Update(update.ToModel(user), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(long delete)
+        public async Task<ServiceResponse> Delete(long delete)
         {
             User? user = await _userRepository.GetAsTracking(delete);
 
             if (user == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _userRepository.SoftDelete(user,1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
 
 
 
-        public async Task<EntityResultUpdate> ChangePassword(ChangePasswordDto changePassword)
+        public async Task<ServiceResponse> ChangePassword(ChangePasswordDto changePassword)
         {
             User? user = await _userRepository.GetAsNoTracking(changePassword.Id);
 
             if (user == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             if (user.Password != changePassword.Password)
-                return EntityResultUpdate.WrongPassword;
+                return new ServiceResponse(EntityResult.Failed, "رمز عبور نادرست است");
 
             user = await _userRepository.GetAsTracking(changePassword.Id);
             user!.Password = changePassword.NewPassword;
             await _userRepository.Update(user, 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, "رمز عبور با موفقیت تغییر یافت");
         }
 
 

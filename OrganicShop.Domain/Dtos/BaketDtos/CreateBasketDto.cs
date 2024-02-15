@@ -1,8 +1,10 @@
-﻿namespace OrganicShop.Domain.Dtos.BaketDtos
+﻿using OrganicShop.Domain.Dtos.Base;
+
+namespace OrganicShop.Domain.Dtos.BaketDtos
 {
-    public record CreateBasketDto
+    public class CreateBasketDto : BaseDto
     {
-        public long UserId { get; set; }
+        public long UserId { get; set; } 
     }
 
 

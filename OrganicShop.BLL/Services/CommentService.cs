@@ -2,10 +2,11 @@
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Enums;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Dtos.CommentDtos;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,6 +15,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly ICommentRepository _CommentRepository;
+        public Message<Comment> _Message { init; get; }
 
         public CommentService(ICommentRepository CommentRepository)
         {
@@ -50,44 +52,45 @@ namespace OrganicShop.BLL.Services
 
             PageDto<Comment, CommentListDto, long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateCommentDto create)
+        public async Task<ServiceResponse> Create(CreateCommentDto create)
         {
             Comment Comment = create.ToModel();
             Comment.Status = CommentStatus.Unread;
             await _CommentRepository.Add(Comment,1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateCommentDto update)
+        public async Task<ServiceResponse> Update(UpdateCommentDto update)
         {
             Comment? Comment = await _CommentRepository.GetAsTracking(update.Id);
             
             if (Comment == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _CommentRepository.Update(update.ToModel(Comment), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(long delete)
+        public async Task<ServiceResponse> Delete(long delete)
         {
             Comment? Comment = await _CommentRepository.GetAsTracking(delete);
 
             if (Comment == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _CommentRepository.SoftDelete(Comment, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
     }
 }

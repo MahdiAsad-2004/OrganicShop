@@ -1,22 +1,22 @@
 ﻿using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.BaketDtos;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.Domain.IServices
 {
-    public interface IBasketService
+    public interface IBasketService : IService<Basket>
     {
         Task<PageDto<Basket, BasketListDto, long>> GetAll(FilterBasketDto filter, SortBasketDto sort, PagingDto paging);
 
-        Task<EntityResultCreate> Create(CreateBasketDto create);
+        Task<ServiceResponse> Create(CreateBasketDto create);
 
-        Task<EntityResultUpdate> Update(UpdateBasketDto update);
+        Task<ServiceResponse> Update(UpdateBasketDto update);
 
         //Task<DeleteEntityResult> Delete(BasketDeleteDto delete);
 
-        //Task<EntityResultUpdate> AddToBasket(CoProduct coProduct);
+        //Task<ServiceResponse> AddToBasket(CoProduct coProduct);
 
-        //Task<EntityResultUpdate> AddToBasket(List<CoProduct> coProducts);
+        //Task<ServiceResponse> AddToBasket(List<CoProduct> coProducts);
     }
 }

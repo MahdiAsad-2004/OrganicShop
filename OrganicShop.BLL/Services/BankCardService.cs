@@ -3,10 +3,11 @@ using OrganicShop.BLL.Mappers;
 using OrganicShop.DAL.Repositories;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Dtos.BankCardDtos;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,6 +16,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IBankCardRepository _BankCardRepository;
+        public Message<BankCard> _Message { init; get; }
 
         public BankCardService(IBankCardRepository BankCardRepository)
         {
@@ -46,50 +48,52 @@ namespace OrganicShop.BLL.Services
 
             PageDto<BankCard, BankCardListDto, long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
+
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateBankCardDto create)
+        public async Task<ServiceResponse> Create(CreateBankCardDto create)
         {
             if (await _BankCardRepository.GetQueryable().Where(a => a.UserId == create.UserId).CountAsync() > 8)
-                return EntityResultCreate.MaxCreate;
+                return new ServiceResponse(EntityResult.MaxCreate , _Message.MaxCreate(8));
 
             BankCard BankCard = create.ToModel();
             await _BankCardRepository.Add(BankCard, 1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
+            
 
-
-        public async Task<EntityResultUpdate> Update(UpdateBankCardDto update)
+        public async Task<ServiceResponse> Update(UpdateBankCardDto update)
         {
             BankCard? BankCard = await _BankCardRepository.GetAsTracking(update.Id);
 
             if (BankCard == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.Success, _Message.NotFound());
 
             if (BankCard.UserId != update.UserId)
-                return EntityResultUpdate.NoAccess;
+                return new ServiceResponse(EntityResult.Success, _Message.NoAccess());
 
             await _BankCardRepository.Update(update.ToModel(BankCard), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(long delete)
+        public async Task<ServiceResponse> Delete(long delete)
         {
 
             BankCard? BankCard = await _BankCardRepository.GetAsTracking(delete);
 
             if (BankCard == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.Success, _Message.NotFound());
 
             await _BankCardRepository.SoftDelete(BankCard, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

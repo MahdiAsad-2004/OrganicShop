@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.CommentDtos
 {
-    public class UpdateCommentDto : BaseDto<long>
+    public class UpdateCommentDto : BaseListDto<long>
     {
         public CommentStatus Status { get; set; }
         public long UserId { get; set; }

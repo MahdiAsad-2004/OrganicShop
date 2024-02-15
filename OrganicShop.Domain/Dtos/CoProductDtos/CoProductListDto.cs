@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.CoProductDtos
 {
-    public class CoProductListDto : BaseDto<long>
+    public class CoProductListDto : BaseListDto<long>
     {
         public long ProductId { get; set; }
         public int Count { get; set; }

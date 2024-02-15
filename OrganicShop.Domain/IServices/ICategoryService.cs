@@ -1,19 +1,19 @@
 ﻿using OrganicShop.Domain.Dtos.CategoryDtos;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.Domain.IServices
 {
-    public interface ICategoryService
+    public interface ICategoryService : IService<Category>
     {
         Task<PageDto<Category,CategoryListDto,int>> GetAll(FilterCategoryDto filter, SortCategoryDto sort,PagingDto paging);
 
-        Task<EntityResultCreate> Create(CreateCategoryDto create);
+        Task<ServiceResponse> Create(CreateCategoryDto create);
 
-        Task<EntityResultUpdate> Update(UpdateCategoryDto update);
+        Task<ServiceResponse> Update(UpdateCategoryDto update);
         
-        Task<EntityResultDelete> Delete( int id);
+        Task<ServiceResponse> Delete( int id);
         
     }
 }

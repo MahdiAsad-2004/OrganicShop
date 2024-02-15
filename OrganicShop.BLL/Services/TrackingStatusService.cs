@@ -6,9 +6,10 @@ using OrganicShop.Domain.Dtos.TrackingStatusDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Entities.Base;
 using OrganicShop.Domain.Enums;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -19,6 +20,7 @@ namespace OrganicShop.BLL.Services
 
         private readonly ITrackingStatusRepository _TrackingStatusRepository;
         private readonly IOrderRepository _OrderRepository;
+        public Message<TrackingStatus> _Message { get; }
 
         public TrackingStatusService(ITrackingStatusRepository TrackingStatusRepository,IOrderRepository orderRepository)
         {
@@ -54,21 +56,22 @@ namespace OrganicShop.BLL.Services
 
             PageDto<TrackingStatus, TrackingStatusListDto,long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query , paging).Select(a => a.ToListDto()).ToList();
-            
+            pageDto.Pager = pageDto.SetPager(query, paging);
+
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateTrackingStatusDto create)
+        public async Task<ServiceResponse> Create(CreateTrackingStatusDto create)
         {
             //TrackingStatus TrackingStatus = create.ToModel();
 
             if (_OrderRepository.GetQueryable().Any(a => a.Id == create.OrderId) == false)
-                return EntityResultCreate.Failed;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound(typeof(Order)));
 
             if(_TrackingStatusRepository.GetQueryable().Any(a => a.OrderId == create.OrderId) == true)
-                return EntityResultCreate.Failed;
+                return new ServiceResponse(EntityResult.EntityExist, "وضعیت های سفارش قبلا ایجاد شده است");
 
             var TrackingStatuses = Enumerable.Empty<TrackingStatus>();
             foreach (var orderStep in EnumExtension.GetArray<OrderStep>())
@@ -85,33 +88,33 @@ namespace OrganicShop.BLL.Services
             }
 
             await _TrackingStatusRepository.Add(TrackingStatuses.ToList(),1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateTrackingStatusDto update)
+        public async Task<ServiceResponse> Update(UpdateTrackingStatusDto update)
         {
             TrackingStatus? TrackingStatus = await _TrackingStatusRepository.GetAsTracking(update.Id);
             
             if (TrackingStatus == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _TrackingStatusRepository.Update(update.ToModel(TrackingStatus), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(long delete)
+        public async Task<ServiceResponse> Delete(long delete)
         {
             TrackingStatus? TrackingStatus = await _TrackingStatusRepository.GetAsTracking(delete);
 
             if (TrackingStatus == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _TrackingStatusRepository.SoftDelete(TrackingStatus, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

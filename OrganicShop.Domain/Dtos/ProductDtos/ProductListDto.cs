@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.ProductDtos
 {
-    public class ProductListDto : BaseDto<long>
+    public class ProductListDto : BaseListDto<long>
     {
         public string Title { get; set; }
         public int Stock { get; set; }
@@ -11,6 +11,9 @@ namespace OrganicShop.Domain.Dtos.ProductDtos
         public int SoldCount { get; set; }
         public string MainImage { get; set; }
         public string Barcode { get; set; }
+        public string CategoryTitle { get; set; }
+        public bool IsActive { get; set; }
+
     }
 
 

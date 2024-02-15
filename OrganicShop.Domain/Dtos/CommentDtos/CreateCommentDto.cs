@@ -1,8 +1,9 @@
-﻿using OrganicShop.Domain.Enums;
+﻿using OrganicShop.Domain.Dtos.Base;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.CommentDtos
 {
-    public record CreateCommentDto
+    public class CreateCommentDto : BaseDto
     {
         public int Rate { get; set; }
         public string Text { get; set; }

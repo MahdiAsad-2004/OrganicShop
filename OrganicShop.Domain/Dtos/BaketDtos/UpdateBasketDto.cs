@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.BaketDtos
 {
-    public class UpdateBasketDto : BaseDto<long>
+    public class UpdateBasketDto : BaseListDto<long>
     {
 
     }

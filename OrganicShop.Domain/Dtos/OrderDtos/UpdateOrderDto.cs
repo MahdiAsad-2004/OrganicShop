@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.OrderDtos
 {
-    public class UpdateOrderDto : BaseDto<long>
+    public class UpdateOrderDto : BaseListDto<long>
     {
         public OrderStatus OrderStatus { get; set; }
         public DateTime DeliveryDatePredicate { get; set; }

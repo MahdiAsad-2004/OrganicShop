@@ -2,9 +2,10 @@
 using OrganicShop.BLL.Mappers;
 using OrganicShop.Domain.Dtos.ContactUsDtos;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -13,6 +14,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IContactUsRepository _ContactUsRepository;
+        public Message<ContactUs> _Message { init; get; }
 
         public ContactUsService(IContactUsRepository ContactUsRepository)
         {
@@ -22,6 +24,7 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
+
         public async Task<UpdateContactUsDto> Get()
         {
             var contactUs = await _ContactUsRepository.GetQueryable().FirstAsync();
@@ -29,15 +32,16 @@ namespace OrganicShop.BLL.Services
         }
 
 
-        public async Task<EntityResultUpdate> Update(UpdateContactUsDto update)
+
+        public async Task<ServiceResponse> Update(UpdateContactUsDto update)
         {
             ContactUs? ContactUs = await _ContactUsRepository.GetQueryable().FirstAsync();
 
             if (ContactUs == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _ContactUsRepository.Update(update.ToModel(ContactUs), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
     }

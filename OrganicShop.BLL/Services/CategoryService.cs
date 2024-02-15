@@ -2,10 +2,11 @@
 using OrganicShop.BLL.Mappers;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Dtos.CategoryDtos;
+using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,6 +16,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly ICategoryRepository _CategoryRepository;
+        public Message<Category> _Message { init; get; }
 
         public CategoryService(ICategoryRepository CategoryRepository)
         {
@@ -54,55 +56,60 @@ namespace OrganicShop.BLL.Services
 
             PageDto<Category, CategoryListDto, int> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
         }
 
 
 
-        public async Task<EntityResultCreate> Create(CreateCategoryDto create)
+        public async Task<ServiceResponse> Create(CreateCategoryDto create)
         {
+            Category? Category = new Category();
+
             if (_CategoryRepository.GetQueryable().Any(a => a.Title.Contains(create.Title, StringComparison.OrdinalIgnoreCase)))
-                return EntityResultCreate.EntityExist;
+                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create,a => nameof(a.Title)));
 
             if (_CategoryRepository.GetQueryable().Any(a => a.EnTitle.Contains(create.EnTitle, StringComparison.OrdinalIgnoreCase)))
-                return EntityResultCreate.EntityExist;
+                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create, a => nameof(a.EnTitle)));
 
-            Category Category = create.ToModel();
+            Category = create.ToModel();
             await _CategoryRepository.Add(Category, 1);
-            return EntityResultCreate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultUpdate> Update(UpdateCategoryDto update)
+        public async Task<ServiceResponse> Update(UpdateCategoryDto update)
         {
+            Category? Category = new Category();
+
             if (_CategoryRepository.GetQueryable().Any(a => a.Title.Contains(update.Title, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
-                return EntityResultUpdate.EntityExist;
+                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Title)));
 
             if (_CategoryRepository.GetQueryable().Any(a => a.EnTitle.Contains(update.EnTitle, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
-                return EntityResultUpdate.EntityExist;
+                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Title)));
 
-            Category? Category = await _CategoryRepository.GetAsTracking(update.Id);
+            Category = await _CategoryRepository.GetAsTracking(update.Id);
 
             if (Category == null)
-                return EntityResultUpdate.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _CategoryRepository.Update(update.ToModel(Category), 1);
-            return EntityResultUpdate.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<EntityResultDelete> Delete(int id)
+        public async Task<ServiceResponse> Delete(int id)
         {
             Category? Category = await _CategoryRepository.GetAsTracking(id);
 
             if (Category == null)
-                return EntityResultDelete.NotFound;
+                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             await _CategoryRepository.SoftDelete(Category, 1);
-            return EntityResultDelete.success;
+            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.CommentDtos
 {
-    public class CommentListDto : BaseDto<long>
+    public class CommentListDto : BaseListDto<long>
     {
         public int Rate { get; set; }
         public string Text { get; set; }

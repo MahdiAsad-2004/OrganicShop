@@ -1,19 +1,20 @@
 ﻿using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Response;
+using System.Xml.Schema;
 
 namespace OrganicShop.Domain.IServices
 {
-    public interface IAddressService
+    public interface IAddressService : IService<Address>
     {
         Task<PageDto<Address,AddressListDto,long>> GetAll(FilterAddressDto filter , SortAddressDto sort , PagingDto paging);
 
-        Task<EntityResultCreate> Create(CreateAddressDto create);
+        Task<ServiceResponse> Create(CreateAddressDto create);
 
-        Task<EntityResultUpdate> Update(UpdateAddressDto update);
+        Task<ServiceResponse> Update(UpdateAddressDto update);
         
-        Task<EntityResultDelete> Delete(long delete);
+        Task<ServiceResponse> Delete(long delete);
         
     }
 }

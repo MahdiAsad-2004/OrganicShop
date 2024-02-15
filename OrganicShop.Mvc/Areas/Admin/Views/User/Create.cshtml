@@ -1,0 +1,255 @@
+﻿@using OrganicShop.Domain.Dtos.ProductDtos
+@model CreateProductDto
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-sm-8 m-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-header-2">
+                                <h5>ایجاد محصول جدید</h5>
+                            </div>
+
+                            <form class="theme-form theme-form-2 mega-form">
+                                <div class="mb-5 row align-items-center">
+                                    <label class="form-label-title col-sm-3 mb-0">نام محصول</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" placeholder="عنوان محصول" asp-for="Title">
+                                        <span asp-validation-for="Title" class="mt-1 text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="mb-5 row align-items-center">
+                                    <label class="col-sm-3 col-form-label form-label-title">دسته بندی</label>
+                                    <div class="col-sm-9">
+                                        <select class="js-example-basic-single w-100" asp-for="CategoryId">
+                                            <option disabled>منو دسته ها</option>
+                                            <option>الکترونیک</option>
+                                            <option>تلویزیون و مانیتور</option>
+                                            <option>خانه و آشپزخانه</option>
+                                            <option>لوازم بهداشتی</option>
+                                            <option>گوشت و خوارکی</option>
+                                            <option>سلامتی دهان و دندان</option>
+                                            <option>دسته بندی نشده</option>
+                                        </select>
+                                        <span asp-validation-for="CategoryId" class="mt-1 text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="mb-5 row align-items-center">
+                                    <label class="col-sm-3 col-form-label form-label-title">واحد</label>
+                                    <div class="col-sm-9">
+                                        <select class="js-example-basic-single w-100">
+                                            <option disabled>منو واحد</option>
+                                            <option>کیلو گرم</option>
+                                            <option>قطعه</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-5 row align-items-center">
+                                    <label class="col-sm-3 col-form-label form-label-title">برچسب ها</label>
+                                    <div class="col-sm-9">
+                                        <div class="bs-example">
+                                            <input asp-for="Tags" type="text" class="form-control" placeholder="برچسب را تایپ کنید" id="#inputTag" data-role="tagsinput">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-header-2">
+                                <h5>توضیحات</h5>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <label class="form-label-title col-sm-3 mb-0">توضیحات محصول</label>
+                                        <div class="col-sm-9">
+                                            <textarea id="editor" asp-for="Description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-header-2">
+                                <h5>تصویر محصول</h5>
+                            </div>
+
+                            <div class="theme-form theme-form-2 mega-form">
+                                <div class="row align-items-center">
+                                    <label class="col-sm-3 col-form-label form-label-title">تصویر شاخص</label>
+                                    <div class="col-sm-9">
+                                        <input asp-for="MainImage" class="form-control form-choose" type="file" id="formFileMultiple1">
+                                        <span asp-validation-for="MainImage" class="mt-1 text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-5 row align-items-center">
+                                    <label class="col-sm-3 col-form-label form-label-title">تصاویر</label>
+                                    <div class="col-sm-9">
+                                        <input asp-for="PictureFiles" class="form-control form-choose" type="file" id="formFile" multiple>
+                                        <span asp-validation-for="PictureFiles" class="mt-1 text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-header-2">
+                                <h5>ویژگی محصول</h5>
+                            </div>
+
+                            <div class="theme-form theme-form-2 mega-form">
+                                <div class="mb-5 row align-items-center">
+                                    <label class="form-label-title col-sm-3 mb-0">نوع ویژگی</label>
+                                    <div class="col-sm-9">
+                                        <select class="js-example-basic-single w-100" name="state">
+                                            <option>رنگ</option>
+                                            <option>سایز</option>
+                                            <option>جنس</option>
+                                            <option>استایل</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center">
+                                    <label class="col-sm-3 col-form-label form-label-title">مقدار</label>
+                                    <div class="col-sm-9">
+                                        <div class="bs-example">
+                                            <input type="text" class="form-control"
+                                                   placeholder="تایپ کنید سپس اینتر را بزنید" id="#inputTag"
+                                                   data-role="tagsinput">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="/admin/property/create" class="add-option"><i class="ri-add-line me-2"></i> افزودن ویژگی جدید</a>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-header-2">
+                                <h5>قیمت محصول</h5>
+                            </div>
+
+                            <div class="theme-form theme-form-2 mega-form">
+                                <div class="mb-5 row align-items-center">
+                                    <label class="col-sm-3 form-label-title">قیمت</label>
+                                    <div class="col-sm-9">
+                                        <input asp-for="Price" class="form-control" type="number" placeholder="0">
+                                        <span asp-validation-for="Price" class="mt-1 text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="mb-5 row align-items-center">
+                                    <label class="col-sm-3 form-label-title">قیمت با تخفیف</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="number" placeholder="0" asp-for="UpdatedPrice">
+                                        <span asp-validation-for="UpdatedPrice" class="mt-1 text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="mb-5 row align-items-center">
+                                    <label class="col-sm-3 form-label-title">تعداد</label>
+                                    <div class="col-sm-5">
+                                        <input class="form-control" asp-for="DiscountCount" type="number" placeholder="0">
+                                        <span asp-validation-for="DiscountCount" class="mt-1 text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-header-2">
+                                <h5>موجودی انبار</h5>
+                            </div>
+
+                            <div class="theme-form theme-form-2 mega-form">
+                                <div class="mb-5 row align-items-center">
+                                    <label class="form-label-title col-sm-3 mb-0">کد بارکد محصول</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" asp-for="Barcode">
+                                        <span asp-validation-for="Barcode" class="mt-1 text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="mb-5 row align-items-center">
+                                    <label class="col-sm-3 col-form-label form-label-title">موجودی</label>
+                                    <input class="form-control" type="number" asp-for="Stock">
+                                    <span asp-validation-for="Stock" class="mt-1 text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@section Scripts {
+
+    <!-- bootstrap tag-input js -->
+    <script src="assets/js/bootstrap-tagsinput.min.js"></script>
+    <script src="assets/js/sidebar-menu.js"></script>
+
+    <!--Dropzon js -->
+    <script src="assets/js/dropzone/dropzone.js"></script>
+    <script src="assets/js/dropzone/dropzone-script.js"></script>
+
+    <!-- ck editor js -->
+    <script src="assets/js/ckeditor.js"></script>
+    <script src="assets/js/ckeditor-custom.js"></script>
+
+    <!-- select2 js -->
+    <script src="assets/js/select2.min.js"></script>
+    <script src="assets/js/select2-custom.js"></script>
+
+}

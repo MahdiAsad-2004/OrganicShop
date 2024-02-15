@@ -1,6 +1,8 @@
-﻿namespace OrganicShop.Domain.Dtos.TrackingDescriptionDtos
+﻿using OrganicShop.Domain.Dtos.Base;
+
+namespace OrganicShop.Domain.Dtos.TrackingDescriptionDtos
 {
-    public record CreateTrackingDescriptionDto
+    public class CreateTrackingDescriptionDto : BaseDto
     {
         public string Title { get; set; }
         public DateTime Date { get; set; }

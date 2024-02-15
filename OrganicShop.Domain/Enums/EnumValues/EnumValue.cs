@@ -16,15 +16,15 @@ namespace OrganicShop.Domain.Enums.EnumValues
             {
                 case CategoryType.All:
                     return "سایت";
-                    
+
                 case CategoryType.Product:
                     return "محصولات";
 
                 case CategoryType.Article:
                     return "مطالب";
-                    
+
                 default:
-                    throw new Exception("Enum error");
+                    throw new Exception("Enum value not found");
             }
         }
 
@@ -42,9 +42,28 @@ namespace OrganicShop.Domain.Enums.EnumValues
                     return "تایید شده";
 
                 default:
-                    throw new Exception("Enum error");
+                    throw new Exception("Enum value not found");
             }
+
+
         }
 
+        public static string ToStringValue(this Role role)
+        {
+            switch (role)
+            {
+                case Role.Manager:
+                    return "مدیر";
+
+                case Role.Admin:
+                    return "ادمین";
+
+                case Role.Customer:
+                    return "مشتری";
+                default:
+                    throw new Exception("Enum value not found");
+
+            }
+        }
     }
 }

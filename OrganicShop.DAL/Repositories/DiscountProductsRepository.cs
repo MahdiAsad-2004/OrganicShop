@@ -12,6 +12,9 @@ namespace OrganicShop.DAL.Repositories
 {
     public class DiscountProductsRepository : CrudRepository<DiscountProducts, int>, IDiscountProductsRepository
     {
+        public DiscountProductsRepository(OrganicShopDbContext organicShopDbContext) : base(organicShopDbContext)
+        {
+        }
     }
 
 

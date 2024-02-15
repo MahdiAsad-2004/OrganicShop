@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.CategoryDtos
 {
-    public class CategoryListDto : BaseDto<int>
+    public class CategoryListDto : BaseListDto<int>
     {
         public string Title { get; set; }
         public string EnTitle { get; set; }

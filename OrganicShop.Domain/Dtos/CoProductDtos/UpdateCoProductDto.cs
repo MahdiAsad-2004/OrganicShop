@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.CoProductDtos
 {
-    public class UpdateCoProductDto : BaseDto<long>
+    public class UpdateCoProductDto : BaseListDto<long>
     {
         public int Count { get; set; }
         public long? BasketId { get; set; }

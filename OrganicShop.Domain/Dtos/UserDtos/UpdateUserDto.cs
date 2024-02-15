@@ -3,7 +3,7 @@ using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.UserDtos
 {
-    public class UpdateUserDto : BaseDto<long>
+    public class UpdateUserDto : BaseListDto<long>
     {
         public string Name { get; set; }
         public string Email { get; set; }

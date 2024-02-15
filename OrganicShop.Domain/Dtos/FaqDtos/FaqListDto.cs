@@ -2,7 +2,7 @@
 
 namespace OrganicShop.Domain.Dtos.FaqDtos
 {
-    public class FaqListDto : BaseDto<byte>
+    public class FaqListDto : BaseListDto<byte>
     {
         public string QuestionText { get; set; }
         public string AnswerText { get; set; }

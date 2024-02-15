@@ -1,6 +1,8 @@
-﻿namespace OrganicShop.Domain.Dtos.CoProductDtos
+﻿using OrganicShop.Domain.Dtos.Base;
+
+namespace OrganicShop.Domain.Dtos.CoProductDtos
 {
-    public record CoProductCreateDto
+    public class CreateCoProductDto : BaseDto
     {
         public long ProductId { get; set; }
         public long BasketId { get; set; }

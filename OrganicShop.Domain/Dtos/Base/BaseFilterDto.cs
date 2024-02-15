@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Dtos.Base
 {
-    public class BaseFilterDto<Entity,Key>  where Entity : EntityId<Key> where Key : struct
+    public class BaseFilterDto<Entity,Key> : BaseDto  where Entity : EntityId<Key> where Key : struct
     {
         //public DeleteFilter DeleteFilter { get; set; } = DeleteFilter.NotDeleted;
         public IsActiveFilter ActiveFilter { get; set; } = IsActiveFilter.Active;

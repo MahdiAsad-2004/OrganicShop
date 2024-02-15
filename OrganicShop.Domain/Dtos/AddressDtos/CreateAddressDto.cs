@@ -1,6 +1,8 @@
-﻿namespace OrganicShop.Domain.Dtos.AddressDtos
+﻿using OrganicShop.Domain.Dtos.Base;
+
+namespace OrganicShop.Domain.Dtos.AddressDtos
 {
-    public record CreateAddressDto
+    public class CreateAddressDto : BaseDto
     {
         public string Title { get; set; }
         public string Text { get; set; }
