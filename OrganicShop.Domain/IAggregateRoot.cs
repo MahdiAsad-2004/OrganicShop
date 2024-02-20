@@ -9,5 +9,7 @@ namespace OrganicShop.Domain
     public interface IAggregateRoot
     {
 
+
+
     }
 }

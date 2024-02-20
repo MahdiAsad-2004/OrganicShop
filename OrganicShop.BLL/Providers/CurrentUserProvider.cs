@@ -10,16 +10,10 @@ namespace OrganicShop.BLL.Providers
 {
     public class CurrentUserProvider
     {
-        public readonly CurrentUser _User;
+        public CurrentUser _User { get; private set; }
 
 
-        //public void SetCurrentUser(CurrentUser currentUser)
-        //{
-        //    _User = currentUser;
-
-        //}
-
-        public CurrentUserProvider(CurrentUser currentUser)
+        public void SetCurrentUser(CurrentUser currentUser)
         {
             _User = currentUser;
         }

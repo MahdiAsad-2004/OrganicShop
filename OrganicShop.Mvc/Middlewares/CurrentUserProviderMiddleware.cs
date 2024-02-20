@@ -19,15 +19,15 @@ namespace OrganicShop.Mvc.Middlewares
         public CurrentUserProviderMiddleware(RequestDelegate next, WebApplication application)
         {
             _next = next;
-            this.application = application;
+            application = application;
         }
 
 
         public async Task Invoke(HttpContext httpContext)
         {
-            //var currentUserProvider = application.Services.GetService<CurrentUserProvider>();
-            //currentUserProvider = new CurrentUserProvider(httpContext.GetCurrentUser());
-            CurrentUserProvider currentUserProvider = new CurrentUserProvider(httpContext.GetCurrentUser());
+            var currentUserProvider = application.Services.GetService<CurrentUserProvider>();
+            var currentUser = httpContext.GetCurrentUser();
+            currentUserProvider.SetCurrentUser(currentUser);
             await _next(httpContext);
         }
 
