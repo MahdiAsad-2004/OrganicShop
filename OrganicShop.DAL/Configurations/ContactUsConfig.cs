@@ -46,15 +46,10 @@ namespace OrganicShop.DAL.Configurations
                 CreateDate = DateTime.Now,
                 LastModified = DateTime.Now,
                 IsActive = true,
-            });
-            builder.OwnsOne(a => a.BaseEntity).HasData(new
-            {
-                ContactUsId = (byte)1,
                 IsDelete = false,
-                //DeleteDate = null,
+
             });
-
-
+         
 
 
         }

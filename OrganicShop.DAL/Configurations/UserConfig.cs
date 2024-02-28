@@ -61,25 +61,16 @@ namespace OrganicShop.DAL.Configurations
                 CreateDate = DateTime.Now,
                 LastModified = DateTime.Now,
                 IsActive = true,
-            });
-            builder.OwnsOne(a => a.BaseEntity).HasData(new
-            {
-                UserId = (long)1,
                 IsDelete = false,
-                //DeleteDate = null,
             });
             builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 UserId = (long)2,
                 CreateDate = DateTime.Now,
                 LastModified = DateTime.Now,
-                IsActive = true
-            });
-            builder.OwnsOne(a => a.BaseEntity).HasData(new
-            {
-                UserId = (long)2,
+                IsActive = true,
                 IsDelete = true,
-                //DeleteDate = null,
+
             });
 
 

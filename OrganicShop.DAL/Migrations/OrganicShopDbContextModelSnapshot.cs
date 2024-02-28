@@ -448,13 +448,43 @@ namespace OrganicShop.DAL.Migrations
                         {
                             Id = (byte)2,
                             EnTitle = "Users Admin",
+                            ParentId = (byte)1,
                             Title = "مدیریت کاربران"
                         },
                         new
                         {
                             Id = (byte)3,
                             EnTitle = "Products Admin",
+                            ParentId = (byte)1,
                             Title = "مدیریت محصولات"
+                        },
+                        new
+                        {
+                            Id = (byte)4,
+                            EnTitle = "Permissions Admin",
+                            ParentId = (byte)1,
+                            Title = "مدیریت مجوز ها"
+                        },
+                        new
+                        {
+                            Id = (byte)5,
+                            EnTitle = "Comments Admin",
+                            ParentId = (byte)1,
+                            Title = "مدیریت نظرات"
+                        },
+                        new
+                        {
+                            Id = (byte)6,
+                            EnTitle = "Discounts Admin",
+                            ParentId = (byte)1,
+                            Title = "مدیریت تخفیف ها"
+                        },
+                        new
+                        {
+                            Id = (byte)7,
+                            EnTitle = "Giving Permission",
+                            ParentId = (byte)4,
+                            Title = "صدور مجوز"
                         });
                 });
 
@@ -793,7 +823,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -806,28 +842,6 @@ namespace OrganicShop.DAL.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("AddressId");
                         });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("AddressId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("AddressId");
-
-                            b1.ToTable("Addresses");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AddressId");
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("BaseEntity")
                         .IsRequired();
@@ -845,7 +859,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -858,28 +878,6 @@ namespace OrganicShop.DAL.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("ArticleId");
                         });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<int>("ArticleId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("ArticleId");
-
-                            b1.ToTable("Articles");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ArticleId");
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("BaseEntity")
                         .IsRequired();
@@ -901,7 +899,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -914,28 +918,6 @@ namespace OrganicShop.DAL.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("BankCardId");
                         });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("BankCardId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("BankCardId");
-
-                            b1.ToTable("BankCards");
-
-                            b1.WithOwner()
-                                .HasForeignKey("BankCardId");
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("BaseEntity")
                         .IsRequired();
@@ -959,7 +941,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -972,28 +960,6 @@ namespace OrganicShop.DAL.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("BasketId");
                         });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("BasketId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("BasketId");
-
-                            b1.ToTable("Baskets");
-
-                            b1.WithOwner()
-                                .HasForeignKey("BasketId");
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("BaseEntity")
                         .IsRequired();
@@ -1015,7 +981,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1029,32 +1001,10 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("CategoryId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<int>("CategoryId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("CategoryId");
-
-                            b1.ToTable("Categories");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CategoryId");
-                        });
-
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("Parent");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.CoProduct", b =>
@@ -1081,30 +1031,17 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
                                 .HasColumnType("datetime2");
-
-                            b1.HasKey("CoProductId");
-
-                            b1.ToTable("CoProducts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CoProductId");
-                        });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("CoProductId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
 
                             b1.HasKey("CoProductId");
 
@@ -1122,9 +1059,6 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Comment", b =>
@@ -1143,7 +1077,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1156,28 +1096,6 @@ namespace OrganicShop.DAL.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("CommentId");
                         });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("CommentId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("CommentId");
-
-                            b1.ToTable("Comments");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CommentId");
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("BaseEntity")
                         .IsRequired();
@@ -1195,7 +1113,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1212,40 +1136,12 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     ContactUsId = (byte)1,
-                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 874, DateTimeKind.Local).AddTicks(6629),
+                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 826, DateTimeKind.Local).AddTicks(1431),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 874, DateTimeKind.Local).AddTicks(6759)
+                                    IsDelete = false,
+                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 826, DateTimeKind.Local).AddTicks(1488)
                                 });
                         });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<byte>("ContactUsId")
-                                .HasColumnType("tinyint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("ContactUsId");
-
-                            b1.ToTable("ContactUs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContactUsId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    ContactUsId = (byte)1,
-                                    IsDelete = false
-                                });
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("BaseEntity")
                         .IsRequired();
@@ -1261,7 +1157,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1274,28 +1176,6 @@ namespace OrganicShop.DAL.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("DiscountId");
                         });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<int>("DiscountId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("DiscountId");
-
-                            b1.ToTable("Discounts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DiscountId");
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("BaseEntity")
                         .IsRequired();
@@ -1311,7 +1191,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1324,28 +1210,6 @@ namespace OrganicShop.DAL.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("FaqId");
                         });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<byte>("FaqId")
-                                .HasColumnType("tinyint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("FaqId");
-
-                            b1.ToTable("Faqs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("FaqId");
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("BaseEntity")
                         .IsRequired();
@@ -1384,30 +1248,17 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
                                 .HasColumnType("datetime2");
-
-                            b1.HasKey("OrderId");
-
-                            b1.ToTable("Orders");
-
-                            b1.WithOwner()
-                                .HasForeignKey("OrderId");
-                        });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("OrderId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
 
                             b1.HasKey("OrderId");
 
@@ -1423,9 +1274,6 @@ namespace OrganicShop.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Receiver");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Permission", b =>
@@ -1442,7 +1290,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1459,59 +1313,58 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     PermissionId = (byte)1,
-                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(2700),
+                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6331),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(2744)
+                                    IsDelete = false,
+                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6381)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)2,
-                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3039),
+                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6528),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3048)
+                                    IsDelete = false,
+                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6536)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)3,
-                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3255),
+                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6661),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3262)
-                                });
-                        });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<byte>("PermissionId")
-                                .HasColumnType("tinyint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("PermissionId");
-
-                            b1.ToTable("Permission");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PermissionId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    PermissionId = (byte)1,
-                                    IsDelete = true
+                                    IsDelete = false,
+                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6668)
                                 },
                                 new
                                 {
-                                    PermissionId = (byte)2,
-                                    IsDelete = true
+                                    PermissionId = (byte)4,
+                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6767),
+                                    IsActive = true,
+                                    IsDelete = false,
+                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6773)
                                 },
                                 new
                                 {
-                                    PermissionId = (byte)3,
-                                    IsDelete = true
+                                    PermissionId = (byte)5,
+                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6888),
+                                    IsActive = true,
+                                    IsDelete = false,
+                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6893)
+                                },
+                                new
+                                {
+                                    PermissionId = (byte)6,
+                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6987),
+                                    IsActive = true,
+                                    IsDelete = false,
+                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6992)
+                                },
+                                new
+                                {
+                                    PermissionId = (byte)7,
+                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(7087),
+                                    IsActive = true,
+                                    IsDelete = false,
+                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(7151)
                                 });
                         });
 
@@ -1519,9 +1372,6 @@ namespace OrganicShop.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Parent");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Picture", b =>
@@ -1538,7 +1388,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1552,32 +1408,10 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("PictureId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("PictureId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("PictureId");
-
-                            b1.ToTable("ProductImages");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PictureId");
-                        });
-
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("Product");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Product", b =>
@@ -1596,7 +1430,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1610,32 +1450,10 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("ProductId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("ProductId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("ProductId");
-
-                            b1.ToTable("Products");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProductId");
-                        });
-
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("Category");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Property", b =>
@@ -1652,7 +1470,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1666,32 +1490,10 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("PropertyId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<int>("PropertyId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("PropertyId");
-
-                            b1.ToTable("Properties");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PropertyId");
-                        });
-
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("Product");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountProducts", b =>
@@ -1716,30 +1518,17 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
                                 .HasColumnType("datetime2");
-
-                            b1.HasKey("DiscountProductsId");
-
-                            b1.ToTable("DiscountProducts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DiscountProductsId");
-                        });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<int>("DiscountProductsId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
 
                             b1.HasKey("DiscountProductsId");
 
@@ -1755,9 +1544,6 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("Discount");
 
                     b.Navigation("Product");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountUsers", b =>
@@ -1782,7 +1568,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1796,32 +1588,10 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("DiscountUsersId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<int>("DiscountUsersId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("DiscountUsersId");
-
-                            b1.ToTable("DiscountUsers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DiscountUsersId");
-                        });
-
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("Discount");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -1848,30 +1618,17 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
                                 .HasColumnType("datetime2");
-
-                            b1.HasKey("PermissionUsersId");
-
-                            b1.ToTable("PermissionUsers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PermissionUsersId");
-                        });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<int>("PermissionUsersId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
 
                             b1.HasKey("PermissionUsersId");
 
@@ -1886,9 +1643,6 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Permission");
 
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
-
                     b.Navigation("User");
                 });
 
@@ -1902,7 +1656,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1915,28 +1675,6 @@ namespace OrganicShop.DAL.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("TagId");
                         });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<int>("TagId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("TagId");
-
-                            b1.ToTable("Tags");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TagId");
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("BaseEntity")
                         .IsRequired();
@@ -1958,7 +1696,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -1972,32 +1716,10 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("TrackingDescriptionId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("TrackingDescriptionId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("TrackingDescriptionId");
-
-                            b1.ToTable("TrackingDescriptions");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TrackingDescriptionId");
-                        });
-
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("Order");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.TrackingStatus", b =>
@@ -2016,30 +1738,17 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
                                 .HasColumnType("datetime2");
-
-                            b1.HasKey("TrackingStatusId");
-
-                            b1.ToTable("TrackingStatuses");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TrackingStatusId");
-                        });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("TrackingStatusId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
 
                             b1.HasKey("TrackingStatusId");
 
@@ -2053,9 +1762,6 @@ namespace OrganicShop.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.User", b =>
@@ -2068,7 +1774,13 @@ namespace OrganicShop.DAL.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
                             b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
                                 .HasColumnType("bit");
 
                             b1.Property<DateTime>("LastModified")
@@ -2085,52 +1797,20 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     UserId = 1L,
-                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(366),
+                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 835, DateTimeKind.Local).AddTicks(2068),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(401)
+                                    IsDelete = false,
+                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 835, DateTimeKind.Local).AddTicks(2110)
                                 },
                                 new
                                 {
                                     UserId = 2L,
-                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(826),
+                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 835, DateTimeKind.Local).AddTicks(2236),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(838)
+                                    IsDelete = true,
+                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 835, DateTimeKind.Local).AddTicks(2242)
                                 });
                         });
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<long>("UserId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("DalateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.HasKey("UserId");
-
-                            b1.ToTable("Users");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    UserId = 1L,
-                                    IsDelete = false
-                                },
-                                new
-                                {
-                                    UserId = 2L,
-                                    IsDelete = true
-                                });
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
 
                     b.Navigation("BaseEntity")
                         .IsRequired();
