@@ -1,4 +1,5 @@
-﻿using OrganicShop.Domain.Dtos.Page;
+﻿using OrganicShop.Domain.Dtos.Combo;
+using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.PermissionDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Response;
@@ -14,6 +15,7 @@ namespace OrganicShop.Domain.IServices
         Task<ServiceResponse> Update(UpdatePermissionDto update);
         
         Task<ServiceResponse> Delete(byte delete);
-        
+
+        Task<List<ComboDto<Permission>>> GetCombos();
     }
 }

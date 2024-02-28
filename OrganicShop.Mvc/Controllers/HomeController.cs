@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OrganicShop.DAL.Repositories;
-using OrganicShop.Mvc;
-using System.Diagnostics;
+using OrganicShop.Mvc.Controllers.Base;
+using OrganicShop.Mvc.Models.Toast;
 
 namespace OrganicShop.Mvc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         #region ctor
 
@@ -16,17 +15,33 @@ namespace OrganicShop.Mvc.Controllers
         #endregion
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            //TempData["TestData"] = "Hello";
             return View();
         }
 
-        public IActionResult Error()
+        public async Task<IActionResult> TestAction()
         {
-            return Content("Error");
+            //return Redirect("Privacy" , new Toast(ToastType.Error, "Bad Request .", 5000));
+            return Partial("Privacy",new Toast(ToastType.Error , "Bad Request ." , 5000),RedirectToAction("index" , new { Pass = 45465456456}));
+            
         }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+
+
+        [HttpPut]
+        public async Task<IActionResult> TestAction(string name)
+        {
+            return Content($"Name: {name}");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> TestAction(string name , int number)
+        {
+            return Content($"Name: {name} ---- Number: {number}");
+        }
 
     }
 }

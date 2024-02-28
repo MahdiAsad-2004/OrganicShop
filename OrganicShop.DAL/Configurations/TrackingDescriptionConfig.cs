@@ -19,7 +19,7 @@ namespace OrganicShop.DAL.Configurations
             builder.HasOne(a => a.Order).WithMany(a => a.TrackingDescriptions).HasForeignKey(a => a.OrderId);
 
 
-            builder.HasQueryFilter(a => a.SoftDelete.IsDelete == false);
+            builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);
         }
     }
 }

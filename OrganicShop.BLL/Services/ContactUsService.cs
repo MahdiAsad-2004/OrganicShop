@@ -14,7 +14,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IContactUsRepository _ContactUsRepository;
-        public Message<ContactUs> _Message { init; get; }
+        public Message<ContactUs> _Message { init; get; } = new Message<ContactUs>();
 
         public ContactUsService(IContactUsRepository ContactUsRepository)
         {

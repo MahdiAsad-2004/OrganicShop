@@ -20,7 +20,7 @@ namespace OrganicShop.DAL.Configurations
             builder.HasMany(a => a.Products).WithMany(a => a.Tags);
 
 
-            builder.HasQueryFilter(a => a.SoftDelete.IsDelete == false);
+            builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);
         }
     }
 }

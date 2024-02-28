@@ -16,7 +16,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly ICategoryRepository _CategoryRepository;
-        public Message<Category> _Message { init; get; }
+        public Message<Category> _Message { init; get; } = new Message<Category>();
 
         public CategoryService(ICategoryRepository CategoryRepository)
         {

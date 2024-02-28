@@ -20,7 +20,7 @@ namespace OrganicShop.DAL.Configurations
             builder.HasMany(a => a.Orders).WithOne(a => a.Address).HasForeignKey(a => a.AddressId);
             //builder.HasMany(a => a.Orders).WithOne(a => a.Address).HasForeignKey(a => a.AddressId);
 
-            builder.HasQueryFilter(a => a.SoftDelete.IsDelete == false);
+            builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);
 
 
 
@@ -42,7 +42,7 @@ namespace OrganicShop.DAL.Configurations
             //    LastModified = DateTime.Now,
             //    IsActive = true,
             //});
-            //builder.OwnsOne(a => a.SoftDelete).HasData(new
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
             //{
             //    AddressId = (long)1,
             //    IsDelete = false,
@@ -66,7 +66,7 @@ namespace OrganicShop.DAL.Configurations
             //    LastModified = DateTime.Now,
             //    IsActive = true,
             //});
-            //builder.OwnsOne(a => a.SoftDelete).HasData(new
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
             //{
             //    AddressId = (long)2,
             //    IsDelete = false,
@@ -92,7 +92,7 @@ namespace OrganicShop.DAL.Configurations
             //    LastModified = DateTime.Now,
             //    IsActive = true,
             //});
-            //builder.OwnsOne(a => a.SoftDelete).HasData(new
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
             //{
             //    AddressId = (long)3,
             //    IsDelete = true,

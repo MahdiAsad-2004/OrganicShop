@@ -20,7 +20,7 @@ namespace OrganicShop.BLL.Services
         private readonly IProductRepository _ProductRepository;
         private readonly ICategoryRepository _CategoryRepository;
         private readonly IDiscountProductsRepository _DiscountProductRepository;
-        public Message<Product> _Message { init; get; }
+        public Message<Product> _Message { init; get; } = new Message<Product>();
 
         public ProductService(IProductRepository ProductRepository, ICategoryRepository categoryRepository, IDiscountProductsRepository discountProductRepository)
         {
@@ -110,7 +110,6 @@ namespace OrganicShop.BLL.Services
                 {
                     FixedValue = create.Price - create.UpdatedPrice,
                     BaseEntity = new BaseEntity(true),
-                    SoftDelete = new SoftDelete(true),
                     IsDefault = true,
                 };
 
@@ -122,7 +121,6 @@ namespace OrganicShop.BLL.Services
                         Discount = discount,
                         Product = Product,
                         BaseEntity = new BaseEntity(true),
-                        SoftDelete = new SoftDelete(true),
                     }
                 };
                 Product.UpdatedPrice = discount.ApplyDiscount(Product.Price);
@@ -155,7 +153,6 @@ namespace OrganicShop.BLL.Services
                     {
                         Title = str,
                         BaseEntity = new BaseEntity(true),
-                        SoftDelete = new SoftDelete(true),
                     });
                 }
                 Product.Tags = tags.ToList();
@@ -175,7 +172,6 @@ namespace OrganicShop.BLL.Services
                         Title = property.Key,
                         Value = property.Value,
                         BaseEntity = new BaseEntity(true),
-                        SoftDelete = new SoftDelete(true),
                     });
                 }
                 Product.Properties = properties.ToList();
@@ -205,7 +201,6 @@ namespace OrganicShop.BLL.Services
                         Discount = update.Discount,
                         Product = Product,
                         BaseEntity = new BaseEntity(true),
-                        SoftDelete = new SoftDelete(true),
                     } 
                 };
                 Product.UpdatedPrice = update.Discount.ApplyDiscount(Product.Price);
@@ -238,7 +233,6 @@ namespace OrganicShop.BLL.Services
                     {
                         Title = str,
                         BaseEntity = new BaseEntity(true),
-                        SoftDelete = new SoftDelete(true),
                     });
                 }
                 Product.Tags = tags.ToList();
@@ -258,7 +252,6 @@ namespace OrganicShop.BLL.Services
                         Title = property.Key,
                         Value = property.Value,
                         BaseEntity = new BaseEntity(true),
-                        SoftDelete = new SoftDelete(true),
                     });
                 }
                 Product.Properties = properties.ToList();

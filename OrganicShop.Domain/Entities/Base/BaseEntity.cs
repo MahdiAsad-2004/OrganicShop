@@ -11,7 +11,8 @@ namespace OrganicShop.Domain.Entities.Base
         public DateTime CreateDate { get; set; }
         public DateTime LastModified { get; set; }
         public bool IsActive { get; set; }
-
+        public bool IsDelete { get; set; }
+        public DateTime? DeleteDate { get; set; }
 
         public BaseEntity()
         {
@@ -23,6 +24,8 @@ namespace OrganicShop.Domain.Entities.Base
             CreateDate = DateTime.Now;
             LastModified = DateTime.Now;
             IsActive = true;
+            IsDelete = false;
+            DeleteDate = null;
         }
 
 

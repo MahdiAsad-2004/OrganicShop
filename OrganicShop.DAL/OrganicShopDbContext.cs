@@ -56,7 +56,7 @@ namespace OrganicShop.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Owned<BaseEntity>();
-            modelBuilder.Owned<SoftDelete>();
+            modelBuilder.Owned<BaseEntity>();
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfig).Assembly);
 
 

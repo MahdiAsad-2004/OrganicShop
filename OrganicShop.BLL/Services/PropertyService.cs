@@ -15,7 +15,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IPropertyRepository _PropertyRepository;
-        public Message<Property> _Message { init; get; }
+        public Message<Property> _Message { init; get; } = new Message<Property>();
 
         public PropertyService(IPropertyRepository PropertyRepository)
         {

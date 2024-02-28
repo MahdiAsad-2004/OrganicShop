@@ -22,7 +22,7 @@ namespace OrganicShop.DAL.Configurations
 
 
 
-            builder.HasQueryFilter(a => a.SoftDelete.IsDelete == false);
+            builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);
 
 
 
@@ -41,7 +41,7 @@ namespace OrganicShop.DAL.Configurations
                 LastModified = DateTime.Now,
                 IsActive = true,
             });
-            builder.OwnsOne(a => a.SoftDelete).HasData(new
+            builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 PermissionId = (byte)1,
                 IsDelete = true,
@@ -63,7 +63,7 @@ namespace OrganicShop.DAL.Configurations
                 LastModified = DateTime.Now,
                 IsActive = true,
             });
-            builder.OwnsOne(a => a.SoftDelete).HasData(new
+            builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 PermissionId = (byte)2,
                 IsDelete = true,
@@ -86,7 +86,7 @@ namespace OrganicShop.DAL.Configurations
                 LastModified = DateTime.Now,
                 IsActive = true,
             });
-            builder.OwnsOne(a => a.SoftDelete).HasData(new
+            builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 PermissionId = (byte)3,
                 IsDelete = true,

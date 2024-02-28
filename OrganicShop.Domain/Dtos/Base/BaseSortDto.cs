@@ -36,7 +36,7 @@ namespace OrganicShop.Domain.Dtos.Base
                     break;
 
                 case BaseSortType.LatestDelete:
-                    query = query.OrderByDescending(a => a.SoftDelete.DalateDate);
+                    query = query.OrderByDescending(a => a.BaseEntity.DeleteDate);
                     break;
             }
 

@@ -14,7 +14,7 @@ namespace OrganicShop.DAL.Configurations
     //    public void Configure(EntityTypeBuilder<> builder)
     //    {
     //        builder.OwnsOne(a => a.BaseEntity);
-    //        builder.OwnsOne(a => a.SoftDelete);
+    //        builder.OwnsOne(a => a.BaseEntity);
     //    }
     //}
 }

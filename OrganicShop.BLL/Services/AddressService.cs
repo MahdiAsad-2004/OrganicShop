@@ -20,13 +20,12 @@ namespace OrganicShop.BLL.Services
 
         //public CurrentUser _User {private get; init; }
         private readonly IAddressRepository _AddressRepository;
-        public Message<Address> _Message { get; }
+        public Message<Address> _Message { get; init; } = new Message<Address>();
 
         public AddressService(/*CurrentUserProvider currentUserProvider,*/ IAddressRepository AddressRepository)
         {
             this._AddressRepository = AddressRepository;
             //this._User = currentUserProvider._User;
-            
         }
 
         #endregion

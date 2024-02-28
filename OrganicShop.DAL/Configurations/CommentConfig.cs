@@ -19,7 +19,7 @@ namespace OrganicShop.DAL.Configurations
             builder.HasOne(a => a.User).WithMany(a => a.Comments).HasForeignKey(a => a.UserId);
 
 
-            builder.HasQueryFilter(a => a.SoftDelete.IsDelete == false);
+            builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);
         }
     }
 }

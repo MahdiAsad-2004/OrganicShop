@@ -30,8 +30,7 @@ namespace OrganicShop.DAL.Repositories
 
         public async Task<TKey> Add(TEntity entity, long id , string? operationDescription = null)
         {
-            entity.SoftDelete = new SoftDelete { IsDelete = false, DalateDate = null };
-            entity.BaseEntity = new BaseEntity { CreateDate = DateTime.Now, LastModified = DateTime.Now, IsActive = true };
+            entity.BaseEntity = new BaseEntity(true);
             var operation = new Domain.Entities.Operation
             {
                 Date = DateTime.Now,
@@ -52,8 +51,7 @@ namespace OrganicShop.DAL.Repositories
         {
             foreach (var entity in entities)
             {
-                entity.SoftDelete = new SoftDelete { IsDelete = false, DalateDate = null };
-                entity.BaseEntity = new BaseEntity { CreateDate = DateTime.Now, LastModified = DateTime.Now, IsActive = true };
+                entity.BaseEntity = new BaseEntity(true);
             }
             var operation = new Domain.Entities.Operation
             {
@@ -128,8 +126,8 @@ namespace OrganicShop.DAL.Repositories
 
         public async Task SoftDelete(TEntity entity, long id, string? operationDescription = null)
         {
-            _context.Entry(entity).Entity.SoftDelete.DalateDate = DateTime.Now;
-            _context.Entry(entity).Entity.SoftDelete.IsDelete = true;
+            _context.Entry(entity).Entity.BaseEntity.DeleteDate = DateTime.Now;
+            _context.Entry(entity).Entity.BaseEntity.IsDelete = true;
             var operation = new Domain.Entities.Operation
             {
                 Date = DateTime.Now,
@@ -147,8 +145,8 @@ namespace OrganicShop.DAL.Repositories
         public async Task SoftDelete(TKey key, long id, string? operationDescription = null)
         {
             TEntity entity = await GetAsNoTracking(key);
-            _context.Entry(entity).Entity.SoftDelete.DalateDate = DateTime.Now;
-            _context.Entry(entity).Entity.SoftDelete.IsDelete = true;
+            _context.Entry(entity).Entity.BaseEntity.DeleteDate = DateTime.Now;
+            _context.Entry(entity).Entity.BaseEntity.IsDelete = true;
             var operation = new Domain.Entities.Operation
             {
                 Date = DateTime.Now,
@@ -232,6 +230,5 @@ namespace OrganicShop.DAL.Repositories
 
         public async Task SaveChanges()
         => await _context.SaveChangesAsync();
-
     }
 }

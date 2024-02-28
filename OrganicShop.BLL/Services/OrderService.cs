@@ -20,7 +20,7 @@ namespace OrganicShop.BLL.Services
         private readonly ICoProductRepository _CoProductRepository;
         private readonly IBasketRepository _BasketRepository;
         private readonly ITrackingStatusService _TrackingStatusesService;
-        public Message<Order> _Message { init; get; }
+        public Message<Order> _Message { init; get; } = new Message<Order>();
 
         public OrderService(IOrderRepository OrderRepository, IAddressRepository addressRepository, ICoProductRepository coProductRepository, 
             IBasketRepository basketRepository, ITrackingStatusService trackingStatusesService)

@@ -23,20 +23,17 @@ namespace OrganicShop.BLL.Mappers
         {
             return new User()
             {
-                Name = create.Name,
-                Password = create.Password,
-                PhoneNumber = create.PhoneNumber.ToLower(),
-                Email = create.Email.ToLower(),   
+                Name = create.Name.Trim(),
+                Password = create.Password.Trim(),
+                PhoneNumber = create.PhoneNumber.Trim().ToLower(),
+                Email = create.Email.Trim().ToLower(),   
                 Role = create.Role,
-                ProfileImage = create.ProfileImage,
             };
         }
 
         public static User ToModel(this UpdateUserDto update, User user)
         {
-            user.Name = update.Name;
-            user.Email = update.Email.ToLower();
-            user.Role = update.Role;    
+            user.Name = update.Name.Trim();
             user.ProfileImage = update.ProfileImage;
             return user;
         }

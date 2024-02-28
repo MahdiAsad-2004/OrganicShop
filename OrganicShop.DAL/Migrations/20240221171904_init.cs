@@ -22,8 +22,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,8 +43,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,8 +77,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -99,8 +99,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -117,8 +117,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -136,8 +136,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,8 +159,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -182,8 +182,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -209,8 +209,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -237,8 +237,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -265,8 +265,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -291,8 +291,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -318,8 +318,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -343,8 +343,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -399,8 +399,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -430,8 +430,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -462,8 +462,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -513,8 +513,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -543,8 +543,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -578,8 +578,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -615,8 +615,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -642,8 +642,8 @@ namespace OrganicShop.DAL.Migrations
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    SoftDelete_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BaseEntity_IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    BaseEntity_DalateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -658,26 +658,26 @@ namespace OrganicShop.DAL.Migrations
 
             migrationBuilder.InsertData(
                 table: "ContactUs",
-                columns: new[] { "Id", "Address", "Description", "Email1", "Email2", "Office1", "Office2", "Office3", "Phone1", "Phone2", "Phone3", "PhoneNumber1", "PhoneNumber2", "PhoneNumber3", "BaseEntity_CreateDate", "BaseEntity_IsActive", "BaseEntity_LastModified", "SoftDelete_DalateDate", "SoftDelete_IsDelete" },
-                values: new object[] { (byte)1, "Address", "Descriptions", "OrganicShop@gmail.com", null, "Tehran", null, null, "02134658899", null, null, "09121234455", null, null, new DateTime(2024, 2, 15, 10, 3, 2, 815, DateTimeKind.Local).AddTicks(6453), true, new DateTime(2024, 2, 15, 10, 3, 2, 815, DateTimeKind.Local).AddTicks(6508), null, false });
+                columns: new[] { "Id", "Address", "Description", "Email1", "Email2", "Office1", "Office2", "Office3", "Phone1", "Phone2", "Phone3", "PhoneNumber1", "PhoneNumber2", "PhoneNumber3", "BaseEntity_CreateDate", "BaseEntity_IsActive", "BaseEntity_LastModified", "BaseEntity_DalateDate", "BaseEntity_IsDelete" },
+                values: new object[] { (byte)1, "Address", "Descriptions", "OrganicShop@gmail.com", null, "Tehran", null, null, "02134658899", null, null, "09121234455", null, null, new DateTime(2024, 2, 21, 20, 49, 3, 874, DateTimeKind.Local).AddTicks(6629), true, new DateTime(2024, 2, 21, 20, 49, 3, 874, DateTimeKind.Local).AddTicks(6759), null, false });
 
             migrationBuilder.InsertData(
                 table: "Permission",
-                columns: new[] { "Id", "EnTitle", "ParentId", "Title", "BaseEntity_CreateDate", "BaseEntity_IsActive", "BaseEntity_LastModified", "SoftDelete_DalateDate", "SoftDelete_IsDelete" },
+                columns: new[] { "Id", "EnTitle", "ParentId", "Title", "BaseEntity_CreateDate", "BaseEntity_IsActive", "BaseEntity_LastModified", "BaseEntity_DalateDate", "BaseEntity_IsDelete" },
                 values: new object[,]
                 {
-                    { (byte)1, "Main Admin", null, "مدیر سایت", new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(3568), true, new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(3610), null, true },
-                    { (byte)2, "Users Admin", null, "مدیریت کاربران", new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(4006), true, new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(4018), null, true },
-                    { (byte)3, "Products Admin", null, "مدیریت محصولات", new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(4242), true, new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(4250), null, true }
+                    { (byte)1, "Main Admin", null, "مدیر سایت", new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(2700), true, new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(2744), null, true },
+                    { (byte)2, "Users Admin", null, "مدیریت کاربران", new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3039), true, new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3048), null, true },
+                    { (byte)3, "Products Admin", null, "مدیریت محصولات", new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3255), true, new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3262), null, true }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "Name", "Password", "PhoneNumber", "ProfileImage", "Role", "BaseEntity_CreateDate", "BaseEntity_IsActive", "BaseEntity_LastModified", "SoftDelete_DalateDate", "SoftDelete_IsDelete" },
+                columns: new[] { "Id", "Email", "Name", "Password", "PhoneNumber", "ProfileImage", "Role", "BaseEntity_CreateDate", "BaseEntity_IsActive", "BaseEntity_LastModified", "BaseEntity_DalateDate", "BaseEntity_IsDelete" },
                 values: new object[,]
                 {
-                    { 1L, "mas1379as@gmail.com", "Mahdi Asadi", "123456", "09369753041", null, 1, new DateTime(2024, 2, 15, 10, 3, 2, 825, DateTimeKind.Local).AddTicks(3513), true, new DateTime(2024, 2, 15, 10, 3, 2, 825, DateTimeKind.Local).AddTicks(3560), null, false },
-                    { 2L, "TestEmail@gmail.com", "AmirAli", "1234", "09331234566", null, 2, new DateTime(2024, 2, 15, 10, 3, 2, 825, DateTimeKind.Local).AddTicks(3898), true, new DateTime(2024, 2, 15, 10, 3, 2, 825, DateTimeKind.Local).AddTicks(3908), null, true }
+                    { 1L, "mas1379as@gmail.com", "Mahdi Asadi", "123456", "09369753041", null, 2, new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(366), true, new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(401), null, false },
+                    { 2L, "TestEmail@gmail.com", "AmirAli", "1234", "09331234566", null, 3, new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(826), true, new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(838), null, true }
                 });
 
             migrationBuilder.CreateIndex(

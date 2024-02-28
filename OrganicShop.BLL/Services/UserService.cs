@@ -17,7 +17,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IUserRepository _userRepository;
-        public Message<User> _Message { get; }
+        public Message<User> _Message { get; } = new Message<User>();
 
         public UserService(IUserRepository userRepository)
         {
@@ -74,8 +74,12 @@ namespace OrganicShop.BLL.Services
             if (await _userRepository.GetQueryable().AnyAsync(a => a.PhoneNumber == create.PhoneNumber))
                 return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create,a => nameof(a.PhoneNumber)));
 
-            if(await _userRepository.GetQueryable().AnyAsync(a => a.Email == create.Email))
+            if (await _userRepository.GetQueryable().AnyAsync(a => a.Email == create.Email))
                 return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create, a => nameof(a.Email)));
+
+
+            // if currentUser has permission to set userUermissions , permissions sets here 
+
 
             User user = create.ToModel();
             await _userRepository.Add(user,1);
@@ -86,8 +90,8 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Update(UpdateUserDto update)
         {
-            if (await _userRepository.GetQueryable().AnyAsync(a => a.Id != update.Id && a.Email == update.Email))
-                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Email)));
+            //if (await _userRepository.GetQueryable().AnyAsync(a => a.Id != update.Id && a.Email == update.Email))
+            //    return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Email)));
 
             User? user = await _userRepository.GetAsTracking(update.Id);
             
@@ -131,5 +135,18 @@ namespace OrganicShop.BLL.Services
 
 
 
+        public Task<bool> IsEmailExist(string email)
+        {
+            email = email.Trim().ToLower();
+            return Task.FromResult(_userRepository.GetQueryable().Any(a => a.Email == email));
+        }
+
+
+
+        public Task<bool> IsPhoneNumberExist(string phoneNumber)
+        {
+            phoneNumber = phoneNumber.Trim().ToLower();
+            return Task.FromResult(_userRepository.GetQueryable().Any(a => a.PhoneNumber == phoneNumber));
+        }
     }
 }

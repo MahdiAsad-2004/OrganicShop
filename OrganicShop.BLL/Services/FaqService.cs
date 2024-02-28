@@ -15,7 +15,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IFaqRepository _FaqRepository;
-        public Message<Faq> _Message { init; get; }
+        public Message<Faq> _Message { init; get; } = new Message<Faq>();
 
         public FaqService(IFaqRepository FaqRepository)
         {

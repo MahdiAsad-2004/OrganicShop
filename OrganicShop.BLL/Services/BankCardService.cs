@@ -16,7 +16,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IBankCardRepository _BankCardRepository;
-        public Message<BankCard> _Message { init; get; }
+        public Message<BankCard> _Message { init; get; } = new Message<BankCard>();
 
         public BankCardService(IBankCardRepository BankCardRepository)
         {

@@ -17,7 +17,7 @@ namespace OrganicShop.DAL.Configurations
           
 
 
-            builder.HasQueryFilter(a => a.SoftDelete.IsDelete == false);
+            builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);
 
 
             builder.HasData(new ContactUs
@@ -47,7 +47,7 @@ namespace OrganicShop.DAL.Configurations
                 LastModified = DateTime.Now,
                 IsActive = true,
             });
-            builder.OwnsOne(a => a.SoftDelete).HasData(new
+            builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 ContactUsId = (byte)1,
                 IsDelete = false,

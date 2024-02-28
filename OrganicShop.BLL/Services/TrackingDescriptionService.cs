@@ -16,7 +16,7 @@ namespace OrganicShop.BLL.Services
 
         private readonly ITrackingDescriptionRepository _TrackingDescriptionRepository;
         private readonly IOrderRepository _OrderRepository;
-        public Message<TrackingDescription> _Message { init; get; }
+        public Message<TrackingDescription> _Message { init; get; } = new Message<TrackingDescription>();
 
         public TrackingDescriptionService(ITrackingDescriptionRepository TrackingDescriptionRepository,IOrderRepository orderRepository)
         {

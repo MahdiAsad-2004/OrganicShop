@@ -36,13 +36,15 @@
             @await Component.InvokeAsync("AdminSideBar")
 
             <!-- index body start -->
-            <div class="page-body">
+            <div class="page-body" id="view-container">
                 @RenderBody()
             </div>
             <!-- index body end -->
 
         </div>
     </div>
+
+    @await RenderSectionAsync("Modals", false)
 
     <partial name="_AdminScripts" />
 

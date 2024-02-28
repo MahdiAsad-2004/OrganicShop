@@ -19,7 +19,7 @@ namespace OrganicShop.BLL.Services
         private readonly IDiscountRepository _DiscountRepository;
         private readonly IDiscountUsersRepository _DiscountUsersRepository;
         private readonly IDiscountProductsRepository _DiscountProductsRepository;
-        public Message<Discount> _Message { init; get; }
+        public Message<Discount> _Message { init; get; } = new Message<Discount>();
 
         public DiscountService(IDiscountRepository discountRepository, IDiscountUsersRepository discountUsersRepository, IDiscountProductsRepository discountProductsRepository)
         {
@@ -103,7 +103,6 @@ namespace OrganicShop.BLL.Services
                 {
                     UserId = id,
                     BaseEntity = new BaseEntity(true),
-                    SoftDelete = new SoftDelete(true),
                 });
             }
             foreach (var id in create.ProducsIds)
@@ -112,7 +111,6 @@ namespace OrganicShop.BLL.Services
                 {
                     ProductId = id,
                     BaseEntity = new BaseEntity(true),
-                    SoftDelete = new SoftDelete(true),
                 });
             }
 
@@ -143,7 +141,6 @@ namespace OrganicShop.BLL.Services
                         DiscountId = update.Id,
                         UserId = id,
                         BaseEntity = new BaseEntity(true),
-                        SoftDelete = new SoftDelete(true),
                     });
                 }
             }
@@ -158,7 +155,6 @@ namespace OrganicShop.BLL.Services
                         DiscountId = update.Id,
                         ProductId = id,
                         BaseEntity = new BaseEntity(true),
-                        SoftDelete = new SoftDelete(true),
                     });
                 }
             }

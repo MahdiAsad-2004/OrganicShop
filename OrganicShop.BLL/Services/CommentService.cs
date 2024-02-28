@@ -15,7 +15,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly ICommentRepository _CommentRepository;
-        public Message<Comment> _Message { init; get; }
+        public Message<Comment> _Message { init; get; } = new Message<Comment>();
 
         public CommentService(ICommentRepository CommentRepository)
         {

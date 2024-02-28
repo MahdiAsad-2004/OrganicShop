@@ -11,10 +11,8 @@ namespace OrganicShop.BLL.Extensions
     public static class EnumExtension
     {
 
-        public static MyEnum[] GetArray<MyEnum>()
+        public static MyEnum[] GetArray<MyEnum>() where MyEnum : Enum
         {
-            if (typeof(MyEnum).IsEnum == false)
-                throw new Exception("Type is not enum");
             return Enum.GetValues(typeof(MyEnum)) as MyEnum[];
         }
 

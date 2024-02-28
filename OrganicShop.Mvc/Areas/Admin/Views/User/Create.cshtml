@@ -1,18 +1,9 @@
-﻿@using OrganicShop.Domain.Dtos.ProductDtos
-@model CreateProductDto
+﻿@using OrganicShop.Domain.Dtos.UserDtos
+@model CreateUserDto
 
-
-
-
-
-
-
-
-
-
-
-
-
+@{
+    List<ComboDto<Permission>> permissions = ViewData["Permissions"] as List<ComboDto<Permission>>;
+}
 
 
 <div class="container-fluid">
@@ -22,197 +13,173 @@
                 <div class="col-sm-8 m-auto">
                     <div class="card">
                         <div class="card-body">
-                            <div class="card-header-2">
-                                <h5>ایجاد محصول جدید</h5>
+                            <div class="title-header option-title">
+                                <h5>افزودن کاربر جدید</h5>
                             </div>
+                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="pills-home-tab"
+                                            data-bs-toggle="pill" data-bs-target="#pills-home"
+                                            type="button">
+                                        حساب کاربری
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="pills-profile-tab"
+                                            data-bs-toggle="pill" data-bs-target="#pills-profile"
+                                            type="button">
+                                        دسترسی ها
+                                    </button>
+                                </li>
+                            </ul>
 
-                            <form class="theme-form theme-form-2 mega-form">
-                                <div class="mb-5 row align-items-center">
-                                    <label class="form-label-title col-sm-3 mb-0">نام محصول</label>
-                                    <div class="col-sm-9">
-                                        <input class="form-control" type="text" placeholder="عنوان محصول" asp-for="Title">
-                                        <span asp-validation-for="Title" class="mt-1 text-danger"></span>
-                                    </div>
-                                </div>
+                            <form class="tab-content" id="pills-tabContent" method="post" href="/Admin/User/Create">
+                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
+                                    <div class="theme-form theme-form-2 mega-form">
+                                        <div class="card-header-1">
+                                            <h5>اطلاعات کاربر</h5>
+                                        </div>
 
+                                        <div class="row">
 
-                                <div class="mb-5 row align-items-center">
-                                    <label class="col-sm-3 col-form-label form-label-title">دسته بندی</label>
-                                    <div class="col-sm-9">
-                                        <select class="js-example-basic-single w-100" asp-for="CategoryId">
-                                            <option disabled>منو دسته ها</option>
-                                            <option>الکترونیک</option>
-                                            <option>تلویزیون و مانیتور</option>
-                                            <option>خانه و آشپزخانه</option>
-                                            <option>لوازم بهداشتی</option>
-                                            <option>گوشت و خوارکی</option>
-                                            <option>سلامتی دهان و دندان</option>
-                                            <option>دسته بندی نشده</option>
-                                        </select>
-                                        <span asp-validation-for="CategoryId" class="mt-1 text-danger"></span>
-                                    </div>
-                                </div>
+                                            <div class="mb-4 row align-items-center">
+                                                <label asp-for="Name" class="form-label-title col-lg-2 col-md-3 mb-0"></label>
+                                                <div class="col-md-9 col-lg-10">
+                                                    <input class="form-control" asp-for="Name" type="text">
+                                                    <span asp-validation-for="Name" class="mt-1 text-danger"></span>
+                                                </div>
+                                            </div>
 
+                                            <div class="mb-4 row align-items-center">
+                                                <label asp-for="Email" class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
+                                                <div class="col-md-9 col-lg-10">
+                                                    <input class="form-control" asp-for="Email" >
+                                                    <span asp-validation-for="Email" class="mt-1 text-danger"></span>
+                                                </div>
+                                            </div>
 
-                                <div class="mb-5 row align-items-center">
-                                    <label class="col-sm-3 col-form-label form-label-title">واحد</label>
-                                    <div class="col-sm-9">
-                                        <select class="js-example-basic-single w-100">
-                                            <option disabled>منو واحد</option>
-                                            <option>کیلو گرم</option>
-                                            <option>قطعه</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="mb-5 row align-items-center">
-                                    <label class="col-sm-3 col-form-label form-label-title">برچسب ها</label>
-                                    <div class="col-sm-9">
-                                        <div class="bs-example">
-                                            <input asp-for="Tags" type="text" class="form-control" placeholder="برچسب را تایپ کنید" id="#inputTag" data-role="tagsinput">
+                                            <div class="mb-4 row align-items-center">
+                                                <label asp-for="PhoneNumber" class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
+                                                <div class="col-md-9 col-lg-10">
+                                                    <input class="form-control" asp-for="PhoneNumber">
+                                                    <span asp-validation-for="PhoneNumber" class="mt-1 text-danger"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label asp-for="Role" class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
+                                                <div class="col-md-9 col-lg-10">
+                                                    <select class="form-control" asp-for="Role">
+                                                        @foreach(var role in EnumExtension.GetArray<Role>())
+                                                        {
+                                                            <option value="@role">@role.ToStringValue()</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label asp-for="ProfileImage" class="col-sm-3 col-form-label form-label-title"></label>
+                                                <div class="col-sm-9">
+                                                    <input asp-for="ProfileImage" class="form-control form-choose" type="file" >
+                                                    <span asp-validation-for="ProfileImage" class="mt-1 text-danger"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label asp-for="Password" class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
+                                                <div class="col-md-9 col-lg-10">
+                                                    <input class="form-control" asp-for="Password" type="password">
+                                                    <span asp-validation-for="Password" class="mt-1 text-danger"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label asp-for="Password" class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
+                                                <div class="col-md-9 col-lg-10">
+                                                    <input class="form-control" asp-for="PasswordRepeat" type="password">
+                                                    <span asp-validation-for="PasswordRepeat" class="mt-1 text-danger"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-3 row align-items-center">
+                                                <div class="col-md-10 col-lg-12">
+                                                    <button type="submit" class="form-control btn btn-primary">ثبت</button>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="pills-profile" role="tabpanel">
+                                    <div class="card-header-1">
+                                        <h5>تعیین دسترسی های کاربر</h5>
+                                    </div>
+
+
+                                   @foreach (var item in permissions)
+                                   {
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-md-2 mb-0">@item.Text</label>
+                                            <div class="col-md-9">
+                                                <div class="radio-section">
+                                                    <label>
+                                                        <input type="checkbox" class="form-control" name="Permissions" value="@item.Value">
+                                                        <i></i>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                   }
+
+                                  @*   <div class="mb-4 row align-items-center">
+                                        <label class="col-md-2 mb-0">افزودن محصول</label>
+                                        <div class="col-md-9">
+                                            <form class="radio-section">
+                                                <label>
+                                                    <input type="radio" name="opinion" checked>
+                                                    <i></i>
+                                                    <span>مجاز</span>
+                                                </label>
+
+                                                <label>
+                                                    <input type="radio" name="opinion" />
+                                                    <i></i>
+                                                    <span>غیرمجاز</span>
+                                                </label>
+                                            </form>
+                                        </div>
+                                    </div> 
+
+                                 
+
+                                    <div class="card-header-1">
+                                        <h5>مجوز مربوط به دسته</h5>
+                                    </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-md-2 mb-0">مجوز نوع 1</label>
+                                        <div class="col-md-9">
+                                            <form class="radio-section">
+                                                <label>
+                                                    <input type="radio" name="opinion" checked>
+                                                    <i></i>
+                                                    <span>مجاز</span>
+                                                </label>
+
+                                                <label>
+                                                    <input type="radio" name="opinion" />
+                                                    <i></i>
+                                                    <span>غیر مجاز</span>
+                                                </label>
+                                            </form>
+                                        </div>
+                                    </div> *@
+
                                 </div>
                             </form>
                         </div>
                     </div>
-
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-header-2">
-                                <h5>توضیحات</h5>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="row">
-                                        <label class="form-label-title col-sm-3 mb-0">توضیحات محصول</label>
-                                        <div class="col-sm-9">
-                                            <textarea id="editor" asp-for="Description"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-header-2">
-                                <h5>تصویر محصول</h5>
-                            </div>
-
-                            <div class="theme-form theme-form-2 mega-form">
-                                <div class="row align-items-center">
-                                    <label class="col-sm-3 col-form-label form-label-title">تصویر شاخص</label>
-                                    <div class="col-sm-9">
-                                        <input asp-for="MainImage" class="form-control form-choose" type="file" id="formFileMultiple1">
-                                        <span asp-validation-for="MainImage" class="mt-1 text-danger"></span>
-                                    </div>
-                                </div>
-
-                                <div class="mb-5 row align-items-center">
-                                    <label class="col-sm-3 col-form-label form-label-title">تصاویر</label>
-                                    <div class="col-sm-9">
-                                        <input asp-for="PictureFiles" class="form-control form-choose" type="file" id="formFile" multiple>
-                                        <span asp-validation-for="PictureFiles" class="mt-1 text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-header-2">
-                                <h5>ویژگی محصول</h5>
-                            </div>
-
-                            <div class="theme-form theme-form-2 mega-form">
-                                <div class="mb-5 row align-items-center">
-                                    <label class="form-label-title col-sm-3 mb-0">نوع ویژگی</label>
-                                    <div class="col-sm-9">
-                                        <select class="js-example-basic-single w-100" name="state">
-                                            <option>رنگ</option>
-                                            <option>سایز</option>
-                                            <option>جنس</option>
-                                            <option>استایل</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center">
-                                    <label class="col-sm-3 col-form-label form-label-title">مقدار</label>
-                                    <div class="col-sm-9">
-                                        <div class="bs-example">
-                                            <input type="text" class="form-control"
-                                                   placeholder="تایپ کنید سپس اینتر را بزنید" id="#inputTag"
-                                                   data-role="tagsinput">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <a href="/admin/property/create" class="add-option"><i class="ri-add-line me-2"></i> افزودن ویژگی جدید</a>
-                        </div>
-                    </div>
-
-
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-header-2">
-                                <h5>قیمت محصول</h5>
-                            </div>
-
-                            <div class="theme-form theme-form-2 mega-form">
-                                <div class="mb-5 row align-items-center">
-                                    <label class="col-sm-3 form-label-title">قیمت</label>
-                                    <div class="col-sm-9">
-                                        <input asp-for="Price" class="form-control" type="number" placeholder="0">
-                                        <span asp-validation-for="Price" class="mt-1 text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="mb-5 row align-items-center">
-                                    <label class="col-sm-3 form-label-title">قیمت با تخفیف</label>
-                                    <div class="col-sm-9">
-                                        <input class="form-control" type="number" placeholder="0" asp-for="UpdatedPrice">
-                                        <span asp-validation-for="UpdatedPrice" class="mt-1 text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="mb-5 row align-items-center">
-                                    <label class="col-sm-3 form-label-title">تعداد</label>
-                                    <div class="col-sm-5">
-                                        <input class="form-control" asp-for="DiscountCount" type="number" placeholder="0">
-                                        <span asp-validation-for="DiscountCount" class="mt-1 text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-header-2">
-                                <h5>موجودی انبار</h5>
-                            </div>
-
-                            <div class="theme-form theme-form-2 mega-form">
-                                <div class="mb-5 row align-items-center">
-                                    <label class="form-label-title col-sm-3 mb-0">کد بارکد محصول</label>
-                                    <div class="col-sm-9">
-                                        <input class="form-control" type="text" asp-for="Barcode">
-                                        <span asp-validation-for="Barcode" class="mt-1 text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="mb-5 row align-items-center">
-                                    <label class="col-sm-3 col-form-label form-label-title">موجودی</label>
-                                    <input class="form-control" type="number" asp-for="Stock">
-                                    <span asp-validation-for="Stock" class="mt-1 text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -222,34 +189,13 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-@section Scripts {
-
-    <!-- bootstrap tag-input js -->
-    <script src="assets/js/bootstrap-tagsinput.min.js"></script>
-    <script src="assets/js/sidebar-menu.js"></script>
+@section Scripts{
 
     <!--Dropzon js -->
-    <script src="assets/js/dropzone/dropzone.js"></script>
-    <script src="assets/js/dropzone/dropzone-script.js"></script>
+    <script src="~/admin/assets/js/dropzone/dropzone.js"></script>
+    <script src="~/admin/assets/js/dropzone/dropzone-script.js"></script>
 
-    <!-- ck editor js -->
-    <script src="assets/js/ckeditor.js"></script>
-    <script src="assets/js/ckeditor-custom.js"></script>
+    <partial name="_ValidationScriptsPartial" />
 
-    <!-- select2 js -->
-    <script src="assets/js/select2.min.js"></script>
-    <script src="assets/js/select2-custom.js"></script>
-
+    <partial name="_CustomValidationScripts"/>
 }

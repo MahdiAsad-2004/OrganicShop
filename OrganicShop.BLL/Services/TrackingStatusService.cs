@@ -20,7 +20,7 @@ namespace OrganicShop.BLL.Services
 
         private readonly ITrackingStatusRepository _TrackingStatusRepository;
         private readonly IOrderRepository _OrderRepository;
-        public Message<TrackingStatus> _Message { get; }
+        public Message<TrackingStatus> _Message { get; } = new Message<TrackingStatus>();
 
         public TrackingStatusService(ITrackingStatusRepository TrackingStatusRepository,IOrderRepository orderRepository)
         {
@@ -83,7 +83,6 @@ namespace OrganicShop.BLL.Services
                     DoneDate = null,
                     OrderId = create.OrderId,
                     BaseEntity = new BaseEntity(true),
-                    SoftDelete = new SoftDelete(true),
                 });
             }
 

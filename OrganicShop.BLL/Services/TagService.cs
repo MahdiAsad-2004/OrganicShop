@@ -15,7 +15,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly ITagRepository _TagRepository;
-        public Message<Tag> _Message { init; get; }
+        public Message<Tag> _Message { init; get; } = new Message<Tag>();
 
         public TagService(ITagRepository TagRepository)
         {

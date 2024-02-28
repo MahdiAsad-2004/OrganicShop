@@ -16,7 +16,7 @@ namespace OrganicShop.BLL.Services
 
         private readonly ICoProductRepository _CoProductRepository;
         private readonly IBasketRepository _BasketRepository;
-        public Message<CoProduct> _Message { init; get; }
+        public Message<CoProduct> _Message { init; get; } = new Message<CoProduct>();
 
         public CoProductService(ICoProductRepository CoProductRepository, IBasketRepository basketRepository)
         {

@@ -12,7 +12,7 @@ using OrganicShop.DAL;
 namespace OrganicShop.DAL.Migrations
 {
     [DbContext(typeof(OrganicShopDbContext))]
-    [Migration("20240215180303_init")]
+    [Migration("20240221171904_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -752,7 +752,7 @@ namespace OrganicShop.DAL.Migrations
                             Name = "Mahdi Asadi",
                             Password = "123456",
                             PhoneNumber = "09369753041",
-                            Role = 1
+                            Role = 2
                         },
                         new
                         {
@@ -761,7 +761,7 @@ namespace OrganicShop.DAL.Migrations
                             Name = "AmirAli",
                             Password = "1234",
                             PhoneNumber = "09331234566",
-                            Role = 2
+                            Role = 3
                         });
                 });
 
@@ -810,7 +810,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("AddressId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("AddressId")
                                 .HasColumnType("bigint");
@@ -832,7 +832,7 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("User");
@@ -862,7 +862,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("ArticleId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<int>("ArticleId")
                                 .HasColumnType("int");
@@ -884,7 +884,7 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -918,7 +918,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("BankCardId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("BankCardId")
                                 .HasColumnType("bigint");
@@ -940,7 +940,7 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("User");
@@ -976,7 +976,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("BasketId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("BasketId")
                                 .HasColumnType("bigint");
@@ -998,7 +998,7 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("User");
@@ -1032,7 +1032,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("CategoryId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<int>("CategoryId")
                                 .HasColumnType("int");
@@ -1056,7 +1056,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Parent");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1098,7 +1098,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("CoProductId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("CoProductId")
                                 .HasColumnType("bigint");
@@ -1126,7 +1126,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Product");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1160,7 +1160,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("CommentId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("CommentId")
                                 .HasColumnType("bigint");
@@ -1182,7 +1182,7 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("User");
@@ -1215,13 +1215,13 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     ContactUsId = (byte)1,
-                                    CreateDate = new DateTime(2024, 2, 15, 10, 3, 2, 815, DateTimeKind.Local).AddTicks(6453),
+                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 874, DateTimeKind.Local).AddTicks(6629),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 15, 10, 3, 2, 815, DateTimeKind.Local).AddTicks(6508)
+                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 874, DateTimeKind.Local).AddTicks(6759)
                                 });
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<byte>("ContactUsId")
                                 .HasColumnType("tinyint");
@@ -1250,7 +1250,7 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1278,7 +1278,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("DiscountId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<int>("DiscountId")
                                 .HasColumnType("int");
@@ -1300,7 +1300,7 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1328,7 +1328,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("FaqId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<byte>("FaqId")
                                 .HasColumnType("tinyint");
@@ -1350,7 +1350,7 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1401,7 +1401,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("OrderId")
                                 .HasColumnType("bigint");
@@ -1427,7 +1427,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Receiver");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1462,27 +1462,27 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     PermissionId = (byte)1,
-                                    CreateDate = new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(3568),
+                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(2700),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(3610)
+                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(2744)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)2,
-                                    CreateDate = new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(4006),
+                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3039),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(4018)
+                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3048)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)3,
-                                    CreateDate = new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(4242),
+                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3255),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 15, 10, 3, 2, 821, DateTimeKind.Local).AddTicks(4250)
+                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 880, DateTimeKind.Local).AddTicks(3262)
                                 });
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<byte>("PermissionId")
                                 .HasColumnType("tinyint");
@@ -1523,7 +1523,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Parent");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1555,7 +1555,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("PictureId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("PictureId")
                                 .HasColumnType("bigint");
@@ -1579,7 +1579,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Product");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1613,7 +1613,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("ProductId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("ProductId")
                                 .HasColumnType("bigint");
@@ -1637,7 +1637,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1669,7 +1669,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("PropertyId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<int>("PropertyId")
                                 .HasColumnType("int");
@@ -1693,7 +1693,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Product");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1733,7 +1733,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("DiscountProductsId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<int>("DiscountProductsId")
                                 .HasColumnType("int");
@@ -1759,7 +1759,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Product");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1799,7 +1799,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("DiscountUsersId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<int>("DiscountUsersId")
                                 .HasColumnType("int");
@@ -1823,7 +1823,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Discount");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("User");
@@ -1865,7 +1865,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("PermissionUsersId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<int>("PermissionUsersId")
                                 .HasColumnType("int");
@@ -1889,7 +1889,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Permission");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("User");
@@ -1919,7 +1919,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("TagId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<int>("TagId")
                                 .HasColumnType("int");
@@ -1941,7 +1941,7 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -1975,7 +1975,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("TrackingDescriptionId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("TrackingDescriptionId")
                                 .HasColumnType("bigint");
@@ -1999,7 +1999,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Order");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -2033,7 +2033,7 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("TrackingStatusId");
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("TrackingStatusId")
                                 .HasColumnType("bigint");
@@ -2057,7 +2057,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.Navigation("Order");
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 
@@ -2088,20 +2088,20 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     UserId = 1L,
-                                    CreateDate = new DateTime(2024, 2, 15, 10, 3, 2, 825, DateTimeKind.Local).AddTicks(3513),
+                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(366),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 15, 10, 3, 2, 825, DateTimeKind.Local).AddTicks(3560)
+                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(401)
                                 },
                                 new
                                 {
                                     UserId = 2L,
-                                    CreateDate = new DateTime(2024, 2, 15, 10, 3, 2, 825, DateTimeKind.Local).AddTicks(3898),
+                                    CreateDate = new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(826),
                                     IsActive = true,
-                                    LastModified = new DateTime(2024, 2, 15, 10, 3, 2, 825, DateTimeKind.Local).AddTicks(3908)
+                                    LastModified = new DateTime(2024, 2, 21, 20, 49, 3, 884, DateTimeKind.Local).AddTicks(838)
                                 });
                         });
 
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.SoftDelete", "SoftDelete", b1 =>
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
                         {
                             b1.Property<long>("UserId")
                                 .HasColumnType("bigint");
@@ -2135,7 +2135,7 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
-                    b.Navigation("SoftDelete")
+                    b.Navigation("BaseEntity")
                         .IsRequired();
                 });
 

@@ -1,5 +1,6 @@
 ﻿using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Dtos.PermissionDtos;
+using OrganicShop.Domain.Dtos.Combo;
 
 namespace OrganicShop.BLL.Mappers
 {
@@ -34,12 +35,12 @@ namespace OrganicShop.BLL.Mappers
         }
 
 
-
-
-
-
-
-
+        public static ComboDto<Permission> ToComboDto(this Permission Permission)
+            => new ComboDto<Permission>
+            {
+                Text = $"{Permission.Title}",
+                Value = $"{Permission.Id}"
+            };
 
     }
 }

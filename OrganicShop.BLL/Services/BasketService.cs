@@ -16,7 +16,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IBasketRepository _BasketRepository;
-        public Message<Basket> _Message { init; get; }
+        public Message<Basket> _Message { init; get; } = new Message<Basket>();
 
         public BasketService(IBasketRepository BasketRepository)
         {

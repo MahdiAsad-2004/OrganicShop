@@ -15,7 +15,7 @@ namespace OrganicShop.BLL.Services
         #region ctor
 
         private readonly IPictureRepository _PictureRepository;
-        public Message<Picture> _Message { init; get; }
+        public Message<Picture> _Message { init; get; } = new Message<Picture>();
 
         public PictureService(IPictureRepository PictureRepository)
         {

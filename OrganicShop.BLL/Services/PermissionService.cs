@@ -7,6 +7,7 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using OrganicShop.Domain.Dtos.Combo;
 
 namespace OrganicShop.BLL.Services
 {
@@ -18,7 +19,7 @@ namespace OrganicShop.BLL.Services
         private readonly IPermissionUsersRepository _PermissionUsersRepository;
         public Message<Permission> _Message { init; get; }
 
-        public PermissionService(IPermissionRepository permissionRepository , IPermissionUsersRepository permissionUsersRepository)
+        public PermissionService(IPermissionRepository permissionRepository, IPermissionUsersRepository permissionUsersRepository)
         {
             _PermissionRepository = permissionRepository;
             _PermissionUsersRepository = permissionUsersRepository;
@@ -43,7 +44,7 @@ namespace OrganicShop.BLL.Services
             if (filter.UserId != null)
             {
                 IQueryable<User> query1 = _PermissionUsersRepository.GetQueryable().Where(q => q.UserId == filter.UserId).Select(a => a.User).AsQueryable();
-                query = query.IntersectBy(query1.Select(a => a.Id) , b => b.Id);
+                query = query.IntersectBy(query1.Select(a => a.Id), b => b.Id);
 
             }
 
@@ -85,7 +86,7 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-            await _PermissionRepository.Add(Permission,1);
+            await _PermissionRepository.Add(Permission, 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -125,5 +126,17 @@ namespace OrganicShop.BLL.Services
             await _PermissionRepository.SoftDelete(Permission, 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
+
+
+
+
+        public async Task<List<ComboDto<Permission>>> GetCombos()
+            => _PermissionRepository    
+            .GetQueryable()
+            .Select(a => a.ToComboDto())
+            .ToList();
+
+
+
     }
 }

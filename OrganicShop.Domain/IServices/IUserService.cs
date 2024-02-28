@@ -18,7 +18,9 @@ namespace OrganicShop.Domain.IServices
 
         Task<ServiceResponse> ChangePassword(ChangePasswordDto changePassword);
 
+        Task<bool> IsEmailExist(string email);
 
+        Task<bool> IsPhoneNumberExist(string email);
 
         
     }

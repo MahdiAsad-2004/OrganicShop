@@ -44,19 +44,15 @@ namespace OrganicShop.Domain.Response
 
         //}
 
-        private void SetEntityName()
+   
+     
+
+
+        public Message()
         {
             var type = typeof(Entity);
             _EntityName = type.GetCustomAttribute<DisplayNameAttribute>().DisplayName;
         }
-        private void SetEntityName(Type type)
-        {
-            _EntityName = type.GetCustomAttribute<DisplayNameAttribute>().DisplayName;
-        }
-
-
-
-
 
 
 
@@ -68,8 +64,8 @@ namespace OrganicShop.Domain.Response
         }
         public string NotFound(Type? type)
         {
-            SetEntityName(type);
-            return $"{_EntityName} مورد نظر یافت نشد !";
+            string entityName = _EntityName = type.GetCustomAttribute<DisplayNameAttribute>().DisplayName;
+            return $"{entityName} مورد نظر یافت نشد !";
         }
         public string NoAccess()
         {

@@ -27,7 +27,7 @@ namespace OrganicShop.DAL.Configurations
 
 
 
-            builder.HasQueryFilter(a => a.SoftDelete.IsDelete == false);
+            builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);
 
 
 

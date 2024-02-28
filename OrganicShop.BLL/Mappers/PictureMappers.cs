@@ -14,7 +14,6 @@ namespace OrganicShop.BLL.Mappers
                 Name = file.Name,
                 SizeMB = file.Length / 1024 / 1024,
                 BaseEntity = new BaseEntity(true),
-                SoftDelete = new SoftDelete(true),
             };
         }
 

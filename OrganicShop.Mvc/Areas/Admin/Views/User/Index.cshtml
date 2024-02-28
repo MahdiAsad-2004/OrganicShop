@@ -3,7 +3,7 @@
 
 @section Styles {
     <!-- Data Table css -->
-    <link rel="stylesheet" type="text/css" href="assets/css/datatables.css">
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/datatables.css">
 }
 
 
@@ -72,7 +72,7 @@
 
                                                 <li>
                                                     <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                       data-bs-target="#exampleModalToggle">
+                                                       data-bs-target="#exampleModalToggle" onclick="SetUser('@item.Id','@item.Name')">
                                                         <i class="ri-delete-bin-line"></i>
                                                     </a>
                                                 </li>
@@ -94,6 +94,63 @@
 </div>
 
 
+@section Modals{
+    <!-- Delete Modal Box Start -->
+    <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">آیا اطمینان دارید ؟</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <p>کاربر با نام  <i id="user-name"></i> حذف شود</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="delete-cancel" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">خیر</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" onclick="DeleteUserRequest()">بله</button>
+                    <button id="success-delete-message" hidden  type="button" class="btn btn-animation btn-md fw-bold" data-bs-target="#exampleModalToggle2"
+                            data-bs-toggle="modal" data-bs-dismiss="modal"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel12"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box text-center">
+                        <div class="wrapper">
+                            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                            </svg>
+                        </div>
+                        <h4 class="text-content">با موفقیت حذف شد !</h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Modal Box End -->
+}
+
+
+
 @section Scripts {
 
     <!-- all checkbox select js -->
@@ -102,4 +159,38 @@
     <!-- Data table js -->
     <script src="~/admin/assets/js/jquery.dataTables.js"></script>
     <script src="~/admin/assets/js/custom-data-table.js"></script>
+
+
+    <script>
+        let userId = 0;
+        let userName = " ";
+        let cancelDeleteButton = document.getElementById('delete-cancel');
+
+        function SetUser(id,name) { 
+            userName = name;
+            userId = id;
+            document.getElementById('user-name').innerHTML = "".concat("'", name, "'");
+        }
+
+
+        function DeleteUserRequest(){
+            //alert(userId);
+            $.ajax({
+                url: '/Admin/User/Delete',
+                method: 'Get',
+                data: {Id:0},
+                success: function (data, status, jqxht) {
+                    console.log(data);
+                    cancelDeleteButton.click();
+                    HandleResponse(data , jqxht);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+        }
+    </script>
+
+
+
 }
