@@ -7,6 +7,8 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,12 +16,14 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly ITagRepository _TagRepository;
         public Message<Tag> _Message { init; get; } = new Message<Tag>();
 
-        public TagService(ITagRepository TagRepository)
+        public TagService(IMapper mapper,ITagRepository TagRepository)
         {
-            this._TagRepository = TagRepository;
+            _Mapper = mapper;
+            _TagRepository = TagRepository;
         }
 
         #endregion
@@ -49,7 +53,7 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<Tag, TagListDto,int> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query , paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query , paging).Select(a => _Mapper.Map<TagListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -59,7 +63,7 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Create(CreateTagDto create)
         {
-            Tag Tag = create.ToModel();
+            Tag Tag = _Mapper.Map<Tag>(create);
 
             if (await _TagRepository.GetQueryable().AnyAsync(a => a.Title.Contains(create.Title, StringComparison.OrdinalIgnoreCase)))
                 return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create,a => nameof(a.Title)));
@@ -80,7 +84,7 @@ namespace OrganicShop.BLL.Services
             if (await _TagRepository.GetQueryable().AnyAsync(a => a.Title.Contains(update.Title, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
                 return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Title)));
 
-            await _TagRepository.Update(update.ToModel(Tag), 1);
+            await _TagRepository.Update(_Mapper.Map<Tag>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

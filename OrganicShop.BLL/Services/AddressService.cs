@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OrganicShop.BLL.Mappers;
 using OrganicShop.BLL.Providers;
 using OrganicShop.Domain.Dtos.AddressDtos;
@@ -20,12 +21,13 @@ namespace OrganicShop.BLL.Services
 
         //public CurrentUser _User {private get; init; }
         private readonly IAddressRepository _AddressRepository;
+        private readonly IMapper _Mapper;
         public Message<Address> _Message { get; init; } = new Message<Address>();
 
-        public AddressService(/*CurrentUserProvider currentUserProvider,*/ IAddressRepository AddressRepository)
+        public AddressService(IMapper mapper , IAddressRepository AddressRepository)
         {
-            this._AddressRepository = AddressRepository;
-            //this._User = currentUserProvider._User;
+            _AddressRepository = AddressRepository;
+            _Mapper = mapper;
         }
 
         #endregion
@@ -53,7 +55,7 @@ namespace OrganicShop.BLL.Services
 
 
             PageDto<Address, AddressListDto, long> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<AddressListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
 
@@ -67,7 +69,7 @@ namespace OrganicShop.BLL.Services
             if (await _AddressRepository.GetQueryable().Where(a => a.UserId == create.UserId).CountAsync() > 4)
                 return new ServiceResponse(EntityResult.MaxCreate , _Message.MaxCreate(4));
 
-            Address Address = create.ToModel();
+            Address Address = _Mapper.Map<Address>(create);
             await _AddressRepository.Add(Address,1);
             
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
@@ -85,7 +87,7 @@ namespace OrganicShop.BLL.Services
             if (Address.UserId != update.UserId)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NoAccess());
 
-            await _AddressRepository.Update(update.ToModel(Address), 1);
+            await _AddressRepository.Update(_Mapper.Map<Address>(update), 1);
             return new ServiceResponse(EntityResult.Success , _Message.SuccessUpdate());
         }
 

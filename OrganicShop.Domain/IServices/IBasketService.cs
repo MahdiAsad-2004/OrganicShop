@@ -1,7 +1,7 @@
 ﻿using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Dtos.Page;
-using OrganicShop.Domain.Dtos.BaketDtos;
 using OrganicShop.Domain.Response;
+using OrganicShop.Domain.Dtos.BasketDtos;
 
 namespace OrganicShop.Domain.IServices
 {

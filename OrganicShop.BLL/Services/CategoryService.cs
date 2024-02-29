@@ -7,6 +7,8 @@ using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Dtos.CategoryDtos;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,11 +17,13 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly ICategoryRepository _CategoryRepository;
         public Message<Category> _Message { init; get; } = new Message<Category>();
 
-        public CategoryService(ICategoryRepository CategoryRepository)
+        public CategoryService(IMapper mapper ,ICategoryRepository CategoryRepository)
         {
+            _Mapper = mapper;
             _CategoryRepository = CategoryRepository;
         }
 
@@ -55,7 +59,7 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<Category, CategoryListDto, int> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<CategoryListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -73,7 +77,7 @@ namespace OrganicShop.BLL.Services
             if (_CategoryRepository.GetQueryable().Any(a => a.EnTitle.Contains(create.EnTitle, StringComparison.OrdinalIgnoreCase)))
                 return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create, a => nameof(a.EnTitle)));
 
-            Category = create.ToModel();
+            Category = _Mapper.Map<Category>(create);
             await _CategoryRepository.Add(Category, 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
@@ -95,7 +99,7 @@ namespace OrganicShop.BLL.Services
             if (Category == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _CategoryRepository.Update(update.ToModel(Category), 1);
+            await _CategoryRepository.Update(_Mapper.Map<Category>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 

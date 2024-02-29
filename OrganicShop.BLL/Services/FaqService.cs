@@ -7,6 +7,8 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,11 +16,13 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IFaqRepository _FaqRepository;
         public Message<Faq> _Message { init; get; } = new Message<Faq>();
 
-        public FaqService(IFaqRepository FaqRepository)
+        public FaqService(IMapper mapper,IFaqRepository FaqRepository)
         {
+            _Mapper = mapper;
             _FaqRepository = FaqRepository;
         }
 
@@ -48,7 +52,7 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<Faq, FaqListDto, byte> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<FaqListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -58,7 +62,7 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Create(CreateFaqDto create)
         {
-            Faq Faq = create.ToModel();
+            Faq Faq = _Mapper.Map<Faq>(create);
             await _FaqRepository.Add(Faq,1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
@@ -72,7 +76,7 @@ namespace OrganicShop.BLL.Services
             if (Faq == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _FaqRepository.Update(update.ToModel(Faq), 1);
+            await _FaqRepository.Update(_Mapper.Map<Faq>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

@@ -13,6 +13,10 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.DAL.Repositories;
 using OrganicShop.BLL.Services;
 using OrganicShop.Domain;
+using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
+using OrganicShop.BLL.Mappers;
+using StructureMap.AutoMocking;
 
 
 namespace OrganicShop.Ioc
@@ -58,11 +62,13 @@ namespace OrganicShop.Ioc
             container.RegisterMany(serviceClasstypes, Reuse.Scoped, serviceTypeCondition: t => t.IsServiceType());
 
 
+            container.RegisterInstance<IMapper>(new Mapper(MappingConfiguration.GetConfiguration()));
 
-            foreach (var item in container.GetServiceRegistrations())
-            {
-                Console.WriteLine(item.ImplementationType.Name + "  ____  " + item.ServiceType.Name);
-            }
+
+            //foreach (var item in container.GetServiceRegistrations())
+            //{
+            //    Console.WriteLine(item.ImplementationType.Name + "  ____  " + item.ServiceType.Name);
+            //}
 
            
 

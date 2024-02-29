@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrganicShop.Domain.Dtos.BaketDtos
+namespace OrganicShop.Domain.Dtos.BasketDtos
 {
     public class UpdateBasketDto : BaseListDto<long>
     {

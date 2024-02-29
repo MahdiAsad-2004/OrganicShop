@@ -8,6 +8,8 @@ using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Dtos.BankCardDtos;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using OrganicShop.Domain.Dtos.AddressDtos;
+using AutoMapper;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,12 +17,14 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IBankCardRepository _BankCardRepository;
         public Message<BankCard> _Message { init; get; } = new Message<BankCard>();
 
-        public BankCardService(IBankCardRepository BankCardRepository)
+        public BankCardService(IMapper mapper,IBankCardRepository BankCardRepository)
         {
-            this._BankCardRepository = BankCardRepository;
+            _Mapper = mapper;
+            _BankCardRepository = BankCardRepository;
         }
 
         #endregion
@@ -47,7 +51,7 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<BankCard, BankCardListDto, long> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<BankCardListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
 
@@ -61,7 +65,7 @@ namespace OrganicShop.BLL.Services
             if (await _BankCardRepository.GetQueryable().Where(a => a.UserId == create.UserId).CountAsync() > 8)
                 return new ServiceResponse(EntityResult.MaxCreate , _Message.MaxCreate(8));
 
-            BankCard BankCard = create.ToModel();
+            BankCard BankCard = _Mapper.Map<BankCard>(create);
             await _BankCardRepository.Add(BankCard, 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
@@ -78,7 +82,7 @@ namespace OrganicShop.BLL.Services
             if (BankCard.UserId != update.UserId)
                 return new ServiceResponse(EntityResult.Success, _Message.NoAccess());
 
-            await _BankCardRepository.Update(update.ToModel(BankCard), 1);
+            await _BankCardRepository.Update(_Mapper.Map<BankCard>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

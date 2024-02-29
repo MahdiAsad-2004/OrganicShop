@@ -6,6 +6,8 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -13,11 +15,13 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IContactUsRepository _ContactUsRepository;
         public Message<ContactUs> _Message { init; get; } = new Message<ContactUs>();
 
-        public ContactUsService(IContactUsRepository ContactUsRepository)
+        public ContactUsService(IMapper mapper,IContactUsRepository ContactUsRepository)
         {
+            _Mapper = mapper;
             this._ContactUsRepository = ContactUsRepository;
         }
 
@@ -28,7 +32,7 @@ namespace OrganicShop.BLL.Services
         public async Task<UpdateContactUsDto> Get()
         {
             var contactUs = await _ContactUsRepository.GetQueryable().FirstAsync();
-            return contactUs.ToUpdateDto();
+            return _Mapper.Map<UpdateContactUsDto>(contactUs);
         }
 
 
@@ -40,7 +44,7 @@ namespace OrganicShop.BLL.Services
             if (ContactUs == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _ContactUsRepository.Update(update.ToModel(ContactUs), 1);
+            await _ContactUsRepository.Update(_Mapper.Map<ContactUs>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

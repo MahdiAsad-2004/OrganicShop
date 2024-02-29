@@ -7,6 +7,8 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,12 +16,14 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly ICoProductRepository _CoProductRepository;
         private readonly IBasketRepository _BasketRepository;
         public Message<CoProduct> _Message { init; get; } = new Message<CoProduct>();
 
-        public CoProductService(ICoProductRepository CoProductRepository, IBasketRepository basketRepository)
+        public CoProductService(IMapper mapper,ICoProductRepository CoProductRepository, IBasketRepository basketRepository)
         {
+            _Mapper = mapper;
             _CoProductRepository = CoProductRepository;
             _BasketRepository = basketRepository;
         }
@@ -62,7 +66,7 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<CoProduct, CoProductListDto, long> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<CoProductListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -90,7 +94,7 @@ namespace OrganicShop.BLL.Services
             }
             else
             {
-                CoProduct = create.ToModel();
+                CoProduct = _Mapper.Map<CoProduct>(create);
                 CoProduct.IsOrdered = false;
                 await _CoProductRepository.Add(CoProduct, 1);
 
@@ -136,7 +140,7 @@ namespace OrganicShop.BLL.Services
             {
                 throw new Exception("Change CoProduct Basket And Order State Exception");
             }
-            await _CoProductRepository.Update(update.ToModel(CoProduct), 1);
+            await _CoProductRepository.Update(_Mapper.Map<CoProduct>(update), 1);
 
 
             #region update basket

@@ -11,18 +11,18 @@ namespace OrganicShop.Mvc.Models.Toast
         public int TimeMs { get; set; } = 3000;
 
 
-        public Toast(ToastType messageType, string text)
+        public Toast(ToastType toastType, string text)
         {
-            Type = messageType;
+            Type = toastType;
             Text = text;
-            Title = GetTitle(messageType);
+            Title = GetTitle(toastType);
         }
-        public Toast(ToastType messageType, string text, int timeMs)
+        public Toast(ToastType toastType, string text, int timeMs)
         {
-            Type = messageType;
+            Type = toastType;
             Text = text;
             TimeMs = timeMs;
-            Title = GetTitle(messageType);
+            Title = GetTitle(toastType);
         }
 
 
@@ -38,15 +38,15 @@ namespace OrganicShop.Mvc.Models.Toast
             switch (messageType)
             {
                 case ToastType.Success:
-                    return "Success";
+                    return "موفق";
                 case ToastType.Error:
-                    return "Error!";
-                case ToastType.Info:
-                    return "Info";
+                    return "خطا !";
                 case ToastType.Warning:
-                    return "Warning";
+                    return "هشدار";
+                case ToastType.Info:
+                    return "اطلاعات";
                 case ToastType.Question:
-                    return "Question";
+                    return "پرسش";
                 default:
                     return "";
             }

@@ -1,6 +1,6 @@
 ﻿using OrganicShop.BLL.Extensions;
 using OrganicShop.DAL;
-using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.Dtos.BankCardDtos;
 using OrganicShop.Domain.Dtos.Base;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Enums;

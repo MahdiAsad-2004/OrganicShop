@@ -8,24 +8,26 @@ using OrganicShop.Mvc.Areas.Admin;
 using System.Diagnostics;
 using System.Security.Claims;
 using OrganicShop.Mvc.Extensions;
+using DryIoc;
+
 
 namespace OrganicShop.Mvc.Middlewares
 {
     public class CurrentUserProviderMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly WebApplication application;
+        private readonly WebApplication _application;
 
         public CurrentUserProviderMiddleware(RequestDelegate next, WebApplication application)
         {
             _next = next;
-            application = application;
+            _application = application;
         }
 
 
         public async Task Invoke(HttpContext httpContext)
         {
-            var currentUserProvider = application.Services.GetService<CurrentUserProvider>();
+            var currentUserProvider = _application.Services.GetService<CurrentUserProvider>();
             var currentUser = httpContext.GetCurrentUser();
             currentUserProvider.SetCurrentUser(currentUser);
             await _next(httpContext);

@@ -9,6 +9,8 @@ using OrganicShop.Domain.Enums.EntityResults;
 using System.Dynamic;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -16,11 +18,13 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IUserRepository _userRepository;
         public Message<User> _Message { get; } = new Message<User>();
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IMapper mapper,IUserRepository userRepository)
         {
+            _Mapper = mapper;
             this._userRepository = userRepository;
         }
 
@@ -61,7 +65,7 @@ namespace OrganicShop.BLL.Services
 
 
             PageDto<User, UserListDto, long> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<UserListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -81,7 +85,7 @@ namespace OrganicShop.BLL.Services
             // if currentUser has permission to set userUermissions , permissions sets here 
 
 
-            User user = create.ToModel();
+            User user = _Mapper.Map<User>(create);
             await _userRepository.Add(user,1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
@@ -98,7 +102,7 @@ namespace OrganicShop.BLL.Services
             if (user == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _userRepository.Update(update.ToModel(user), 1);
+            await _userRepository.Update(_Mapper.Map<User>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

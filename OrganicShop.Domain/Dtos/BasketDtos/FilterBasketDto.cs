@@ -1,6 +1,6 @@
 ﻿using OrganicShop.Domain.Dtos.Base;
 
-namespace OrganicShop.Domain.Dtos.BaketDtos
+namespace OrganicShop.Domain.Dtos.BasketDtos
 {
     public class FilterBasketDto : BaseFilterDto<Entities.Basket, long>
     {

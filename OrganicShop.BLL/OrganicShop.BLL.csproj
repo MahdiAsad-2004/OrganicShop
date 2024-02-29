@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\OrganicShop.DAL\OrganicShop.DAL.csproj" />
     <ProjectReference Include="..\OrganicShop.Domain\OrganicShop.Domain.csproj" />
   </ItemGroup>

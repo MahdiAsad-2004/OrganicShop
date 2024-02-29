@@ -36,10 +36,10 @@ namespace OrganicShop.DAL.Repositories
                 Date = DateTime.Now,
                 EntityNewData = null,
                 EntityOldData = null,
-                EntityTitle = entity.GetType().Name,
+                EntityTitle = typeof(TEntity).Name,
                 Type = Domain.Enums.OperationType.Create,
                 UserId = id,
-                Description = operationDescription,
+                Description = operationDescription != null ? operationDescription : $"Creating {typeof(TEntity).Name}",
             };
             await _context.AddAsync(entity);
             await _context.Operations.AddAsync(operation);
@@ -58,10 +58,10 @@ namespace OrganicShop.DAL.Repositories
                 Date = DateTime.Now,
                 EntityNewData = null,
                 EntityOldData = null,
-                EntityTitle = entities.GetType().Name,
+                EntityTitle = typeof(TEntity).Name,
                 Type = Domain.Enums.OperationType.Create,
                 UserId = id,
-                Description = operationDescription,
+                Description = operationDescription != null ? operationDescription : $"Creating {typeof(TEntity).Name}s",
             };
             await _context.AddRangeAsync(entities);
             await _context.Operations.AddAsync(operation);
@@ -76,10 +76,10 @@ namespace OrganicShop.DAL.Repositories
                 Date = DateTime.Now,
                 EntityNewData = null,
                 EntityOldData = null,
-                EntityTitle = entity.GetType().Name,
+                EntityTitle = typeof(TEntity).Name,
                 Type = Domain.Enums.OperationType.Update,
                 UserId = id,
-                Description = operationDescription,
+                Description = operationDescription != null ? operationDescription : $"Editing {typeof(TEntity).Name}",
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
@@ -96,10 +96,10 @@ namespace OrganicShop.DAL.Repositories
                 Date = DateTime.Now,
                 EntityNewData = null,
                 EntityOldData = null,
-                EntityTitle = entities.GetType().Name,
+                EntityTitle = typeof(TEntity).Name,
                 Type = Domain.Enums.OperationType.Update,
                 UserId = id,
-                Description = operationDescription,
+                Description = operationDescription != null ? operationDescription : $"Editing {typeof(TEntity).Name}s",
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
@@ -113,10 +113,10 @@ namespace OrganicShop.DAL.Repositories
                 Date = DateTime.Now,
                 EntityNewData = null,
                 EntityOldData = null,
-                EntityTitle = entity.GetType().Name,
+                EntityTitle = typeof(TEntity).Name,
                 Type = Domain.Enums.OperationType.Update,
                 UserId = id,
-                Description = operationDescription,
+                Description = operationDescription != null ? operationDescription : $"Editing {typeof(TEntity).Name}",
             };
             _context.Update(entity);
             await _context.Operations.AddAsync(operation);
@@ -133,10 +133,10 @@ namespace OrganicShop.DAL.Repositories
                 Date = DateTime.Now,
                 EntityNewData = null,
                 EntityOldData = null,
-                EntityTitle = entity.GetType().Name,
+                EntityTitle = typeof(TEntity).Name,
                 Type = Domain.Enums.OperationType.SoftDelete,
                 UserId = id,
-                Description = operationDescription,
+                Description = operationDescription != null ? operationDescription : $"Soft Delete {typeof(TEntity).Name}",
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
@@ -152,10 +152,10 @@ namespace OrganicShop.DAL.Repositories
                 Date = DateTime.Now,
                 EntityNewData = null,
                 EntityOldData = null,
-                EntityTitle = entity.GetType().Name,
+                EntityTitle = typeof(TEntity).Name,
                 Type = Domain.Enums.OperationType.SoftDelete,
                 UserId = id,
-                Description = operationDescription,
+                Description = operationDescription != null ? operationDescription : $"Soft Delete {typeof(TEntity).Name}",
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
@@ -195,10 +195,10 @@ namespace OrganicShop.DAL.Repositories
                 Date = DateTime.Now,
                 EntityNewData = null,
                 EntityOldData = null,
-                EntityTitle = entity.GetType().Name,
-                Type = Domain.Enums.OperationType.SoftDelete,
+                EntityTitle = typeof(TEntity).Name,
+                Type = Domain.Enums.OperationType.Delete,
                 UserId = id,
-                Description = operationDescription,
+                Description = operationDescription != null ? operationDescription : $"Deleting {typeof(TEntity).Name}",
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
@@ -213,10 +213,10 @@ namespace OrganicShop.DAL.Repositories
                 Date = DateTime.Now,
                 EntityNewData = null,
                 EntityOldData = null,
-                EntityTitle = entity.GetType().Name,
-                Type = Domain.Enums.OperationType.SoftDelete,
+                EntityTitle = typeof(TEntity).Name,
+                Type = Domain.Enums.OperationType.Delete,
                 UserId = id,
-                Description = operationDescription,
+                Description = operationDescription != null ? operationDescription : $"Deleting {typeof(TEntity).Name}",
             };
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();

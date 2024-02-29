@@ -13,5 +13,7 @@ namespace OrganicShop.Domain.Enums
         Update = 2,
         
         SoftDelete = 3,
+
+        Delete = 3,
     }
 }

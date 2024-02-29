@@ -10,6 +10,8 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -18,12 +20,14 @@ namespace OrganicShop.BLL.Services
 
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly ITrackingStatusRepository _TrackingStatusRepository;
         private readonly IOrderRepository _OrderRepository;
         public Message<TrackingStatus> _Message { get; } = new Message<TrackingStatus>();
 
-        public TrackingStatusService(ITrackingStatusRepository TrackingStatusRepository,IOrderRepository orderRepository)
+        public TrackingStatusService(IMapper mapper,ITrackingStatusRepository TrackingStatusRepository,IOrderRepository orderRepository)
         {
+            _Mapper = mapper;
             _TrackingStatusRepository = TrackingStatusRepository;
             _OrderRepository = orderRepository;
         }
@@ -55,7 +59,7 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<TrackingStatus, TrackingStatusListDto,long> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query , paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query , paging).Select(a => _Mapper.Map<TrackingStatusListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -99,7 +103,7 @@ namespace OrganicShop.BLL.Services
             if (TrackingStatus == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _TrackingStatusRepository.Update(update.ToModel(TrackingStatus), 1);
+            await _TrackingStatusRepository.Update(_Mapper.Map<TrackingStatus>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

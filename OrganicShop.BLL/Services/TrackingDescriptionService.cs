@@ -7,6 +7,8 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,12 +16,14 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly ITrackingDescriptionRepository _TrackingDescriptionRepository;
         private readonly IOrderRepository _OrderRepository;
         public Message<TrackingDescription> _Message { init; get; } = new Message<TrackingDescription>();
 
-        public TrackingDescriptionService(ITrackingDescriptionRepository TrackingDescriptionRepository,IOrderRepository orderRepository)
+        public TrackingDescriptionService(IMapper mapper,ITrackingDescriptionRepository TrackingDescriptionRepository,IOrderRepository orderRepository)
         {
+            _Mapper = mapper;
             _TrackingDescriptionRepository = TrackingDescriptionRepository;
             _OrderRepository = orderRepository;
         }
@@ -60,7 +64,7 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<TrackingDescription, TrackingDescriptionListDto,long> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query , paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query , paging).Select(a => _Mapper.Map<TrackingDescriptionListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -70,7 +74,7 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Create(CreateTrackingDescriptionDto create)
         {
-            TrackingDescription TrackingDescription = create.ToModel();
+            TrackingDescription TrackingDescription = _Mapper.Map<TrackingDescription>(create);
 
             #region relation
 
@@ -99,7 +103,7 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-            await _TrackingDescriptionRepository.Update(update.ToModel(TrackingDescription), 1);
+            await _TrackingDescriptionRepository.Update(_Mapper.Map<TrackingDescription>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

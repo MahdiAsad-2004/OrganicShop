@@ -9,6 +9,8 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -16,13 +18,16 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IDiscountRepository _DiscountRepository;
         private readonly IDiscountUsersRepository _DiscountUsersRepository;
         private readonly IDiscountProductsRepository _DiscountProductsRepository;
         public Message<Discount> _Message { init; get; } = new Message<Discount>();
 
-        public DiscountService(IDiscountRepository discountRepository, IDiscountUsersRepository discountUsersRepository, IDiscountProductsRepository discountProductsRepository)
+        public DiscountService(IMapper mapper,IDiscountRepository discountRepository, IDiscountUsersRepository discountUsersRepository
+            , IDiscountProductsRepository discountProductsRepository)
         {
+            _Mapper = mapper;
             _DiscountRepository = discountRepository;
             _DiscountUsersRepository = discountUsersRepository;
             _DiscountProductsRepository = discountProductsRepository;
@@ -85,7 +90,7 @@ namespace OrganicShop.BLL.Services
 
 
             PageDto<Discount, DiscountListDto, int> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query,paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query,paging).Select(a => _Mapper.Map<DiscountListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -95,7 +100,7 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Create(CreateDiscountDto create)
         {
-            Discount Discount = create.ToModel();
+            Discount Discount = _Mapper.Map<Discount>(create);
 
             foreach (var id in create.UsersIds)
             {
@@ -159,7 +164,7 @@ namespace OrganicShop.BLL.Services
                 }
             }
 
-            await _DiscountRepository.Update(update.ToModel(Discount), 1);
+            await _DiscountRepository.Update(_Mapper.Map<Discount>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

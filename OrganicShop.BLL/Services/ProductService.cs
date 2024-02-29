@@ -10,6 +10,8 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -17,13 +19,15 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IProductRepository _ProductRepository;
         private readonly ICategoryRepository _CategoryRepository;
         private readonly IDiscountProductsRepository _DiscountProductRepository;
         public Message<Product> _Message { init; get; } = new Message<Product>();
 
-        public ProductService(IProductRepository ProductRepository, ICategoryRepository categoryRepository, IDiscountProductsRepository discountProductRepository)
+        public ProductService(IMapper mapper,IProductRepository ProductRepository, ICategoryRepository categoryRepository, IDiscountProductsRepository discountProductRepository)
         {
+            _Mapper = mapper;
             _ProductRepository = ProductRepository;
             _CategoryRepository = categoryRepository;
             _DiscountProductRepository = discountProductRepository;
@@ -89,7 +93,7 @@ namespace OrganicShop.BLL.Services
 
 
             PageDto<Product, ProductListDto, long> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<ProductListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -99,7 +103,7 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Create(CreateProductDto create)
         {
-            Product Product = create.ToModel();
+            Product Product = _Mapper.Map<Product>(create);
             Product.UpdatedPrice = null;
 
             #region discounts
@@ -135,7 +139,7 @@ namespace OrganicShop.BLL.Services
                 var pictures = Enumerable.Empty<Picture>();
                 foreach (var file in create.PictureFiles)
                 {
-                    pictures.Append(file.ToPicture());
+                    pictures.Append(_Mapper.Map<Picture>(file));
                 }
                 Product.Pictures = pictures.ToList();
             }
@@ -215,7 +219,7 @@ namespace OrganicShop.BLL.Services
                 var pictures = Enumerable.Empty<Picture>();
                 foreach (var file in update.PictureFiles)
                 {
-                    pictures.Append(file.ToPicture());
+                    pictures.Append(_Mapper.Map<Picture>(file));
                 }
                 Product.Pictures = pictures.ToList();
             }
@@ -259,7 +263,7 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-            await _ProductRepository.Update(update.ToModel(Product), 1);
+            await _ProductRepository.Update(_Mapper.Map<Product>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

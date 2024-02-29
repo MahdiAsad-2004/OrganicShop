@@ -18,11 +18,15 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Linq.Expressions;
 using System.ComponentModel;
 using OrganicShop.Domain.Dtos.Base;
+using AutoMapper;
 
 Console.WriteLine("Hello, World!\n");
 
 
-
+MapperConfiguration mapperConfiguration = new MapperConfiguration(a =>
+{
+    
+});
 
 
 

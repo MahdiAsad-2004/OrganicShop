@@ -7,8 +7,8 @@ namespace OrganicShop.Domain.Dtos.CategoryDtos
         public string Title { get; set; }
         public string EnTitle { get; set; }
         public string Type { get; set; }
-        public string ParentTitle { get; set; }
-        public string ParentEnTitle { get; set; }
+        public string? ParentTitle { get; set; }
+        public string? ParentEnTitle { get; set; }
     }
 
 

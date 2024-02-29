@@ -7,6 +7,8 @@ using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Dtos.CommentDtos;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,11 +16,13 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly ICommentRepository _CommentRepository;
         public Message<Comment> _Message { init; get; } = new Message<Comment>();
 
-        public CommentService(ICommentRepository CommentRepository)
+        public CommentService(IMapper mapper,ICommentRepository CommentRepository)
         {
+            _Mapper = mapper;
             this._CommentRepository = CommentRepository;
         }
 
@@ -51,7 +55,7 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<Comment, CommentListDto, long> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<CommentListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -61,7 +65,7 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Create(CreateCommentDto create)
         {
-            Comment Comment = create.ToModel();
+            Comment Comment = _Mapper.Map<Comment>(create);
             Comment.Status = CommentStatus.Unread;
             await _CommentRepository.Add(Comment,1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
@@ -76,7 +80,7 @@ namespace OrganicShop.BLL.Services
             if (Comment == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _CommentRepository.Update(update.ToModel(Comment), 1);
+            await _CommentRepository.Update(_Mapper.Map<Comment>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

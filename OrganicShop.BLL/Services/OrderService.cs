@@ -8,6 +8,8 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,6 +17,7 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IOrderRepository _OrderRepository;
         private readonly IAddressRepository _AddressRepository;
         private readonly ICoProductRepository _CoProductRepository;
@@ -22,11 +25,12 @@ namespace OrganicShop.BLL.Services
         private readonly ITrackingStatusService _TrackingStatusesService;
         public Message<Order> _Message { init; get; } = new Message<Order>();
 
-        public OrderService(IOrderRepository OrderRepository, IAddressRepository addressRepository, ICoProductRepository coProductRepository, 
+        public OrderService(IMapper mapper,IOrderRepository OrderRepository, IAddressRepository AddressRepository, ICoProductRepository coProductRepository, 
             IBasketRepository basketRepository, ITrackingStatusService trackingStatusesService)
         {
+            _Mapper = mapper;
             _OrderRepository = OrderRepository;
-            _AddressRepository = addressRepository;
+            _AddressRepository = AddressRepository;
             _CoProductRepository = coProductRepository;
             _BasketRepository = basketRepository;
             _TrackingStatusesService = trackingStatusesService;
@@ -71,7 +75,7 @@ namespace OrganicShop.BLL.Services
 
 
             PageDto<Order, OrderListDto, long> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<OrderListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -81,13 +85,13 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Create(CreateOrderDto create)
         {
-            Order Order = create.ToModel();
-            var address = await _AddressRepository.GetAsNoTracking(create.AddressId);
+            Order Order = _Mapper.Map<Order>(create);
+            var Address = await _AddressRepository.GetAsNoTracking(create.AddressId);
 
-            if (address == null)
+            if (Address == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            Order.Address = address;
+            Order.Address = Address;
             long orderId = await _OrderRepository.Add(Order, 1);
 
             #region transfer coProdutcs from basket to order
@@ -145,7 +149,7 @@ namespace OrganicShop.BLL.Services
             if (Order == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.SuccessUpdate());
 
-            await _OrderRepository.Update(update.ToModel(Order), 1);
+            await _OrderRepository.Update(_Mapper.Map<Order>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

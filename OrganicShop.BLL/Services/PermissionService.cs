@@ -8,6 +8,8 @@ using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using OrganicShop.Domain.Dtos.Combo;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,12 +17,14 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IPermissionRepository _PermissionRepository;
         private readonly IPermissionUsersRepository _PermissionUsersRepository;
         public Message<Permission> _Message { init; get; }
 
-        public PermissionService(IPermissionRepository permissionRepository, IPermissionUsersRepository permissionUsersRepository)
+        public PermissionService(IMapper mapper,IPermissionRepository permissionRepository, IPermissionUsersRepository permissionUsersRepository)
         {
+            _Mapper = mapper;
             _PermissionRepository = permissionRepository;
             _PermissionUsersRepository = permissionUsersRepository;
         }
@@ -63,7 +67,7 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<Permission, PermissionListDto, byte> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<PermissionListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -73,7 +77,7 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Create(CreatePermissionDto create)
         {
-            Permission Permission = create.ToModel();
+            Permission Permission = _Mapper.Map<Permission>(create);
 
             #region relations
 
@@ -109,7 +113,7 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-            await _PermissionRepository.Update(update.ToModel(Permission), 1);
+            await _PermissionRepository.Update(_Mapper.Map<Permission>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -133,7 +137,7 @@ namespace OrganicShop.BLL.Services
         public async Task<List<ComboDto<Permission>>> GetCombos()
             => _PermissionRepository    
             .GetQueryable()
-            .Select(a => a.ToComboDto())
+            .Select(a => _Mapper.Map<ComboDto<Permission>>(a))
             .ToList();
 
 

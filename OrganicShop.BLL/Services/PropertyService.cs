@@ -7,6 +7,8 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,11 +16,13 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IPropertyRepository _PropertyRepository;
         public Message<Property> _Message { init; get; } = new Message<Property>();
 
-        public PropertyService(IPropertyRepository PropertyRepository)
+        public PropertyService(IMapper mapper,IPropertyRepository PropertyRepository)
         {
+            _Mapper = mapper;
             this._PropertyRepository = PropertyRepository;
         }
 
@@ -51,7 +55,7 @@ namespace OrganicShop.BLL.Services
 
 
             PageDto<Property, PropertyListDto, int> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query,paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query,paging).Select(a => _Mapper.Map<PropertyListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
             return pageDto;
@@ -61,10 +65,10 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Create(CreatePropertyDto create)
         {
-            Property Property = create.ToModel();
+            Property Property = _Mapper.Map<Property>(create);
 
-            if ((create.IsBase == false && create.ProductId == null) || (create.IsBase == true && create.ProductId != null))
-                return new ServiceResponse(EntityResult.Failed, "Property is not valid");
+            Property.IsBase = true;
+            Property.Value = string.Empty;
 
             await _PropertyRepository.Add(Property,1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
@@ -79,10 +83,7 @@ namespace OrganicShop.BLL.Services
             if (Property == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            if ((update.IsBase == false && update.ProductId == null) || (update.IsBase == true && update.ProductId != null))
-                return new ServiceResponse(EntityResult.Failed, "Property is not valid");
-
-            await _PropertyRepository.Update(update.ToModel(Property), 1);
+            await _PropertyRepository.Update(_Mapper.Map<Property>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

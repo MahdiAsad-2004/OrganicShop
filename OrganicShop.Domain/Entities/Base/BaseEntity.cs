@@ -28,7 +28,18 @@ namespace OrganicShop.Domain.Entities.Base
             DeleteDate = null;
         }
 
+        public BaseEntity UpdateOperation(BaseEntity baseEntity)
+        {
+            baseEntity.LastModified = DateTime.Now;
+            return baseEntity;
+        }
 
+        public BaseEntity SoftDeleteOperation(BaseEntity baseEntity)
+        {
+            baseEntity.IsDelete = true;
+            baseEntity.DeleteDate = DateTime.Now;
+            return baseEntity;
+        }
 
     }
 }

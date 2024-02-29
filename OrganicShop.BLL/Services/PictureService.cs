@@ -7,6 +7,7 @@ using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using AutoMapper;
 
 namespace OrganicShop.BLL.Services
 {
@@ -14,11 +15,13 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IPictureRepository _PictureRepository;
         public Message<Picture> _Message { init; get; } = new Message<Picture>();
 
-        public PictureService(IPictureRepository PictureRepository)
+        public PictureService(IMapper mapper,IPictureRepository PictureRepository)
         {
+            _Mapper = mapper;
             _PictureRepository = PictureRepository;
         }
 

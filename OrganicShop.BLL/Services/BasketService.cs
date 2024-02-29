@@ -5,9 +5,11 @@ using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Dtos.BaketDtos;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
+using OrganicShop.Domain.Dtos.BasketDtos;
+using AutoMapper;
+using OrganicShop.Domain.Dtos.AddressDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -15,11 +17,13 @@ namespace OrganicShop.BLL.Services
     {
         #region ctor
 
+        private readonly IMapper _Mapper;
         private readonly IBasketRepository _BasketRepository;
         public Message<Basket> _Message { init; get; } = new Message<Basket>();
 
-        public BasketService(IBasketRepository BasketRepository)
+        public BasketService(IMapper mapper,IBasketRepository BasketRepository)
         {
+            _Mapper = mapper;
             _BasketRepository = BasketRepository;
         }
 
@@ -50,7 +54,7 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<Basket, BasketListDto, long> pageDto = new();
-            pageDto.List = pageDto.SetPaging(query, paging).Select(a => a.ToListDto()).ToList();
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<BasketListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
 
@@ -64,7 +68,7 @@ namespace OrganicShop.BLL.Services
             if (await _BasketRepository.GetQueryable().Where(a => a.UserId == create.UserId).CountAsync() > 2)
                 return new ServiceResponse(EntityResult.MaxCreate, _Message.MaxCreate(2));
 
-            Basket Basket = create.ToModel();
+            Basket Basket = _Mapper.Map<Basket>(create);
 
             await _BasketRepository.Add(Basket,1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
@@ -79,7 +83,7 @@ namespace OrganicShop.BLL.Services
             if (Basket == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _BasketRepository.Update(update.ToModel(Basket), 1);
+            await _BasketRepository.Update(_Mapper.Map<Basket>(update), 1);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
