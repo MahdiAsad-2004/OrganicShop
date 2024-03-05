@@ -9,18 +9,18 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class CommentService : ICommentService
+    public class CommentService : Service<Comment>, ICommentService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly ICommentRepository _CommentRepository;
-        public Message<Comment> _Message { init; get; } = new Message<Comment>();
 
-        public CommentService(IMapper mapper,ICommentRepository CommentRepository)
+        public CommentService(IApplicationUserProvider provider,IMapper mapper,ICommentRepository CommentRepository) : base(provider)
         {
             _Mapper = mapper;
             this._CommentRepository = CommentRepository;
@@ -67,7 +67,7 @@ namespace OrganicShop.BLL.Services
         {
             Comment Comment = _Mapper.Map<Comment>(create);
             Comment.Status = CommentStatus.Unread;
-            await _CommentRepository.Add(Comment,1);
+            await _CommentRepository.Add(Comment,_AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -80,7 +80,7 @@ namespace OrganicShop.BLL.Services
             if (Comment == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _CommentRepository.Update(_Mapper.Map<Comment>(update), 1);
+            await _CommentRepository.Update(_Mapper.Map<Comment>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -93,7 +93,7 @@ namespace OrganicShop.BLL.Services
             if (Comment == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _CommentRepository.SoftDelete(Comment, 1);
+            await _CommentRepository.SoftDelete(Comment, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
     }

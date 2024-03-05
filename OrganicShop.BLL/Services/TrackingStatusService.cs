@@ -12,20 +12,20 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class TrackingStatusService : ITrackingStatusService
+    public class TrackingStatusService : Service<TrackingStatus>, ITrackingStatusService
     {
-
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly ITrackingStatusRepository _TrackingStatusRepository;
         private readonly IOrderRepository _OrderRepository;
-        public Message<TrackingStatus> _Message { get; } = new Message<TrackingStatus>();
 
-        public TrackingStatusService(IMapper mapper,ITrackingStatusRepository TrackingStatusRepository,IOrderRepository orderRepository)
+        public TrackingStatusService(IApplicationUserProvider provider,IMapper mapper,ITrackingStatusRepository TrackingStatusRepository,
+            IOrderRepository orderRepository) : base(provider)
         {
             _Mapper = mapper;
             _TrackingStatusRepository = TrackingStatusRepository;
@@ -90,7 +90,7 @@ namespace OrganicShop.BLL.Services
                 });
             }
 
-            await _TrackingStatusRepository.Add(TrackingStatuses.ToList(),1);
+            await _TrackingStatusRepository.Add(TrackingStatuses.ToList(),_AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -103,7 +103,7 @@ namespace OrganicShop.BLL.Services
             if (TrackingStatus == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _TrackingStatusRepository.Update(_Mapper.Map<TrackingStatus>(update), 1);
+            await _TrackingStatusRepository.Update(_Mapper.Map<TrackingStatus>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -116,7 +116,7 @@ namespace OrganicShop.BLL.Services
             if (TrackingStatus == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _TrackingStatusRepository.SoftDelete(TrackingStatus, 1);
+            await _TrackingStatusRepository.SoftDelete(TrackingStatus, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }

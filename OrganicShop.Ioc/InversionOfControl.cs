@@ -17,6 +17,8 @@ using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using OrganicShop.BLL.Mappers;
 using StructureMap.AutoMocking;
+using OrganicShop.Domain.IProviders;
+using OrganicShop.BLL.Providers;
 
 
 namespace OrganicShop.Ioc
@@ -63,6 +65,9 @@ namespace OrganicShop.Ioc
 
 
             container.RegisterInstance<IMapper>(new Mapper(MappingConfiguration.GetConfiguration()));
+
+
+            //container.Register<IApplicationUserProvider, ApplicationUserProvider>();
 
 
             //foreach (var item in container.GetServiceRegistrations())

@@ -12,10 +12,11 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class ProductService : IProductService
+    public class ProductService : Service<Product>, IProductService
     {
         #region ctor
 
@@ -23,9 +24,9 @@ namespace OrganicShop.BLL.Services
         private readonly IProductRepository _ProductRepository;
         private readonly ICategoryRepository _CategoryRepository;
         private readonly IDiscountProductsRepository _DiscountProductRepository;
-        public Message<Product> _Message { init; get; } = new Message<Product>();
 
-        public ProductService(IMapper mapper,IProductRepository ProductRepository, ICategoryRepository categoryRepository, IDiscountProductsRepository discountProductRepository)
+        public ProductService(IApplicationUserProvider provider,IMapper mapper,IProductRepository ProductRepository, ICategoryRepository categoryRepository,
+            IDiscountProductsRepository discountProductRepository) : base(provider)
         {
             _Mapper = mapper;
             _ProductRepository = ProductRepository;
@@ -183,7 +184,7 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-            await _ProductRepository.Add(Product, 1);
+            await _ProductRepository.Add(Product, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -263,7 +264,7 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-            await _ProductRepository.Update(_Mapper.Map<Product>(update), 1);
+            await _ProductRepository.Update(_Mapper.Map<Product>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -276,7 +277,7 @@ namespace OrganicShop.BLL.Services
             if (Product == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _ProductRepository.SoftDelete(Product, 1);
+            await _ProductRepository.SoftDelete(Product, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }

@@ -11,10 +11,11 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class DiscountService : IDiscountService
+    public class DiscountService : Service<Discount>, IDiscountService
     {
         #region ctor
 
@@ -22,10 +23,9 @@ namespace OrganicShop.BLL.Services
         private readonly IDiscountRepository _DiscountRepository;
         private readonly IDiscountUsersRepository _DiscountUsersRepository;
         private readonly IDiscountProductsRepository _DiscountProductsRepository;
-        public Message<Discount> _Message { init; get; } = new Message<Discount>();
 
-        public DiscountService(IMapper mapper,IDiscountRepository discountRepository, IDiscountUsersRepository discountUsersRepository
-            , IDiscountProductsRepository discountProductsRepository)
+        public DiscountService(IApplicationUserProvider provider,IMapper mapper,IDiscountRepository discountRepository, IDiscountUsersRepository discountUsersRepository
+            , IDiscountProductsRepository discountProductsRepository) : base(provider)
         {
             _Mapper = mapper;
             _DiscountRepository = discountRepository;
@@ -88,7 +88,6 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-
             PageDto<Discount, DiscountListDto, int> pageDto = new();
             pageDto.List = pageDto.SetPaging(query,paging).Select(a => _Mapper.Map<DiscountListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
@@ -119,7 +118,7 @@ namespace OrganicShop.BLL.Services
                 });
             }
 
-            await _DiscountRepository.Add(Discount, 1);
+            await _DiscountRepository.Add(Discount, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -164,7 +163,7 @@ namespace OrganicShop.BLL.Services
                 }
             }
 
-            await _DiscountRepository.Update(_Mapper.Map<Discount>(update), 1);
+            await _DiscountRepository.Update(_Mapper.Map<Discount>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -178,7 +177,7 @@ namespace OrganicShop.BLL.Services
             if (Discount == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _DiscountRepository.SoftDelete(Discount, 1);
+            await _DiscountRepository.SoftDelete(Discount, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }

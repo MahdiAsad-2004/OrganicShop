@@ -9,18 +9,18 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class PropertyService : IPropertyService
+    public class PropertyService : Service<Property>, IPropertyService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly IPropertyRepository _PropertyRepository;
-        public Message<Property> _Message { init; get; } = new Message<Property>();
 
-        public PropertyService(IMapper mapper,IPropertyRepository PropertyRepository)
+        public PropertyService(IApplicationUserProvider provider,IMapper mapper,IPropertyRepository PropertyRepository) : base(provider)
         {
             _Mapper = mapper;
             this._PropertyRepository = PropertyRepository;
@@ -70,7 +70,7 @@ namespace OrganicShop.BLL.Services
             Property.IsBase = true;
             Property.Value = string.Empty;
 
-            await _PropertyRepository.Add(Property,1);
+            await _PropertyRepository.Add(Property,_AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -83,7 +83,7 @@ namespace OrganicShop.BLL.Services
             if (Property == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _PropertyRepository.Update(_Mapper.Map<Property>(update), 1);
+            await _PropertyRepository.Update(_Mapper.Map<Property>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -96,7 +96,7 @@ namespace OrganicShop.BLL.Services
             if (Property == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _PropertyRepository.SoftDelete(Property, 1);
+            await _PropertyRepository.SoftDelete(Property, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }

@@ -21,5 +21,30 @@ namespace OrganicShop.Domain.Entities
         public Permission? Parent { get; set; }
         public ICollection<Permission>? Subs { get; set; }
         public ICollection<PermissionUsers>? PermissionUsers { get; set; }
+
+
+
+
+
+
+        public List<Permission> GetAllChilds(List<Permission> permissions)
+        {
+            permissions.Add(this);
+            if (this.Subs != null)
+            {
+                if (this.Subs.Any())
+                {
+                    foreach (var sub in this.Subs)
+                    {
+                        sub.GetAllChilds(permissions);
+                    }
+                }
+            }
+            return permissions;
+        }
+
     }
+
+
+
 }

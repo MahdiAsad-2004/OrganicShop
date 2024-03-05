@@ -23,10 +23,51 @@ using AutoMapper;
 Console.WriteLine("Hello, World!\n");
 
 
-MapperConfiguration mapperConfiguration = new MapperConfiguration(a =>
-{
-    
-});
+
+
+
+
+
+
+
+
+
+
+
+
+//var permission = new Permission { Id = 1, EnTitle = "Permission 1", Subs = new List<Permission>() };
+
+//for (byte j = 1; j <= 3; j++)
+//{
+//    var x = new Permission() { Id = (byte)(1 * 10 + j), EnTitle = $"Permission {1}-{j}", Subs = new List<Permission>() };
+
+//    for (byte z = 1; z <= 3; z++)
+//    {
+//        x.Subs.Add(new Permission() { Id = (byte)((1 * 100) + (j * 10) + z), EnTitle = $"Permission{1}-{j}-{z}", Subs = new List<Permission>() });
+//    }
+
+//    permission.Subs.Add(x);
+//}
+
+//var allPermissions = new List<Permission>();
+//permission.GetAllChilds(allPermissions);
+
+//foreach (var item in allPermissions)
+//{
+//    Console.WriteLine($"Id: {item.Id} \t Title: {item.EnTitle}");
+//}
+
+
+
+
+
+
+
+
+//MapperConfiguration mapperConfiguration = new MapperConfiguration(a =>
+//{
+
+//});
 
 
 

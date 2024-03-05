@@ -11,9 +11,12 @@ namespace OrganicShop.Mvc.Extensions
 {
     public static class HttpExnesions
     {
-        public static CurrentUser GetCurrentUser(this HttpContext httpContext)
+        public static ApplicationUser GetCurrentUser(this HttpContext httpContext)
         {
-            CurrentUser currentUser = new CurrentUser();
+            ApplicationUser currentUser = new ApplicationUser()
+            {
+                Id = 1, UserName = "NULL" , Email = "NULL" , Role = null,
+            };
             if (httpContext.User != null)
             {
                 if (httpContext.User.Identity != null)

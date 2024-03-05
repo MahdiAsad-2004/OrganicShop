@@ -8,18 +8,18 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class ContactUsService : IContactUsService
+    public class ContactUsService : Service<ContactUs>, IContactUsService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly IContactUsRepository _ContactUsRepository;
-        public Message<ContactUs> _Message { init; get; } = new Message<ContactUs>();
 
-        public ContactUsService(IMapper mapper,IContactUsRepository ContactUsRepository)
+        public ContactUsService(IApplicationUserProvider provider,IMapper mapper,IContactUsRepository ContactUsRepository) : base(provider)
         {
             _Mapper = mapper;
             this._ContactUsRepository = ContactUsRepository;
@@ -44,7 +44,7 @@ namespace OrganicShop.BLL.Services
             if (ContactUs == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _ContactUsRepository.Update(_Mapper.Map<ContactUs>(update), 1);
+            await _ContactUsRepository.Update(_Mapper.Map<ContactUs>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 

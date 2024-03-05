@@ -11,27 +11,28 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using System.Reflection;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class UserService : IUserService
+    public class UserService : Service<User>, IUserService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly IUserRepository _userRepository;
-        public Message<User> _Message { get; } = new Message<User>();
 
-        public UserService(IMapper mapper,IUserRepository userRepository)
+        public UserService(IApplicationUserProvider provider,IMapper mapper,IUserRepository userRepository) : base(provider)
         {
             _Mapper = mapper;
-            this._userRepository = userRepository;
+            _userRepository = userRepository;
         }
 
         #endregion
 
 
-
+        
         public async Task<PageDto<User,UserListDto,long>> GetAll(FilterUserDto filter, SortUserDto sort,PagingDto paging)
         {
             var query = _userRepository.GetQueryable()
@@ -68,8 +69,13 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<UserListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
+            await Console.Out.WriteLineAsync($"************** {_AppUserProvider.User.Id}  {_AppUserProvider.User.UserName} ***************");
+
             return pageDto;
         }
+
+
+      
 
 
 
@@ -86,7 +92,7 @@ namespace OrganicShop.BLL.Services
 
 
             User user = _Mapper.Map<User>(create);
-            await _userRepository.Add(user,1);
+            await _userRepository.Add(user,_AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -102,7 +108,7 @@ namespace OrganicShop.BLL.Services
             if (user == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _userRepository.Update(_Mapper.Map<User>(update), 1);
+            await _userRepository.Update(_Mapper.Map<User>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -115,7 +121,7 @@ namespace OrganicShop.BLL.Services
             if (user == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _userRepository.SoftDelete(user,1);
+            await _userRepository.SoftDelete(user, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
 
@@ -133,7 +139,7 @@ namespace OrganicShop.BLL.Services
 
             user = await _userRepository.GetAsTracking(changePassword.Id);
             user!.Password = changePassword.NewPassword;
-            await _userRepository.Update(user, 1);
+            await _userRepository.Update(user, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, "رمز عبور با موفقیت تغییر یافت");
         }
 

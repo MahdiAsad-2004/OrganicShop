@@ -10,19 +10,20 @@ using OrganicShop.Domain.Response;
 using OrganicShop.Domain.Dtos.Combo;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class PermissionService : IPermissionService
+    public class PermissionService : Service<Permission>, IPermissionService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly IPermissionRepository _PermissionRepository;
         private readonly IPermissionUsersRepository _PermissionUsersRepository;
-        public Message<Permission> _Message { init; get; }
 
-        public PermissionService(IMapper mapper,IPermissionRepository permissionRepository, IPermissionUsersRepository permissionUsersRepository)
+        public PermissionService(IApplicationUserProvider provider,IMapper mapper,IPermissionRepository permissionRepository,
+            IPermissionUsersRepository permissionUsersRepository) : base(provider)
         {
             _Mapper = mapper;
             _PermissionRepository = permissionRepository;
@@ -90,7 +91,7 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-            await _PermissionRepository.Add(Permission, 1);
+            await _PermissionRepository.Add(Permission, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -113,7 +114,7 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-            await _PermissionRepository.Update(_Mapper.Map<Permission>(update), 1);
+            await _PermissionRepository.Update(_Mapper.Map<Permission>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -127,7 +128,7 @@ namespace OrganicShop.BLL.Services
             if (Permission == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _PermissionRepository.SoftDelete(Permission, 1);
+            await _PermissionRepository.SoftDelete(Permission, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
 

@@ -10,18 +10,18 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using AutoMapper;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class BankCardService : IBankCardService
+    public class BankCardService : Service<BankCard> , IBankCardService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly IBankCardRepository _BankCardRepository;
-        public Message<BankCard> _Message { init; get; } = new Message<BankCard>();
 
-        public BankCardService(IMapper mapper,IBankCardRepository BankCardRepository)
+        public BankCardService(IApplicationUserProvider provider,IMapper mapper,IBankCardRepository BankCardRepository) : base(provider)
         {
             _Mapper = mapper;
             _BankCardRepository = BankCardRepository;
@@ -66,7 +66,7 @@ namespace OrganicShop.BLL.Services
                 return new ServiceResponse(EntityResult.MaxCreate , _Message.MaxCreate(8));
 
             BankCard BankCard = _Mapper.Map<BankCard>(create);
-            await _BankCardRepository.Add(BankCard, 1);
+            await _BankCardRepository.Add(BankCard, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -82,7 +82,7 @@ namespace OrganicShop.BLL.Services
             if (BankCard.UserId != update.UserId)
                 return new ServiceResponse(EntityResult.Success, _Message.NoAccess());
 
-            await _BankCardRepository.Update(_Mapper.Map<BankCard>(update), 1);
+            await _BankCardRepository.Update(_Mapper.Map<BankCard>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -96,7 +96,7 @@ namespace OrganicShop.BLL.Services
             if (BankCard == null)
                 return new ServiceResponse(EntityResult.Success, _Message.NotFound());
 
-            await _BankCardRepository.SoftDelete(BankCard, 1);
+            await _BankCardRepository.SoftDelete(BankCard, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }

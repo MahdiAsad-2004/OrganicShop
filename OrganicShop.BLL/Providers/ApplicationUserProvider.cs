@@ -5,17 +5,19 @@ using OrganicShop.Domain.Dtos.Base;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Enums;
 using OrganicShop.Domain.Models;
+using OrganicShop.Domain.IProviders;
+
 
 namespace OrganicShop.BLL.Providers
 {
-    public class CurrentUserProvider
+    public class ApplicationUserProvider : IApplicationUserProvider
     {
-        public CurrentUser _User { get; private set; }
+        public ApplicationUser User { get; private set; }
 
 
-        public void SetCurrentUser(CurrentUser currentUser)
+        public void SetCurrentUser(ApplicationUser currentUser)
         {
-            _User = currentUser;
+            User = currentUser;
         }
 
     }

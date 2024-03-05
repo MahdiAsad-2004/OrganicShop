@@ -9,19 +9,20 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class CoProductService : ICoProductService
+    public class CoProductService : Service<CoProduct>, ICoProductService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly ICoProductRepository _CoProductRepository;
         private readonly IBasketRepository _BasketRepository;
-        public Message<CoProduct> _Message { init; get; } = new Message<CoProduct>();
 
-        public CoProductService(IMapper mapper,ICoProductRepository CoProductRepository, IBasketRepository basketRepository)
+        public CoProductService(IApplicationUserProvider provider,IMapper mapper,ICoProductRepository CoProductRepository, IBasketRepository basketRepository)
+            : base(provider)
         {
             _Mapper = mapper;
             _CoProductRepository = CoProductRepository;
@@ -90,13 +91,13 @@ namespace OrganicShop.BLL.Services
                     CoProduct.Count = CoProduct.Product.Stock; ;
                 }
                 CoProduct.IsOrdered = false;
-                await _CoProductRepository.Update(CoProduct, 1);
+                await _CoProductRepository.Update(CoProduct, _AppUserProvider.User.Id);
             }
             else
             {
                 CoProduct = _Mapper.Map<CoProduct>(create);
                 CoProduct.IsOrdered = false;
-                await _CoProductRepository.Add(CoProduct, 1);
+                await _CoProductRepository.Add(CoProduct, _AppUserProvider.User.Id);
 
 
             }
@@ -112,7 +113,7 @@ namespace OrganicShop.BLL.Services
             {
                 basket.TotalPrice += coP.UpdatedPrice == null ? coP.Price : coP.UpdatedPrice.Value;
             }
-            await _BasketRepository.Update(basket, 1);
+            await _BasketRepository.Update(basket, _AppUserProvider.User.Id);
 
             #endregion
 
@@ -140,7 +141,7 @@ namespace OrganicShop.BLL.Services
             {
                 throw new Exception("Change CoProduct Basket And Order State Exception");
             }
-            await _CoProductRepository.Update(_Mapper.Map<CoProduct>(update), 1);
+            await _CoProductRepository.Update(_Mapper.Map<CoProduct>(update), _AppUserProvider.User.Id);
 
 
             #region update basket
@@ -154,7 +155,7 @@ namespace OrganicShop.BLL.Services
             {
                 basket.TotalPrice += coP.UpdatedPrice == null ? coP.Price : coP.UpdatedPrice.Value;
             }
-            await _BasketRepository.Update(basket, 1);
+            await _BasketRepository.Update(basket, _AppUserProvider.User.Id);
 
             #endregion
 
@@ -174,7 +175,7 @@ namespace OrganicShop.BLL.Services
 
             CoProduct.BasketId = null;
 
-            await _CoProductRepository.SoftDelete(CoProduct, 1);
+            await _CoProductRepository.SoftDelete(CoProduct, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }

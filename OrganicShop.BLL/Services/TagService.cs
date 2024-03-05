@@ -9,18 +9,18 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class TagService : ITagService
+    public class TagService : Service<Tag>, ITagService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly ITagRepository _TagRepository;
-        public Message<Tag> _Message { init; get; } = new Message<Tag>();
 
-        public TagService(IMapper mapper,ITagRepository TagRepository)
+        public TagService(IApplicationUserProvider provider,IMapper mapper,ITagRepository TagRepository) : base(provider)
         {
             _Mapper = mapper;
             _TagRepository = TagRepository;
@@ -68,7 +68,7 @@ namespace OrganicShop.BLL.Services
             if (await _TagRepository.GetQueryable().AnyAsync(a => a.Title.Contains(create.Title, StringComparison.OrdinalIgnoreCase)))
                 return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create,a => nameof(a.Title)));
 
-            await _TagRepository.Add(Tag,1);
+            await _TagRepository.Add(Tag,_AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -84,7 +84,7 @@ namespace OrganicShop.BLL.Services
             if (await _TagRepository.GetQueryable().AnyAsync(a => a.Title.Contains(update.Title, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
                 return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Title)));
 
-            await _TagRepository.Update(_Mapper.Map<Tag>(update), 1);
+            await _TagRepository.Update(_Mapper.Map<Tag>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -97,7 +97,7 @@ namespace OrganicShop.BLL.Services
             if (Tag == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _TagRepository.SoftDelete(Tag, 1);
+            await _TagRepository.SoftDelete(Tag, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }

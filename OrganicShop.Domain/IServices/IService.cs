@@ -1,4 +1,6 @@
-﻿using OrganicShop.Domain.Models;
+﻿using OrganicShop.Domain.Entities;
+using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Models;
 using OrganicShop.Domain.Response;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,8 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IService<Entity> where Entity : IAggregateRoot
     {
-        //CurrentUser _User { init; }
-        Message<Entity> _Message { get; }
+        Message<Entity> _Message { get; } 
+        IApplicationUserProvider _AppUserProvider { get; } 
     }
+
 }

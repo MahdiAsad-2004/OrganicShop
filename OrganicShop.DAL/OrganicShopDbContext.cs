@@ -32,6 +32,8 @@ namespace OrganicShop.DAL
         public DbSet<Order> Orders { get; set; }
         public DbSet<TrackingStatus> TrackingStatuses { get; set; }
         public DbSet<TrackingDescription> TrackingDescriptions { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<PermissionUsers> PermissionUsers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Picture> ProductImages { get; set; }
         public DbSet<Property> Properties { get; set; }
@@ -46,25 +48,11 @@ namespace OrganicShop.DAL
 
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer("Server=.; Database=OrganicShopDb; Trusted_Connection=True;  TrustServerCertificate=True;");
-        //    optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-        //}
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Owned<BaseEntity>();
-            modelBuilder.Owned<BaseEntity>();
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfig).Assembly);
-
-
-            //modelBuilder.Entity<BaseEntity>().Property(a => a).HasDefaultValue(new BaseEntity());           
-
-
-            
-
 
         }
 

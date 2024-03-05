@@ -9,19 +9,19 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
 
-    public class CategoryService : ICategoryService
+    public class CategoryService : Service<Category> , ICategoryService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly ICategoryRepository _CategoryRepository;
-        public Message<Category> _Message { init; get; } = new Message<Category>();
 
-        public CategoryService(IMapper mapper ,ICategoryRepository CategoryRepository)
+        public CategoryService(IApplicationUserProvider provider,IMapper mapper ,ICategoryRepository CategoryRepository) : base(provider)
         {
             _Mapper = mapper;
             _CategoryRepository = CategoryRepository;
@@ -78,7 +78,7 @@ namespace OrganicShop.BLL.Services
                 return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create, a => nameof(a.EnTitle)));
 
             Category = _Mapper.Map<Category>(create);
-            await _CategoryRepository.Add(Category, 1);
+            await _CategoryRepository.Add(Category, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -99,7 +99,7 @@ namespace OrganicShop.BLL.Services
             if (Category == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _CategoryRepository.Update(_Mapper.Map<Category>(update), 1);
+            await _CategoryRepository.Update(_Mapper.Map<Category>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -112,7 +112,7 @@ namespace OrganicShop.BLL.Services
             if (Category == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _CategoryRepository.SoftDelete(Category, 1);
+            await _CategoryRepository.SoftDelete(Category, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }

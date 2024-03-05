@@ -8,18 +8,18 @@ using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class PictureService : IPictureService
+    public class PictureService : Service<Picture>, IPictureService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly IPictureRepository _PictureRepository;
-        public Message<Picture> _Message { init; get; } = new Message<Picture>();
 
-        public PictureService(IMapper mapper,IPictureRepository PictureRepository)
+        public PictureService(IApplicationUserProvider provider,IMapper mapper,IPictureRepository PictureRepository) : base(provider)
         {
             _Mapper = mapper;
             _PictureRepository = PictureRepository;
@@ -71,7 +71,7 @@ namespace OrganicShop.BLL.Services
             //if (await _PictureRepository.GetQueryable().AnyAsync(a => a.Title.Contains(create.Title, StringComparison.OrdinalIgnoreCase)))
             //    return EntityResult.EntityExist;
 
-            //await _PictureRepository.Add(Picture, 1);
+            //await _PictureRepository.Add(Picture, _AppUserProvider.User.Id);
             //return EntityResult.success;
 
 
@@ -92,7 +92,7 @@ namespace OrganicShop.BLL.Services
             //if (await _PictureRepository.GetQueryable().AnyAsync(a => a.Title.Contains(update.Title, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
             //    return EntityResult.EntityExist;
 
-            //await _PictureRepository.Update(update.ToModel(Picture), 1);
+            //await _PictureRepository.Update(update.ToModel(Picture), _AppUserProvider.User.Id);
             //return EntityResult.success;
 
 
@@ -109,7 +109,7 @@ namespace OrganicShop.BLL.Services
             if (Picture == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.SuccessDelete());
 
-            await _PictureRepository.SoftDelete(Picture, 1);
+            await _PictureRepository.SoftDelete(Picture, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }

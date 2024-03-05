@@ -11,6 +11,8 @@ namespace OrganicShop.Domain.IRepositories
         IReadRepository<Permission,byte>,
         IWriteRepository<Permission,byte>
     {
+        Task<bool> HasPermission(long userId , string PermissionEnTitle);
 
+        Task<bool> HasPermission(long userId , int permissionId);
     }
 }

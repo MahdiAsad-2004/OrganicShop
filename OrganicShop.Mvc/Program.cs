@@ -8,13 +8,14 @@ using OrganicShop.BLL.Services;
 using Microsoft.EntityFrameworkCore;
 using OrganicShop.Mvc.Middlewares;
 using OrganicShop.BLL.Providers;
+using OrganicShop.Domain.IProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSingleton<CurrentUserProvider>();
+builder.Services.AddSingleton<IApplicationUserProvider,ApplicationUserProvider>();
 
 RegisterServices(builder.Services);
 
@@ -53,7 +54,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseMiddleware<CurrentUserProviderMiddleware>(app);
+app.UseMiddleware<ApplicationUserProviderMiddleware>(app);
 
 app.MapControllerRoute(
     name: "default",
@@ -71,8 +72,16 @@ app.MapControllerRoute(
 void RegisterServices(IServiceCollection services)
 {
     builder.Host.UseServiceProviderFactory(new DryIocServiceProviderFactory(InversionOfControl.GetContainer()))
-         .ConfigureContainer<Container>(builder =>{});
+         .ConfigureContainer<Container>(builder => { });
 }
+
+
+//void RegisterServices(IServiceCollection services)
+//{
+//    builder.Host.UseServiceProviderFactory(new DryIocServiceProviderFactory(DryIocAdapter.WithDependencyInjectionAdapter(InversionOfControl.GetContainer())))
+//         .ConfigureContainer<Container>(builder => { });
+//}
+
 
 #endregion
 

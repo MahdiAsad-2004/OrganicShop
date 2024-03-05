@@ -10,10 +10,11 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class OrderService : IOrderService
+    public class OrderService : Service<Order>, IOrderService
     {
         #region ctor
 
@@ -23,10 +24,9 @@ namespace OrganicShop.BLL.Services
         private readonly ICoProductRepository _CoProductRepository;
         private readonly IBasketRepository _BasketRepository;
         private readonly ITrackingStatusService _TrackingStatusesService;
-        public Message<Order> _Message { init; get; } = new Message<Order>();
 
-        public OrderService(IMapper mapper,IOrderRepository OrderRepository, IAddressRepository AddressRepository, ICoProductRepository coProductRepository, 
-            IBasketRepository basketRepository, ITrackingStatusService trackingStatusesService)
+        public OrderService(IApplicationUserProvider provider,IMapper mapper,IOrderRepository OrderRepository, IAddressRepository AddressRepository,
+            ICoProductRepository coProductRepository, IBasketRepository basketRepository, ITrackingStatusService trackingStatusesService) : base(provider)
         {
             _Mapper = mapper;
             _OrderRepository = OrderRepository;
@@ -92,7 +92,7 @@ namespace OrganicShop.BLL.Services
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
             Order.Address = Address;
-            long orderId = await _OrderRepository.Add(Order, 1);
+            long orderId = await _OrderRepository.Add(Order, _AppUserProvider.User.Id);
 
             #region transfer coProdutcs from basket to order
 
@@ -104,7 +104,7 @@ namespace OrganicShop.BLL.Services
                 item.BasketId = null;
                 item.OrderId = orderId;
                 item.IsOrdered = true;
-                await _CoProductRepository.Update(item, 1);
+                await _CoProductRepository.Update(item, _AppUserProvider.User.Id);
             }
 
             #endregion
@@ -120,7 +120,7 @@ namespace OrganicShop.BLL.Services
                 foreach (var item in nextBasket.CoProducts)
                 {
                     item.BasketId = create.BasketId;
-                    await _CoProductRepository.Update(item, 1);
+                    await _CoProductRepository.Update(item, _AppUserProvider.User.Id);
                 }
             }
 
@@ -149,7 +149,7 @@ namespace OrganicShop.BLL.Services
             if (Order == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.SuccessUpdate());
 
-            await _OrderRepository.Update(_Mapper.Map<Order>(update), 1);
+            await _OrderRepository.Update(_Mapper.Map<Order>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -162,7 +162,7 @@ namespace OrganicShop.BLL.Services
             if (Order == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.SuccessUpdate());
 
-            await _OrderRepository.SoftDelete(Order, 1);
+            await _OrderRepository.SoftDelete(Order, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Entities.Base;
 using OrganicShop.Domain.Enums;
+using OrganicShop.Domain.SeedDatas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,14 +27,17 @@ namespace OrganicShop.DAL.Configurations
 
 
 
+
+            builder.HasData(PermissionsSeed.Permissions);
+
             //-----------------------------------------------------------------
 
-            builder.HasData(new Permission
-            {
-                Id = 1,
-                Title = "مدیر سایت",
-                EnTitle = "Main Admin",
-            });
+            //builder.HasData(new Permission
+            //{
+            //    Id = 1,
+            //    Title = "مدیر سایت",
+            //    EnTitle = "Main Admin",
+            //});
             builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 PermissionId = (byte)1,
@@ -45,13 +49,13 @@ namespace OrganicShop.DAL.Configurations
 
             //------------------------------------------------------------------
 
-            builder.HasData(new Permission
-            {
-                Id = 2,
-                Title = "مدیریت کاربران",
-                EnTitle = "Users Admin",
-                ParentId = 1,
-            });
+            //builder.HasData(new Permission
+            //{
+            //    Id = 2,
+            //    Title = "مدیریت کاربران",
+            //    EnTitle = "Users Admin",
+            //    ParentId = 1,
+            //});
             builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 PermissionId = (byte)2,
@@ -63,13 +67,13 @@ namespace OrganicShop.DAL.Configurations
 
             //-----------------------------------------------------------------
 
-            builder.HasData(new Permission
-            {
-                Id = 3,
-                Title = "مدیریت محصولات",
-                EnTitle = "Products Admin",
-                ParentId = 1,
-            });
+            //builder.HasData(new Permission
+            //{
+            //    Id = 3,
+            //    Title = "مدیریت محصولات",
+            //    EnTitle = "Products Admin",
+            //    ParentId = 1,
+            //});
             builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 PermissionId = (byte)3,
@@ -81,14 +85,14 @@ namespace OrganicShop.DAL.Configurations
 
             //-----------------------------------------------------------------
 
-            builder.HasData(new Permission
-            {
-                Id = 4,
-                Title = "مدیریت مجوز ها",
-                EnTitle = "Permissions Admin",
-                ParentId = 1,
+            //builder.HasData(new Permission
+            //{
+            //    Id = 4,
+            //    Title = "مدیریت مجوز ها",
+            //    EnTitle = "Permissions Admin",
+            //    ParentId = 1,
 
-            });
+            //});
             builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 PermissionId = (byte)4,
@@ -100,14 +104,14 @@ namespace OrganicShop.DAL.Configurations
 
             //-----------------------------------------------------------------
 
-            builder.HasData(new Permission
-            {
-                Id = 5,
-                Title = "مدیریت نظرات",
-                EnTitle = "Comments Admin",
-                ParentId = 1,
+            //builder.HasData(new Permission
+            //{
+            //    Id = 5,
+            //    Title = "مدیریت نظرات",
+            //    EnTitle = "Comments Admin",
+            //    ParentId = 1,
 
-            });
+            //});
             builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 PermissionId = (byte)5,
@@ -119,14 +123,14 @@ namespace OrganicShop.DAL.Configurations
 
             //-----------------------------------------------------------------
 
-            builder.HasData(new Permission
-            {
-                Id = 6,
-                Title = "مدیریت تخفیف ها",
-                EnTitle = "Discounts Admin",
-                ParentId = 1,
+            //builder.HasData(new Permission
+            //{
+            //    Id = 6,
+            //    Title = "مدیریت تخفیف ها",
+            //    EnTitle = "Discounts Admin",
+            //    ParentId = 1,
 
-            });
+            //});
             builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 PermissionId = (byte)6,
@@ -138,14 +142,14 @@ namespace OrganicShop.DAL.Configurations
 
             //-----------------------------------------------------------------
 
-            builder.HasData(new Permission
-            {
-                Id = 7,
-                Title = "صدور مجوز",
-                EnTitle = "Giving Permission",
-                ParentId = 4,
+            //builder.HasData(new Permission
+            //{
+            //    Id = 7,
+            //    Title = "صدور مجوز",
+            //    EnTitle = "Giving Permission",
+            //    ParentId = 4,
 
-            });
+            //});
             builder.OwnsOne(a => a.BaseEntity).HasData(new
             {
                 PermissionId = (byte)7,

@@ -9,18 +9,18 @@ using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
+using OrganicShop.Domain.IProviders;
 
 namespace OrganicShop.BLL.Services
 {
-    public class FaqService : IFaqService
+    public class FaqService : Service<Faq>, IFaqService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly IFaqRepository _FaqRepository;
-        public Message<Faq> _Message { init; get; } = new Message<Faq>();
 
-        public FaqService(IMapper mapper,IFaqRepository FaqRepository)
+        public FaqService(IApplicationUserProvider provider,IMapper mapper,IFaqRepository FaqRepository) : base(provider)
         {
             _Mapper = mapper;
             _FaqRepository = FaqRepository;
@@ -63,7 +63,7 @@ namespace OrganicShop.BLL.Services
         public async Task<ServiceResponse> Create(CreateFaqDto create)
         {
             Faq Faq = _Mapper.Map<Faq>(create);
-            await _FaqRepository.Add(Faq,1);
+            await _FaqRepository.Add(Faq,_AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }
 
@@ -76,7 +76,7 @@ namespace OrganicShop.BLL.Services
             if (Faq == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _FaqRepository.Update(_Mapper.Map<Faq>(update), 1);
+            await _FaqRepository.Update(_Mapper.Map<Faq>(update), _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
         }
 
@@ -90,7 +90,7 @@ namespace OrganicShop.BLL.Services
             if (Faq == null)
                 return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
 
-            await _FaqRepository.SoftDelete(Faq, 1);
+            await _FaqRepository.SoftDelete(Faq, _AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
         }
     }
