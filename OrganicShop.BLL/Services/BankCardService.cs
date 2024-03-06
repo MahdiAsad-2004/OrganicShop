@@ -31,9 +31,13 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<BankCard, BankCardListDto, long>> GetAll(FilterBankCardDto filter, SortBankCardDto sort, PagingDto paging)
+        public async Task<PageDto<BankCard, BankCardListDto, long>> GetAll(FilterBankCardDto?filter = null, SortBankCardDto? sort = null, PagingDto? paging = null)
         {
             var query = _BankCardRepository.GetQueryable();
+
+            if (filter == null) filter = new FilterBankCardDto();
+            if (sort == null) sort = new SortBankCardDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 

@@ -19,6 +19,17 @@ namespace OrganicShop.Mvc.Controllers.Base
 
 
 
+        protected void ToastTempData(Toast toast)
+        {
+            TempData["Toast"] = toast;
+        }
+
+        protected void ToastTempDataSerialize(Toast toast)
+        {
+            TempData["Toast"] = toast.Serialize();
+        }
+
+
         protected IActionResult Toast(Toast message)
         {
             Response.Headers.Add("ResponseDataType", "toast");

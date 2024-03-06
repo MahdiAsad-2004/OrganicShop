@@ -39,11 +39,15 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<Order, OrderListDto, long>> GetAll(FilterOrderDto filter, SortOrderDto sort, PagingDto paging)
+        public async Task<PageDto<Order, OrderListDto, long>> GetAll(FilterOrderDto? filter = null, SortOrderDto? sort = null, PagingDto? paging = null)
         {
             var query = _OrderRepository.GetQueryable()
                 .Include(a => a.Receiver)
                 .AsQueryable();
+
+            if (filter == null) filter = new FilterOrderDto();
+            if (sort == null) sort = new SortOrderDto();
+            if (paging == null) paging = new PagingDto();
 
             #region flters
 

@@ -33,9 +33,14 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<TrackingDescription,TrackingDescriptionListDto,long>> GetAll(FilterTrackingDescriptionDto filter , SortTrackingDescriptionDto sort , PagingDto paging)
+        public async Task<PageDto<TrackingDescription,TrackingDescriptionListDto,long>> GetAll(FilterTrackingDescriptionDto? filter = null 
+            , SortTrackingDescriptionDto? sort = null , PagingDto? paging = null)
         {
             var query = _TrackingDescriptionRepository.GetQueryable();
+
+            if (filter == null) filter = new FilterTrackingDescriptionDto();
+            if (sort == null) sort = new SortTrackingDescriptionDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 

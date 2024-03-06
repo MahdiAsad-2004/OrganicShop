@@ -17,21 +17,6 @@ namespace OrganicShop.Domain.Dtos.Base
 
         public IQueryable<Entity> ApplyBaseFilters(IQueryable<Entity> query)
         {
-            //switch (DeleteFilter)
-            //{
-            //    case DeleteFilter.All:
-            //        //query = query.Where(a => a.SoftDelete.IsDelete == true || a.SoftDelete.IsDelete == false);
-            //        break;
-
-            //    case DeleteFilter.Deleted:
-            //        query = query.Where(a => a.SoftDelete.IsDelete == true);
-            //        break;
-
-            //    case DeleteFilter.NotDeleted:
-            //        query = query.Where(a => a.SoftDelete.IsDelete == false);
-            //        break;
-            //}
-
             switch (ActiveFilter)
             {
                 case IsActiveFilter.Active:
@@ -40,6 +25,9 @@ namespace OrganicShop.Domain.Dtos.Base
 
                 case IsActiveFilter.NotActive:
                     query = query.Where(a => a.BaseEntity.IsActive == false);
+                    break;
+
+                case IsActiveFilter.All:
                     break;
             }
 

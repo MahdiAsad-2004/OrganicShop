@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace OrganicShop.Mvc.Models.Toast
 {
@@ -11,6 +13,11 @@ namespace OrganicShop.Mvc.Models.Toast
         public int TimeMs { get; set; } = 3000;
 
 
+
+        public Toast()
+        {
+                
+        }
         public Toast(ToastType toastType, string text)
         {
             Type = toastType;
@@ -50,6 +57,27 @@ namespace OrganicShop.Mvc.Models.Toast
                 default:
                     return "";
             }
+        }
+
+        public static Toast GetToastFromTempData(object x)
+        {
+            if(x is string)
+            {
+                var jsonStr = x as string;
+                return JsonSerializer.Deserialize<Toast>(jsonStr);
+            }
+            else if(x is Toast)
+            {
+                return x as Toast;
+            }
+            throw new Exception("Wrong Toast TempData");
+        }
+
+
+
+        public string Serialize()
+        {
+            return JsonSerializer.Serialize(this);
         }
     }
 

@@ -7,7 +7,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IBankCardService : IService<BankCard>
     {
-        Task<PageDto<BankCard,BankCardListDto,long>> GetAll(FilterBankCardDto filter , SortBankCardDto sort, PagingDto paging);
+        Task<PageDto<BankCard,BankCardListDto,long>> GetAll(FilterBankCardDto? filter = null , SortBankCardDto? sort = null, PagingDto? paging = null);
 
         Task<ServiceResponse> Create(CreateBankCardDto create);
 

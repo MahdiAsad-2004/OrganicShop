@@ -7,7 +7,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IPropertyService : IService<Property>
     {
-        Task<PageDto<Property,PropertyListDto,int>> GetAll(FilterPropertyDto filter , SortPropertyDto sort , PagingDto paging);
+        Task<PageDto<Property,PropertyListDto,int>> GetAll(FilterPropertyDto? filter = null , SortPropertyDto? sort = null , PagingDto? paging = null);
 
         Task<ServiceResponse> Create(CreatePropertyDto create);
 

@@ -31,9 +31,13 @@ namespace OrganicShop.BLL.Services
 
         
 
-        public async Task<PageDto<Property,PropertyListDto,int>> GetAll(FilterPropertyDto filter, SortPropertyDto sort, PagingDto paging)
+        public async Task<PageDto<Property,PropertyListDto,int>> GetAll(FilterPropertyDto? filter = null, SortPropertyDto? sort = null, PagingDto? paging = null)
         {
             var query = _PropertyRepository.GetQueryable();
+
+            if (filter == null) filter = new FilterPropertyDto();
+            if (sort == null) sort = new SortPropertyDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 

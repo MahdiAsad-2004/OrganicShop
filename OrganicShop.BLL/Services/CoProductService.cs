@@ -32,9 +32,13 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<CoProduct, CoProductListDto, long>> GetAll(FilterCoProductDto filter, SortCoProductDto sort, PagingDto paging)
+        public async Task<PageDto<CoProduct, CoProductListDto, long>> GetAll(FilterCoProductDto? filter = null, SortCoProductDto? sort = null, PagingDto? paging = null)
         {
             var query = _CoProductRepository.GetQueryable();
+
+            if (filter == null) filter = new FilterCoProductDto();
+            if (sort == null) sort = new SortCoProductDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 

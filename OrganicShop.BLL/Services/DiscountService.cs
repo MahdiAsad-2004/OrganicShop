@@ -37,11 +37,15 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<Discount,DiscountListDto,int>> GetAll(FilterDiscountDto filter, SortDiscountDto sort , PagingDto paging)
+        public async Task<PageDto<Discount,DiscountListDto,int>> GetAll(FilterDiscountDto? filter = null, SortDiscountDto? sort = null , PagingDto? paging = null)
         {
             var query = _DiscountRepository.GetQueryable()
                 .Include(a => a.DiscountUsers)
                 .AsQueryable();
+
+            if (filter == null) filter = new FilterDiscountDto();
+            if (sort == null) sort = new SortDiscountDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 

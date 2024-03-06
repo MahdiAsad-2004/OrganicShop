@@ -13,6 +13,8 @@ using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using System.Reflection;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Entities.Relations;
+using OrganicShop.Domain.Entities.Base;
 
 namespace OrganicShop.BLL.Services
 {
@@ -33,11 +35,14 @@ namespace OrganicShop.BLL.Services
 
 
         
-        public async Task<PageDto<User,UserListDto,long>> GetAll(FilterUserDto filter, SortUserDto sort,PagingDto paging)
+        public async Task<PageDto<User,UserListDto,long>> GetAll(FilterUserDto? filter = null, SortUserDto? sort = null,PagingDto? paging = null)
         {
             var query = _userRepository.GetQueryable()
-                .Include(a => a.Addresses)
                 .AsQueryable();
+
+            if (filter == null) filter = new FilterUserDto();
+            if (sort == null) sort = new SortUserDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 
@@ -54,7 +59,6 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-
             #region sort
 
             query = sort.ApplyBaseSort(query);
@@ -63,7 +67,6 @@ namespace OrganicShop.BLL.Services
             if (sort.Name == false) query = query.OrderByDescending(a => a.Name);
 
             #endregion
-
 
             PageDto<User, UserListDto, long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<UserListDto>(a)).ToList();
@@ -75,7 +78,16 @@ namespace OrganicShop.BLL.Services
         }
 
 
-      
+        public async Task<UserListDto?> Get(long id)
+        {
+            var user = await _userRepository.GetAsNoTracking(id);
+            UserListDto? userListDto = null;
+            if(user != null)
+            {
+                userListDto = _Mapper.Map<UserListDto>(user);
+            }
+            return userListDto;
+        }
 
 
 
@@ -87,11 +99,16 @@ namespace OrganicShop.BLL.Services
             if (await _userRepository.GetQueryable().AnyAsync(a => a.Email == create.Email))
                 return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create, a => nameof(a.Email)));
 
-
-            // if currentUser has permission to set userUermissions , permissions sets here 
-
-
             User user = _Mapper.Map<User>(create);
+            
+            if(HasPermission(a => a.Giving_Permission))
+            {
+                foreach (var permissionId in create.Permissions)
+                {
+                    user.PermissionUsers.Add(new PermissionUsers() { PermissionId = (byte)permissionId , BaseEntity = new BaseEntity(true) });
+                }
+            }
+
             await _userRepository.Add(user,_AppUserProvider.User.Id);
             return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
         }

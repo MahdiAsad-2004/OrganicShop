@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Entities.Base;
+using OrganicShop.Domain.Entities.SeedDatas;
 using OrganicShop.Domain.Enums;
-using OrganicShop.Domain.SeedDatas;
 using System;
 using System.Collections.Generic;
 using System.Linq;

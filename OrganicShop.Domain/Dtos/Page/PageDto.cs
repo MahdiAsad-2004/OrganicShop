@@ -11,7 +11,7 @@ namespace OrganicShop.Domain.Dtos.Page
 {
     public class PageDto<Entity , ListDto , key> where Entity : class where ListDto : BaseListDto<key> where key : struct
     {
-        public List<ListDto> List { get; set; }
+        public List<ListDto> List { get; set; } = new List<ListDto>();
         public Pager<Entity> Pager { get; set; }
 
 

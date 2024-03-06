@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using OrganicShop.Domain.IServices;
 using System.Reflection;
-using OrganicShop.Domain.SeedDatas;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Entities.SeedDatas;
 
 namespace OrganicShop.BLL.Services
 {

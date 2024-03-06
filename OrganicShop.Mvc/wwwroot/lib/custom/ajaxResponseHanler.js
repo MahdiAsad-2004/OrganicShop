@@ -125,8 +125,10 @@ function HandleData(data , time) {
 
 
 
+let type = MessageTypes[0];
 function Toast(title, text, typeIndex , timeMs) {
-    var type = MessageTypes[typeIndex];
+    alert(typeIndex);
+    console.log(type);
     Swal.fire({
         toast: true,
         titleText: title,

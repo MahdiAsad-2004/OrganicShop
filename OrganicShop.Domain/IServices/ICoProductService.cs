@@ -7,7 +7,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface ICoProductService : IService<CoProduct>
     {
-        Task<PageDto<CoProduct, CoProductListDto, long>> GetAll(FilterCoProductDto filter, SortCoProductDto sort, PagingDto paging);
+        Task<PageDto<CoProduct, CoProductListDto, long>> GetAll(FilterCoProductDto? filter = null, SortCoProductDto? sort = null, PagingDto? paging = null);
 
         Task<ServiceResponse> Create(CreateCoProductDto create);
 

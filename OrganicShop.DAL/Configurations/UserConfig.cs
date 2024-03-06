@@ -44,6 +44,7 @@ namespace OrganicShop.DAL.Configurations
                     PhoneNumber = "09369753041",
                     Email = "mas1379as@gmail.com",
                     Role = Role.Admin,
+                    ProfileImage = "joker.jpg",
                 },
                 new User
                 {

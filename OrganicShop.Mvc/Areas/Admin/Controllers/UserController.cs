@@ -9,6 +9,8 @@ using OrganicShop.Domain.Enums.EntityResults;
 using System.Security.Cryptography.Xml;
 using OrganicShop.Domain.Dtos.Combo;
 using OrganicShop.Mvc.Models.Toast;
+using OrganicShop.Mvc.Extensions;
+using System.Text.Json;
 
 namespace OrganicShop.Mvc.Areas.Admin.Controllers
 {
@@ -34,7 +36,7 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         {
             var pageDto = await _UserService.GetAll(filter, sort, paging);
 
-            
+            //ToastTempData(new Toast(ToastType.Info , "" ,6000));
 
             return View(pageDto);
             //return View(new PageDto<User,UserListDto,long>());
@@ -80,7 +82,26 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
             return View();
         }
 
-     
+
+        [HttpGet("Admin/User/{id}/Permissions")]
+        public async Task<IActionResult> UserPermissions(long id)
+        {
+            if (User.GetAppUser().HasPermission(a => a.Giving_Permission))
+            {
+                await Console.Out.WriteLineAsync("Find");
+                var user = await _UserService.Get(id);
+                if (user == null)
+                {
+                    ToastTempDataSerialize(new Toast(ToastType.Error, "کاربر یافت نشد"));
+                    return View("Index" , await _UserService.GetAll());
+                }
+            }
+            return Content("sfdsfs");
+        }
+
+
+
+
         public async Task<bool> EmailExist(string email)
             => await _UserService.IsEmailExist(email);
 

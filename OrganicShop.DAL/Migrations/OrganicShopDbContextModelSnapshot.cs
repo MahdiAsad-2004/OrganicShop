@@ -435,7 +435,7 @@ namespace OrganicShop.DAL.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Permission");
+                    b.ToTable("Permissions");
 
                     b.HasData(
                         new
@@ -779,6 +779,7 @@ namespace OrganicShop.DAL.Migrations
                             Name = "Mahdi Asadi",
                             Password = "123456",
                             PhoneNumber = "09369753041",
+                            ProfileImage = "joker.jpg",
                             Role = 2
                         },
                         new
@@ -1136,10 +1137,10 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     ContactUsId = (byte)1,
-                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 826, DateTimeKind.Local).AddTicks(1431),
+                                    CreateDate = new DateTime(2024, 3, 5, 18, 1, 13, 979, DateTimeKind.Local).AddTicks(4759),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 826, DateTimeKind.Local).AddTicks(1488)
+                                    LastModified = new DateTime(2024, 3, 5, 18, 1, 13, 979, DateTimeKind.Local).AddTicks(4817)
                                 });
                         });
 
@@ -1304,7 +1305,7 @@ namespace OrganicShop.DAL.Migrations
 
                             b1.HasKey("PermissionId");
 
-                            b1.ToTable("Permission");
+                            b1.ToTable("Permissions");
 
                             b1.WithOwner()
                                 .HasForeignKey("PermissionId");
@@ -1313,58 +1314,58 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     PermissionId = (byte)1,
-                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6331),
+                                    CreateDate = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3105),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6381)
+                                    LastModified = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3150)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)2,
-                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6528),
+                                    CreateDate = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3261),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6536)
+                                    LastModified = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3267)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)3,
-                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6661),
+                                    CreateDate = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3361),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6668)
+                                    LastModified = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3366)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)4,
-                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6767),
+                                    CreateDate = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3444),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6773)
+                                    LastModified = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3448)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)5,
-                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6888),
+                                    CreateDate = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3519),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6893)
+                                    LastModified = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3523)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)6,
-                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6987),
+                                    CreateDate = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3590),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(6992)
+                                    LastModified = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3594)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)7,
-                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(7087),
+                                    CreateDate = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3673),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 831, DateTimeKind.Local).AddTicks(7151)
+                                    LastModified = new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3693)
                                 });
                         });
 
@@ -1797,18 +1798,18 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     UserId = 1L,
-                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 835, DateTimeKind.Local).AddTicks(2068),
+                                    CreateDate = new DateTime(2024, 3, 5, 18, 1, 13, 989, DateTimeKind.Local).AddTicks(1690),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 835, DateTimeKind.Local).AddTicks(2110)
+                                    LastModified = new DateTime(2024, 3, 5, 18, 1, 13, 989, DateTimeKind.Local).AddTicks(1731)
                                 },
                                 new
                                 {
                                     UserId = 2L,
-                                    CreateDate = new DateTime(2024, 2, 28, 20, 55, 57, 835, DateTimeKind.Local).AddTicks(2236),
+                                    CreateDate = new DateTime(2024, 3, 5, 18, 1, 13, 989, DateTimeKind.Local).AddTicks(1854),
                                     IsActive = true,
                                     IsDelete = true,
-                                    LastModified = new DateTime(2024, 2, 28, 20, 55, 57, 835, DateTimeKind.Local).AddTicks(2242)
+                                    LastModified = new DateTime(2024, 3, 5, 18, 1, 13, 989, DateTimeKind.Local).AddTicks(1860)
                                 });
                         });
 

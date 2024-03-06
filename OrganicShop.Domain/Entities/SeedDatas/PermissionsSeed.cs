@@ -1,6 +1,6 @@
 ﻿using OrganicShop.Domain.Entities;
 
-namespace OrganicShop.Domain.SeedDatas
+namespace OrganicShop.Domain.Entities.SeedDatas
 {
     public class PermissionsSeed
     {

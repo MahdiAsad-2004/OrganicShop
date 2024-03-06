@@ -30,9 +30,13 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<Category,CategoryListDto,int>> GetAll(FilterCategoryDto filter, SortCategoryDto sort,PagingDto paging)
+        public async Task<PageDto<Category,CategoryListDto,int>> GetAll(FilterCategoryDto? filter = null, SortCategoryDto? sort = null,PagingDto? paging = null)
         {
             var query = _CategoryRepository.GetQueryable();
+
+            if (filter == null) filter = new FilterCategoryDto();
+            if (sort == null) sort = new SortCategoryDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 

@@ -30,9 +30,13 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<Tag , TagListDto,int>> GetAll(FilterTagDto filter , SortTagDto sort , PagingDto paging)
+        public async Task<PageDto<Tag , TagListDto,int>> GetAll(FilterTagDto? filter = null , SortTagDto? sort = null , PagingDto? paging = null)
         {
             var query = _TagRepository.GetQueryable();
+
+            if (filter == null) filter = new FilterTagDto();
+            if (sort == null) sort = new SortTagDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 

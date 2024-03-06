@@ -11,7 +11,6 @@ namespace OrganicShop.Domain.Dtos.UserDtos
         public string Email { get; set; }
         public Role Role { get; set; }
         public string? ProfileImage { get; set; }
-        public List<Entities.Address>? Addresses { get; set; }
     }
 
 

@@ -34,9 +34,13 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<Address, AddressListDto, long>> GetAll(FilterAddressDto filter, SortAddressDto sort, PagingDto paging)
+        public async Task<PageDto<Address, AddressListDto, long>> GetAll(FilterAddressDto? filter = null, SortAddressDto? sort = null, PagingDto? paging = null)
         {
             var query = _AddressRepository.GetQueryable();
+            
+            if (filter == null) filter = new FilterAddressDto();
+            if (sort == null) sort = new SortAddressDto();
+            if(paging == null) paging = new PagingDto();
 
             #region filter
 

@@ -29,9 +29,13 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<Picture , PictureListDto,long>> GetAll(FilterPictureDto filter , SortPictureDto sort , PagingDto paging)
+        public async Task<PageDto<Picture , PictureListDto,long>> GetAll(FilterPictureDto? filter = null , SortPictureDto? sort = null , PagingDto? paging = null)
         {
             var query = _PictureRepository.GetQueryable();
+
+            if (filter == null) filter = new FilterPictureDto();
+            if (sort == null) sort = new SortPictureDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 

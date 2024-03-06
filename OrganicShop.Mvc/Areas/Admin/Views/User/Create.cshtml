@@ -53,7 +53,7 @@
                                             <div class="mb-4 row align-items-center">
                                                 <label asp-for="Email" class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
                                                 <div class="col-md-9 col-lg-10">
-                                                    <input class="form-control" asp-for="Email" >
+                                                    <input class="form-control" asp-for="Email">
                                                     <span asp-validation-for="Email" class="mt-1 text-danger"></span>
                                                 </div>
                                             </div>
@@ -70,7 +70,7 @@
                                                 <label asp-for="Role" class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
                                                 <div class="col-md-9 col-lg-10">
                                                     <select class="form-control" asp-for="Role">
-                                                        @foreach(var role in EnumExtension.GetArray<Role>())
+                                                        @foreach (var role in EnumExtension.GetArray<Role>())
                                                         {
                                                             <option value="@role">@role.ToStringValue()</option>
                                                         }
@@ -81,7 +81,7 @@
                                             <div class="mb-4 row align-items-center">
                                                 <label asp-for="ProfileImage" class="col-sm-3 col-form-label form-label-title"></label>
                                                 <div class="col-sm-9">
-                                                    <input asp-for="ProfileImage" class="form-control form-choose" type="file" >
+                                                    <input asp-for="ProfileImage" class="form-control form-choose" type="file">
                                                     <span asp-validation-for="ProfileImage" class="mt-1 text-danger"></span>
                                                 </div>
                                             </div>
@@ -112,71 +112,33 @@
                                     </div>
                                 </div>
 
-                                <div class="tab-pane fade" id="pills-profile" role="tabpanel">
-                                    <div class="card-header-1">
-                                        <h5>تعیین دسترسی های کاربر</h5>
-                                    </div>
 
+                                @if (User.GetAppUser().HasPermission(a => a.Giving_Permission))
+                                {
+                                    foreach (var item in permissions)
+                                    {
+                                        <div class="tab-pane fade" id="pills-profile" role="tabpanel">
+                                            <div class="card-header-1">
+                                                <h5>تعیین دسترسی های کاربر</h5>
+                                            </div>
 
-                                   @foreach (var item in permissions)
-                                   {
-                                        <div class="mb-3 row align-items-center">
-                                            <label class="col-md-2 mb-0">@item.Text</label>
-                                            <div class="col-md-9">
-                                                <div class="radio-section">
-                                                    <label>
-                                                        <input type="checkbox" class="form-control" name="Permissions" value="@item.Value">
-                                                        <i></i>
-                                                    </label>
+                                            <div class="mb-3 row align-items-center">
+                                                <label class="col-md-2 mb-0">@item.Text</label>
+                                                <div class="col-md-9">
+                                                    <div class="radio-section">
+                                                        <label>
+                                                            <input type="checkbox" class="form-control" name="Permissions" value="@item.Value">
+                                                            <i></i>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                   }
+                                    }
 
-                                  @*   <div class="mb-4 row align-items-center">
-                                        <label class="col-md-2 mb-0">افزودن محصول</label>
-                                        <div class="col-md-9">
-                                            <form class="radio-section">
-                                                <label>
-                                                    <input type="radio" name="opinion" checked>
-                                                    <i></i>
-                                                    <span>مجاز</span>
-                                                </label>
+                                }
 
-                                                <label>
-                                                    <input type="radio" name="opinion" />
-                                                    <i></i>
-                                                    <span>غیرمجاز</span>
-                                                </label>
-                                            </form>
-                                        </div>
-                                    </div> 
 
-                                 
-
-                                    <div class="card-header-1">
-                                        <h5>مجوز مربوط به دسته</h5>
-                                    </div>
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-md-2 mb-0">مجوز نوع 1</label>
-                                        <div class="col-md-9">
-                                            <form class="radio-section">
-                                                <label>
-                                                    <input type="radio" name="opinion" checked>
-                                                    <i></i>
-                                                    <span>مجاز</span>
-                                                </label>
-
-                                                <label>
-                                                    <input type="radio" name="opinion" />
-                                                    <i></i>
-                                                    <span>غیر مجاز</span>
-                                                </label>
-                                            </form>
-                                        </div>
-                                    </div> *@
-
-                                </div>
                             </form>
                         </div>
                     </div>
@@ -189,7 +151,7 @@
 
 
 
-@section Scripts{
+@section Scripts {
 
     <!--Dropzon js -->
     <script src="~/admin/assets/js/dropzone/dropzone.js"></script>
@@ -197,5 +159,5 @@
 
     <partial name="_ValidationScriptsPartial" />
 
-    <partial name="_CustomValidationScripts"/>
+    <partial name="_CustomValidationScripts" />
 }

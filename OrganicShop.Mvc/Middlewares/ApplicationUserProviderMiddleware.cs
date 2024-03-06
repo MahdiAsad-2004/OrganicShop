@@ -42,7 +42,7 @@ namespace OrganicShop.Mvc.Middlewares
 
 
             var applicationUserProvider = _application.Services.GetService<IApplicationUserProvider>();
-            var applicationUser = httpContext.GetCurrentUser();
+            var applicationUser = httpContext.GetAppUser();
             //applicationUser = new ApplicationUser()
             //{
             //    Id = 10,

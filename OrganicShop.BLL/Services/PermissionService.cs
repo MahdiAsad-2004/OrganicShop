@@ -34,9 +34,14 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<Permission, PermissionListDto, byte>> GetAll(FilterPermissionDto filter, SortPermissionDto sort, PagingDto paging)
+        public async Task<PageDto<Permission, PermissionListDto, byte>> GetAll(FilterPermissionDto? filter = null,
+            SortPermissionDto? sort = null, PagingDto? paging = null)
         {
             var query = _PermissionRepository.GetQueryable();
+
+            if (filter == null) filter = new FilterPermissionDto();
+            if (sort == null) sort = new SortPermissionDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 

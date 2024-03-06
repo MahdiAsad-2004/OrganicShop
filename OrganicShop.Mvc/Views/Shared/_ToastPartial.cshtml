@@ -1,0 +1,17 @@
+﻿@model Toast
+
+<form id="toast-form">
+
+    <input type="text" disabled hidden id="toast-title" value="@(Model.Title)"/>
+
+    <input type="text" disabled hidden id="toast-text" value="@(Model.Text)" />
+
+    <input type="text" disabled hidden id="toast-type" value="@((int)Model.Type)" />
+
+    <input type="text" disabled hidden id="toast-position" value="@(Model.Position)" />
+
+    <input type="text" disabled hidden id="toast-time" value="@(Model.TimeMs)" />
+
+</form>
+
+

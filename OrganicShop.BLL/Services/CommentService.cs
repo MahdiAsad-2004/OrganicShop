@@ -29,9 +29,13 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<Comment, CommentListDto, long>> GetAll(FilterCommentDto filter, SortCommentDto sort, PagingDto paging)
+        public async Task<PageDto<Comment, CommentListDto, long>> GetAll(FilterCommentDto? filter = null, SortCommentDto? sort = null, PagingDto? paging = null)
         {
             var query = _CommentRepository.GetQueryable();
+
+            if (filter == null) filter = new FilterCommentDto();
+            if (sort == null) sort = new SortCommentDto();
+            if (paging == null) paging = new PagingDto();
 
             #region filter
 

@@ -11,7 +11,7 @@ namespace OrganicShop.BLL.Mappers
         {
 
             CreateMap<User, UserListDto>()
-                .ForMember(m => m.Addresses, a => a.MapFrom(b => b.Addresses != null ? b.Addresses : new List<Address>()))
+                //.ForMember(m => m.Addresses, a => a.MapFrom(b => b.Addresses != null ? b.Addresses : new List<Address>()))
                 .ForMember(m => m.ProfileImage, a => a.MapFrom(b => b.ProfileImage == null ? "" : b.ProfileImage.ToString()))
                 .ForMember(m => m.Email, a => a.AddTransform(b => b.ToLower()));
 

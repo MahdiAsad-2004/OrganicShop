@@ -27,6 +27,12 @@
     </div>
     <!-- tap on tap end -->
 
+    @if(TempData["Toast"] != null)
+    {
+        var toast = Toast.GetToastFromTempData(TempData["Toast"]);
+        <partial name="_ToastPartial" model="toast"/>
+    }
+
     <div class="page-wrapper compact-wrapper" id="pageWrapper">
 
         @await Component.InvokeAsync("AdminHeader")
