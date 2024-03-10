@@ -10,8 +10,10 @@ namespace OrganicShop.Domain.Enums
 {
     public enum SortOrder
     {
-         Ascending  = 1,
-        
+        None = 0,
+
+        Ascending = 1,
+
         Descending = 2,
 
 

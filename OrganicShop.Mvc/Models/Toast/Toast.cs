@@ -10,7 +10,7 @@ namespace OrganicShop.Mvc.Models.Toast
         public string Text { get; set; } = "";
         public ToastType Type { get; set; } = ToastType.Success;
         public ToastPosition Position { get; set; } = ToastPosition.TopEnd;
-        public int TimeMs { get; set; } = 3000;
+        public int TimeMs { get; set; } = 4000;
 
 
 
@@ -34,11 +34,12 @@ namespace OrganicShop.Mvc.Models.Toast
 
 
 
-        public void SetMessageOnResponse(HttpResponse response)
+        public void SetToastOnResponse(HttpResponse response)
         {
             var MessageJson = JsonSerializer.Serialize(this);
             response.Headers.Add("Message", MessageJson);
         }
+
 
         private string GetTitle(ToastType messageType)
         {

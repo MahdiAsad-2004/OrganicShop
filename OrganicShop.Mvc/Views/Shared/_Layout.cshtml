@@ -24,7 +24,7 @@
 
     @if (TempData["Toast"] != null)
     {
-        var toast = TempData["Toast"] as Toast;
+        var toast = Toast.GetToastFromTempData(TempData["Toast"]);
         <partial name="_ToastPartial" model="toast" />
     }
 

@@ -10,14 +10,14 @@ namespace OrganicShop.Domain.Enums
 {
     public enum BaseSortType
     {
-        None = 1,
+        None = 0,
 
-        Newest = 2,
+        Newest = 1,
 
-        LatestChange = 3,
+        LatestChange = 2,
 
-        Oldest = 4,
+        Oldest = 3,
 
-        LatestDelete = 5,
+        LatestDelete = 4,
     }
 }

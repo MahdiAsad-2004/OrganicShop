@@ -3,6 +3,7 @@ using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
 using OrganicShop.Domain.Dtos.PropertyDtos;
+using OrganicShop.Domain.Dtos.UserDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Ioc;
@@ -11,19 +12,33 @@ using OrganicShop.Mvc.Models.Toast;
 
 namespace OrganicShop.Mvc.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController : BaseController<HomeController>
     {
+
+    
         public async Task<IActionResult> Index()
         {
-            //TempData["TestData"] = "Hello";
+            
             return View();
         }
 
         public async Task<IActionResult> TestAction()
         {
-            //return Redirect("Privacy" , new Toast(ToastType.Error, "Bad Request .", 5000));
-            return Partial("Privacy",new Toast(ToastType.Error , "Bad Request ." , 5000),RedirectToAction("index" , new { Pass = 45465456456}));
+            await Console.Out.WriteLineAsync();
+
             
+            //return RedirectToAction("Index", new { name = "asd", pass = "zxcv", flag = false });
+
+            var t = new Toast(ToastType.Error, "asdadasd 654654a6d4d6a54d ", 5000);
+
+            return _ClientHandleResult.RedirectThenToast(HttpContext,TempData,"Index",t,false);
+
+            //return _ClientHandleResult.Partial(HttpContext, "Privacy", null, t);
+
+            //return _ClientHandleResult.ToastThenRedirect(HttpContext, "Index", "Home", new {name = "asd",pass="zxcv",flag=false }, t, false);
+
+            return _ClientHandleResult.Toast(HttpContext,t);
+
         }
 
 

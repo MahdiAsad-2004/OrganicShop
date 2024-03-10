@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using OrganicShop.Mvc.Middlewares;
 using OrganicShop.BLL.Providers;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Mvc.Controllers.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 

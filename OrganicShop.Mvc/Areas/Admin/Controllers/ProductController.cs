@@ -10,7 +10,7 @@ using System.Security.Cryptography.Xml;
 
 namespace OrganicShop.Mvc.Areas.Admin.Controllers
 {
-    public class ProductController : BaseAdminController
+    public class ProductController : BaseAdminController<ProductController>
     {
         #region ctor
 

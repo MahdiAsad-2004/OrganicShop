@@ -2,7 +2,7 @@
 {
     public enum ToastType
     {
-        Success , Error , Warning , Info,  Question ,
+        Success = 0 , Error = 1 , Warning = 2 , Info = 3,  Question = 4 ,
     }
 
 }

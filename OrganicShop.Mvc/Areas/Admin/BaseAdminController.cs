@@ -4,13 +4,9 @@ using OrganicShop.Mvc.Controllers.Base;
 namespace OrganicShop.Mvc.Areas.Admin
 {
     [Area("Admin")]
-    public class BaseAdminController : BaseController
+    public class BaseAdminController<TController> : BaseController<TController> where TController : Controller
     {
        
-
-       
-
-
     }
 
 

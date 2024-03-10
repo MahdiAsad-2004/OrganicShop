@@ -11,6 +11,7 @@ using OrganicShop.Domain.Dtos.BasketDtos;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.BLL.Services
 {
@@ -52,8 +53,8 @@ namespace OrganicShop.BLL.Services
 
             sort.ApplyBaseSort(query);
 
-            if (sort.TotalPrice == true) query = query.OrderBy(o => o.TotalPrice);
-            if (sort.TotalPrice == false) query = query.OrderByDescending(o => o.TotalPrice);
+            if (sort.TotalPrice == SortOrder.Ascending) query = query.OrderBy(o => o.TotalPrice);
+            if (sort.TotalPrice == SortOrder.Descending) query = query.OrderByDescending(o => o.TotalPrice);
 
             #endregion
 

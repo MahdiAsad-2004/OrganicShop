@@ -102,10 +102,11 @@ namespace OrganicShop.Domain.Response
 
         public string EntityExist<TDto>(TDto dto, Func<TDto, string> nameofProperty) where TDto : BaseDto
         {
-            var type = typeof(Entity);
+            var entityType = typeof(Entity);
+            var dtoType = typeof(TDto);
             var propertyStr = nameofProperty.Invoke(dto);
-            string propertyName = type.GetProperty(propertyStr).GetCustomAttribute<DisplayNameAttribute>().DisplayName;
-            string propertyValue = type.GetProperty(propertyStr).GetValue(dto).ToString();
+            string propertyName = dtoType.GetProperty(propertyStr).GetCustomAttribute<DisplayNameAttribute>().DisplayName;
+            string propertyValue = dtoType.GetProperty(propertyStr).GetValue(dto).ToString();
             return $"{_EntityName} با {propertyName} '{propertyValue}' در حال حاضر وجود دارد";
         }
 

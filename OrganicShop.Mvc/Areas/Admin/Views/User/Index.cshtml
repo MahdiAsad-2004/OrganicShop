@@ -179,10 +179,10 @@
                 url: '/Admin/User/Delete',
                 method: 'Get',
                 data: {Id:0},
-                success: function (data, status, jqxht) {
+                success: function (data, status, jqxhr) {
                     console.log(data);
                     cancelDeleteButton.click();
-                    HandleResponse(data , jqxht);
+                    HandleResponse(data , jqxhr);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(errorThrown);

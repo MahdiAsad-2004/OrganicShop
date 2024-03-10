@@ -15,6 +15,7 @@ using System.Reflection;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Entities.Relations;
 using OrganicShop.Domain.Entities.Base;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.BLL.Services
 {
@@ -63,8 +64,8 @@ namespace OrganicShop.BLL.Services
 
             query = sort.ApplyBaseSort(query);
 
-            if (sort.Name == true) query = query.OrderBy(a => a.Name);
-            if (sort.Name == false) query = query.OrderByDescending(a => a.Name);
+            if (sort.Name == SortOrder.Ascending) query = query.OrderBy(a => a.Name);
+            if (sort.Name == SortOrder.Descending) query = query.OrderByDescending(a => a.Name);
 
             #endregion
 

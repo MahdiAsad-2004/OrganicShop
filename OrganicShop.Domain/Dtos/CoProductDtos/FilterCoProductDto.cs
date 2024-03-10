@@ -1,4 +1,5 @@
 ﻿using OrganicShop.Domain.Dtos.Base;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.CoProductDtos
 {

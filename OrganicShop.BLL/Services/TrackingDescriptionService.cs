@@ -10,6 +10,7 @@ using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.BLL.Services
 {
@@ -61,11 +62,11 @@ namespace OrganicShop.BLL.Services
 
             sort.ApplyBaseSort(query);
 
-            if (sort.Title == true) query = query.OrderBy(o => o.Title);
-            if (sort.Title == false) query = query.OrderByDescending(o => o.Title);
+            if (sort.Title == SortOrder.Ascending) query = query.OrderBy(o => o.Title);
+            if (sort.Title == SortOrder.Descending) query = query.OrderByDescending(o => o.Title);
 
-            if (sort.Date == true) query = query.OrderBy(o => o.Date);
-            if (sort.Date == false) query = query.OrderByDescending(o => o.Date);
+            if (sort.Date == SortOrder.Ascending) query = query.OrderBy(o => o.Date);
+            if (sort.Date == SortOrder.Descending) query = query.OrderByDescending(o => o.Date);
 
             #endregion
 

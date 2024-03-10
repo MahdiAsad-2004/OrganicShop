@@ -14,7 +14,7 @@ using System.Text.Json;
 
 namespace OrganicShop.Mvc.Areas.Admin.Controllers
 {
-    public class UserController : BaseAdminController
+    public class UserController : BaseAdminController<UserController>
     {
         #region ctor
 
@@ -92,7 +92,7 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
                 var user = await _UserService.Get(id);
                 if (user == null)
                 {
-                    ToastTempDataSerialize(new Toast(ToastType.Error, "کاربر یافت نشد"));
+                    ToastOnTempData(new Toast(ToastType.Error, "کاربر یافت نشد"));
                     return View("Index" , await _UserService.GetAll());
                 }
             }
@@ -115,11 +115,11 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
             var response = await _UserService.Delete(Id);
             switch (response.Result)
             {
-                case EntityResult.Success:
-                    return Partial("Index" , new Toast(ToastType.Success , response.Message , 3000));
+                //case EntityResult.Success:
+                    //return Partial("Index", await _UserService.GetAll() , new Toast(ToastType.Success , response.Message , 3000));
 
-                case EntityResult.NotFound:
-                    return Toast(new Toast(ToastType.Error, response.Message));
+                //case EntityResult.NotFound:
+                    //return Toast(new Toast(ToastType.Error, response.Message));
                 
                 default:
                     throw new Exception("Unhandled Entity Result .");

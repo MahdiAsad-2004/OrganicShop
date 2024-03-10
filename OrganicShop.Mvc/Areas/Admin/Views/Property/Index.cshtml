@@ -1,0 +1,150 @@
+﻿@using OrganicShop.Domain.Dtos.PropertyDtos
+@model PageDto<Property,PropertyListDto,int>
+
+@section Styles {
+    <!-- Data Table css -->
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/datatables.css">
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="title-header option-title">
+                        <h5>لیست ویژگی ها</h5>
+                        <form class="d-inline-flex">
+                            <a href="/Admin/Property/Create" class="align-items-center btn btn-theme d-flex">
+                                <i data-feather="plus-square"></i>افزودن جدید
+                            </a>
+                        </form>
+                    </div>
+
+                    <div class="table-responsive category-table">
+                        <table class="table all-package theme-table" id="table_id">
+                            <thead>
+                                <tr>
+                                    <th>عنوان</th>
+                                    <th>الویت</th>
+                                    <th>تنظیمات</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model.List)
+                                {
+                                    <tr>
+                                        <td>@item.Title</td>
+                                        <td>@item.Priority</td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="ri-pencil-line"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                       data-bs-target="#exampleModalToggle" onclick="SetValueOnModal('@item.Id' , '@item.Title')">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Modals {
+    <!-- Delete Modal Box Start -->
+    <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">آیا اطمینان دارید ؟</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <p>ویژگی با نام  <i id="property-title"></i> حذف شود</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modal-button-close" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">خیر</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" onclick="Delete()">بله</button>
+                    <button id="success-delete-message" hidden type="button" class="btn btn-animation btn-md fw-bold" data-bs-target="#exampleModalToggle2"
+                            data-bs-toggle="modal" data-bs-dismiss="modal"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form hidden class="ajax-request" id="delete-form" href="/Admin/Property/Delete" method="delete">
+        <input hidden name="Id" id="input-id" value="0"/>
+        <button type="submit" id="delete-form-submit"></button>
+    </form>
+}
+
+
+
+
+@section Scripts {
+
+    <!-- Data table js -->
+    <script src="~/admin/assets/js/jquery.dataTables.js"></script>
+    <script src="~/admin/assets/js/custom-data-table.js"></script>
+
+
+    <script>
+
+        let propertyId = 0;
+        let propertyTitle = 'NULL';
+        let inputId = document.getElementById('input-id');
+        let propertyTitle_elem = document.getElementById('property-title');
+        let modalButtonClose = document.getElementById('modal-button-close');
+        let deleteForm = document.getElementById('delete-form');
+        let deleteFormSubmit = document.getElementById('delete-form-submit');
+
+
+        function SetValueOnModal(id, title) {
+            propertyId = id;
+            propertyTitle = title;
+            propertyTitle_elem.innerHTML = propertyTitle;
+            inputId.setAttribute('value', propertyId);
+        }
+
+        function ResetSetValueOnModal() {
+            propertyId = 0;
+            propertyTitle = "NULL";
+            propertyTitle_elem.innerHTML = propertyTitle;
+            inputId.setAttribute('value', id);
+        }
+
+
+        function Delete() {
+            modalButtonClose.click();
+            deleteFormSubmit.click();
+            ResetSetValueOnModal();
+            //deleteForm.submit(e);  //=>>> OnSubmit Handler not work
+        }
+
+
+    </script>
+
+
+}
+
+

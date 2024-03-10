@@ -10,6 +10,7 @@ using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.BLL.Services
 {
@@ -46,14 +47,17 @@ namespace OrganicShop.BLL.Services
             if (filter.IsBase != null)
                 query = query.Where(q => q.IsBase == filter.IsBase.Value);
 
+            if (filter.ProductId != null)
+                query = query.Where(q => q.ProductId == filter.ProductId);
+
             #endregion
 
             #region sort
 
             query = sort.ApplyBaseSort(query);
 
-            if (sort.Priority == true) query = query.OrderBy(o => o.Priority); 
-            if (sort.Priority == false) query = query.OrderByDescending(o => o.Priority);
+            if (sort.Priority == SortOrder.Ascending) query = query.OrderBy(o => o.Priority); 
+            if (sort.Priority == SortOrder.Descending) query = query.OrderByDescending(o => o.Priority);
 
             #endregion
 
@@ -69,6 +73,9 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse> Create(CreatePropertyDto create)
         {
+            if (await _PropertyRepository.GetQueryable().AnyAsync(a => a.Title == create.Title))
+                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create, a => nameof(a.Title)));
+
             Property Property = _Mapper.Map<Property>(create);
 
             Property.IsBase = true;

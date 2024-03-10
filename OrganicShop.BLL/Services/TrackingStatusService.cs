@@ -58,8 +58,8 @@ namespace OrganicShop.BLL.Services
 
             sort.ApplyBaseSort(query);
 
-            if (sort.Step == true) query = query.OrderBy(o => o.Step);
-            if (sort.Step == false) query = query.OrderByDescending(o => o.Step);
+            if (sort.Step == SortOrder.Ascending) query = query.OrderBy(o => o.Step);
+            if (sort.Step == SortOrder.Descending) query = query.OrderByDescending(o => o.Step);
 
             #endregion
 

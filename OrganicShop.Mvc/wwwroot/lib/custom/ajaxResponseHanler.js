@@ -8,18 +8,14 @@ let MessageTypes = [
 let MessagePositions = ["top", "top-start", "top-end", "center", "center-start", "center-end", "bottom", "bottom-start", "bottom-end"];
 
 let Message = {
-    Title: "",
-    Text: "",
-    Position: 0,
-    Type: 0,
-    TimeMs: 0,
+    Title: "", Text: "", Position: 0, Type: 0,TimeMs: 0,
 };
 
-let RedirectUrl = '';
+let Redirect = {
+    Url: "",IsReplace: "",TimeOut: 0,
+};
 
-let ReplaceUrl = '';
-
-let Refresh = false;
+let Messagetype = MessageTypes[0];
 
 let ViewContainer = document.getElementById('view-container');
 
@@ -27,8 +23,7 @@ var TargetElementId = null;
 
 let ResponseDataType = '';
 
-let DefaultTime = 3000;
-
+let MessageString = null;
 
 
 function HandleResponse(data, jqxhr) {
@@ -36,25 +31,85 @@ function HandleResponse(data, jqxhr) {
         throw new Error("jxhr is null or undefined");
     }
     ResponseDataType = jqxhr.getResponseHeader("ResponseDataType");
-    var messageString = jqxhr.getResponseHeader("Message");
-    if (messageString)
-    {
-        Message = JSON.parse(messageString);
-        DefaultTime = Message.TimeMs;
-        HandleMessage(Message);
-        AfterMessage(jqxhr, DefaultTime);
+
+    if (ResponseDataType == 'partial') {
+        Partial(data, jqxhr);
     }
-    TargetElementId = jqxhr.getResponseHeader("TargetElementId");
-    HandleData(data, DefaultTime);
+    else if (ResponseDataType == 'redirect-toast') {
+        RedirectThenToast(data, jqxhr);
+    }
+    else if (ResponseDataType == 'toast-redirect') {
+        ToastThenRedirect(data, jqxhr);
+    }
+    else if (ResponseDataType == 'toast-refresh') {
+        ToastThenRefresh(data, jqxhr);
+    }
+    else if (ResponseDataType == 'toast') {
+        Message = JSON.parse(data);
+        HandleMessage(Message);
+    }
+}
+
+
+function Partial(data, jqxhr) {
+    TargetElementId = jqxhr.getResponseHeader('targetElementId');
+    if (TargetElementId) {
+        ViewContainer = document.getElementById(TargetElementId);
+    }
+    MessageString = jqxhr.getResponseHeader("Message");
+    Message = JSON.parse(MessageString);
+    ViewContainer.innerHTML = data;
+    HandleMessage(Message);
+}
+
+
+
+function ToastThenRedirect(data, jqxhr) {
+    MessageString = jqxhr.getResponseHeader("Message");
+    Message = JSON.parse(MessageString);
+    Redirect = JSON.parse(data);
+    HandleMessage(Message);
+    setTimeout(function () {
+        if (Redirect.IsReplace == true) {
+            console.log("replace action");
+            location.replace(Redirect.Url);
+
+        }
+        else {
+            location.assign(Redirect.Url);
+        }
+    }, Message.TimeMs+1000)
+}
+
+
+function RedirectThenToast(data, jqxhr) {
+    Redirect = JSON.parse(data);
+    if (Redirect.IsReplace == true) {
+        console.log("replace action");
+        location.replace(Redirect.Url);
+
+    }
+    else {
+        location.assign(Redirect.Url);
+    }
+}
+
+
+function ToastThenRefresh(data,jqxhr) {
+    MessageString = jqxhr.getResponseHeader("Message");
+    Message = JSON.parse(MessageString);
+    Redirect = JSON.parse(data);
+    HandleMessage(Message);
+    setTimeout(function () {
+        location.reload();
+    }, Message.TimeMs + 1000)
 }
 
 
 
 function HandleMessage(message) {
-   
+
     var messageType = MessageTypes[message.Type];
-    console.log(message.Type);
-    console.log(messageType);
     Swal.fire({
         toast: true,
         titleText: message.Title,
@@ -66,82 +121,34 @@ function HandleMessage(message) {
         timerProgressBar: message.TimeMs == 0 ? false : true,
 
         showConfirmButton: false,
-        showCloseButton: true,
-        width: '400px',
+        showCloseButton: false,
+        width: '450px',
+        allowEscapeKey: false,
+        allowEnterKey: false,
         //confirmButtonText: 'Ok',
         //showCancelButton:true,
         //cancelButtonText: 'Cancel',
-        //allowEscapeKey:true,
-        //allowEnterKey:true,
     });
 }
 
 
-function AfterMessage(jqxhr , time) {
-    RedirectUrl = jqxhr.getResponseHeader("RedirectUrl");
-    ReplaceUrl = jqxhr.getResponseHeader("RefreshUrl");
-    Refresh = jqxhr.getResponseHeader("Refresh");
-    if (RedirectUrl) {
-        setTimeout(function () {
-            location.assign(RedirectUrl);
-        }, time);
-    }
-    else if (ReplaceUrl) {
-        setTimeout(function () {
-            location.replace(ReplaceUrl);
-        }, time)
-    }
-    else if (Refresh) {
-        setTimeout(function () {
-            location.reload();
-        }, time)
-    }
-}
 
-
-
-function HandleData(data , time) {
-    if (ResponseDataType == 'partial') {
-        if (TargetElementId) {
-            TargetElementId.innerHTML = data;
-        }
-        else {
-            ViewContainer.innerHTML = data;
-        }
-    }
-    else if (ResponseDataType == 'redirect') {
-        setTimeout(function () {
-            location.assign(data);
-        }, time);
-    }
-    else if (ResponseDataType = 'toast') {
-        console.log("Data: " + data);
-        HandleMessage(JSON.parse(data));
-    }
-    else {
-        throw new Error("ResponseDataType header is not set .")
-    }
-}
-
-
-
-let type = MessageTypes[0];
-function Toast(title, text, typeIndex , timeMs) {
-    alert(typeIndex);
-    console.log(type);
+function Toast(title, text, typeIndex, timeMs) {
+    Messagetype = MessageTypes[typeIndex];
+    console.log(Messagetype);
     Swal.fire({
         toast: true,
         titleText: title,
         text: text,
-        icon: type.Icon,
+        icon: Messagetype.Icon,
         timer: timeMs == 0 ? undefined : timeMs,
         position: 'top-end',
-        background: type.Color,
+        background: Messagetype.Color,
         timerProgressBar: timeMs == 0 ? false : true,
 
         showConfirmButton: false,
         showCloseButton: true,
-        width: '400px',
+        width: '450px',
 
         //confirmButtonText: 'Ok',
         //showCancelButton:true,

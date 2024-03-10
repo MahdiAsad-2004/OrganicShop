@@ -12,6 +12,7 @@ using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.BLL.Services
 {
@@ -81,14 +82,14 @@ namespace OrganicShop.BLL.Services
 
             query = sort.ApplyBaseSort(query);
 
-            if (sort.Count == true) query = query.OrderBy(o => o.Count);
-            if (sort.Count == false) query = query.OrderByDescending(o => o.Count);
+            if (sort.Count == SortOrder.Ascending) query = query.OrderBy(o => o.Count);
+            if (sort.Count == SortOrder.Descending) query = query.OrderByDescending(o => o.Count);
 
-            if (sort.Percent == true) query = query.OrderBy(o => o.Percent);
-            if (sort.Percent == false) query = query.OrderByDescending(o => o.Percent);
+            if (sort.Percent == SortOrder.Ascending) query = query.OrderBy(o => o.Percent);
+            if (sort.Percent == SortOrder.Descending) query = query.OrderByDescending(o => o.Percent);
 
-            if (sort.FixedValue == true) query = query.OrderBy(o => o.FixedValue);
-            if (sort.FixedValue == false) query = query.OrderByDescending(o => o.FixedValue);
+            if (sort.FixedValue == SortOrder.Ascending) query = query.OrderBy(o => o.FixedValue);
+            if (sort.FixedValue == SortOrder.Descending) query = query.OrderByDescending(o => o.FixedValue);
 
             #endregion
 

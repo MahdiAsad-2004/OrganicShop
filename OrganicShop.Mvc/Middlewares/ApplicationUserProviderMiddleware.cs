@@ -14,6 +14,8 @@ using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Ioc;
 using OrganicShop.Domain.IProviders;
+using Microsoft.AspNetCore.Mvc.Filters;
+using OrganicShop.Mvc.Controllers.Base;
 
 
 namespace OrganicShop.Mvc.Middlewares
@@ -32,8 +34,6 @@ namespace OrganicShop.Mvc.Middlewares
 
         public async Task Invoke(HttpContext httpContext)
         {
-
-
             //var applicationUserProvider = DryIocAdapter.GetServiceProvider(InversionOfControl.GetContainer()).GetService<IApplicationUserProvider>();
             //var applicationUserProvider = DryIocAdapter.BuildServiceProvider(InversionOfControl.GetContainer()).GetService<IApplicationUserProvider>();
             //var applicationUserProvider = Resolver.Resolve<IApplicationUserProvider>(InversionOfControl.GetContainer());
@@ -75,6 +75,53 @@ namespace OrganicShop.Mvc.Middlewares
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public class x : Microsoft.AspNetCore.Mvc.Filters.IActionFilter
+    {
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            
+            throw new NotImplementedException();
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+            
+            throw new NotImplementedException();
+        }
+
+
+    }
+
+
+    public class asd : Microsoft.AspNetCore.Mvc.Filters.IResultFilter
+    {
+      
+
+        public void OnResultExecuted(ResultExecutedContext context)
+        {
+            //context.
+            throw new NotImplementedException();
+        }
+
+        public void OnResultExecuting(ResultExecutingContext context)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 
 

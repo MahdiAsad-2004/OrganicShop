@@ -13,6 +13,7 @@ using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.BLL.Services
 {
@@ -83,16 +84,16 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            if (sort.Title == true) query = query.OrderBy(o => o.Title);
-            if (sort.Title == false) query = query.OrderByDescending(o => o.Title);
+            if (sort.Title == SortOrder.Ascending) query = query.OrderBy(o => o.Title);
+            if (sort.Title == SortOrder.Descending) query = query.OrderByDescending(o => o.Title);
 
-            if (sort.Price == true) query = query.OrderBy(o => o.Price);
-            if (sort.Price == false) query = query.OrderByDescending(o => o.Price);
+            if (sort.Price == SortOrder.Ascending) query = query.OrderBy(o => o.Price);
+            if (sort.Price == SortOrder.Descending) query = query.OrderByDescending(o => o.Price);
 
-            if (sort.SoldCount == true) query = query.OrderBy(o => o.SoldCount);
-            if (sort.SoldCount == false) query = query.OrderByDescending(o => o.SoldCount);
+            if (sort.SoldCount == SortOrder.Ascending) query = query.OrderBy(o => o.SoldCount);
+            if (sort.SoldCount == SortOrder.Descending) query = query.OrderByDescending(o => o.SoldCount);
 
-            if (sort.Discount == true) query = query.OrderByDescending(a => a.Price - a.UpdatedPrice);
+            if (sort.Discount == SortOrder.Descending) query = query.OrderByDescending(a => a.Price - a.UpdatedPrice);
 
             #endregion
 

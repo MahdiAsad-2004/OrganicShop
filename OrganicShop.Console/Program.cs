@@ -19,6 +19,7 @@ using System.Linq.Expressions;
 using System.ComponentModel;
 using OrganicShop.Domain.Dtos.Base;
 using AutoMapper;
+using OrganicShop.Domain.Dtos.UserDtos;
 
 Console.WriteLine("Hello, World!\n");
 
@@ -28,6 +29,42 @@ Console.WriteLine("Hello, World!\n");
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//List<Tag> tags = new List<Tag>
+//{
+//    new Tag(){Id = 5 , Title = "A"},
+//    new Tag(){Id = 2 , Title = "C"},
+//    new Tag(){Id = 3 , Title = "Z"},
+//    new Tag(){Id = 1 , Title = "E"},
+//    new Tag(){Id = 4 , Title = "B"},
+//};
+
+
+//Func<Tag, object> sss = a => a.Title;  
+
+//foreach (var item in tags.OrderBy(sss))
+//{
+//    Console.WriteLine($"{item.Id} ----- {item.Title}");
+//}
 
 
 
