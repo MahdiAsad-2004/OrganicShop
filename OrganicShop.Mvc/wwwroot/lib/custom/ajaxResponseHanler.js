@@ -27,6 +27,7 @@ let MessageString = null;
 
 
 function HandleResponse(data, jqxhr) {
+    ShowLoading();
     if (jqxhr == null || jqxhr == undefined) {
         throw new Error("jxhr is null or undefined");
     }
@@ -48,6 +49,7 @@ function HandleResponse(data, jqxhr) {
         Message = JSON.parse(data);
         HandleMessage(Message);
     }
+    HideLoading();
 }
 
 
@@ -124,7 +126,7 @@ function HandleMessage(message) {
         showCloseButton: false,
         width: '450px',
         allowEscapeKey: false,
-        allowEnterKey: false,
+        //allowEnterKey: false,
         //confirmButtonText: 'Ok',
         //showCancelButton:true,
         //cancelButtonText: 'Cancel',

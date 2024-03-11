@@ -13,12 +13,39 @@ var formData = new FormData();
 
 var fff = document.createElement('form');
 
+let element = document.createElement('form')
 
-Forms.forEach(function (element) {
-    if (element.tagName === 'FORM') {
-        element.addEventListener('submit', function (e) {
+ let loadingBackground = document.getElementById('loading-background');
+ let loadingSvg = document.getElementById('loading-svg');
+
+function ShowLoading() {
+    loadingBackground.style.height = '' + document.body.clientHeight + 'px';
+    loadingBackground.style.display = 'block';
+    loadingSvg.style.display = 'block';
+    console.log('show');
+}
+
+function HideLoading() {
+    loadingBackground.style.display = 'none';
+    loadingSvg.style.display = 'none';
+    console.log('hide');
+}
+
+//let myPromise = new Promise(ShowLoading);
+
+Forms.forEach(function (elem) {
+    if (elem.tagName === 'FORM') {
+        elem.addEventListener('submit', function (e) {
+            element = elem;
             e.preventDefault();
-=            if ($(element).valid()) {
+            ShowLoading();
+            OnSubmit();
+            HideLoading();
+        });
+
+
+        function OnSubmit() {
+            if ($(element).valid()) {
                 formData = new FormData(element);
                 $.ajax({
                     url: element.getAttribute('href'),
@@ -41,7 +68,9 @@ Forms.forEach(function (element) {
             else {
                 console.log('form is invalid');
             }
-        });
+        }
+
+
         //element.onsubmit = function (e) {
         //    e.preventDefault();
         //    console.log('target: ' + e.target);
