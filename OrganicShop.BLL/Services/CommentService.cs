@@ -5,11 +5,11 @@ using OrganicShop.Domain.Enums;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Dtos.CommentDtos;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Enums.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -29,7 +29,8 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<Comment, CommentListDto, long>> GetAll(FilterCommentDto? filter = null, SortCommentDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Comment, CommentListDto, long>>> GetAll
+            (FilterCommentDto? filter = null, SortCommentDto? sort = null, PagingDto? paging = null)
         {
             var query = _CommentRepository.GetQueryable();
 
@@ -62,43 +63,43 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<CommentListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<Comment, CommentListDto, long>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreateCommentDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateCommentDto create)
         {
             Comment Comment = _Mapper.Map<Comment>(create);
             Comment.Status = CommentStatus.Unread;
             await _CommentRepository.Add(Comment,_AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateCommentDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateCommentDto update)
         {
             Comment? Comment = await _CommentRepository.GetAsTracking(update.Id);
             
             if (Comment == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _CommentRepository.Update(_Mapper.Map<Comment>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(long delete)
+        public async Task<ServiceResponse<Empty>> Delete(long delete)
         {
             Comment? Comment = await _CommentRepository.GetAsTracking(delete);
 
             if (Comment == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _CommentRepository.SoftDelete(Comment, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
     }
 }

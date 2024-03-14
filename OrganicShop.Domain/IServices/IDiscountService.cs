@@ -7,13 +7,13 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IDiscountService : IService<Discount>
     {
-        Task<PageDto<Discount,DiscountListDto,int>> GetAll(FilterDiscountDto? filter = null, SortDiscountDto? sort = null,PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Discount, DiscountListDto, int>>> GetAll(FilterDiscountDto? filter = null, SortDiscountDto? sort = null,PagingDto? paging = null);
 
-        Task<ServiceResponse> Create(CreateDiscountDto create);
+        Task<ServiceResponse<Empty>> Create(CreateDiscountDto create);
 
-        Task<ServiceResponse> Update(UpdateDiscountDto update);
+        Task<ServiceResponse<Empty>> Update(UpdateDiscountDto update);
         
-        Task<ServiceResponse> Delete(int id);
+        Task<ServiceResponse<Empty>> Delete(int id);
         
     }
 }

@@ -8,14 +8,15 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IPermissionService : IService<Permission>
     {
-        Task<PageDto<Permission,PermissionListDto,byte>> GetAll(FilterPermissionDto? filter = null, SortPermissionDto? sort = null,PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Permission, PermissionListDto, byte>>> GetAll
+            (FilterPermissionDto? filter = null, SortPermissionDto? sort = null,PagingDto? paging = null);
 
-        Task<ServiceResponse> Create(CreatePermissionDto create);
+        Task<ServiceResponse<Empty>> Create(CreatePermissionDto create);
 
-        Task<ServiceResponse> Update(UpdatePermissionDto update);
+        Task<ServiceResponse<Empty>> Update(UpdatePermissionDto update);
         
-        Task<ServiceResponse> Delete(byte delete);
+        Task<ServiceResponse<Empty>> Delete(byte delete);
 
-        Task<List<ComboDto<Permission>>> GetCombos();
+        Task<ServiceResponse<List<ComboDto<Permission>>>> GetCombos();
     }
 }

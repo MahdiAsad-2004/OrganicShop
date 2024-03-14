@@ -13,7 +13,8 @@ namespace OrganicShop.BLL.Mappers
         {
             return new MapperConfiguration(cfg =>
             {
-                cfg.ValueTransformers.Add<string>(a => a.Trim());
+                cfg.ValueTransformers.Add<string?>(a => a == null ? null : a.Trim());
+                cfg.AllowNullCollections = true;
                 cfg.AddMaps(typeof(UserProfile).Assembly);
             });
         }

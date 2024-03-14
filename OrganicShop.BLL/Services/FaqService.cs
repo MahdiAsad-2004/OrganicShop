@@ -5,7 +5,7 @@ using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
@@ -29,7 +29,8 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<Faq, FaqListDto, byte>> GetAll(FilterFaqDto? filter = null, SortFaqDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Faq, FaqListDto, byte>>> GetAll
+            (FilterFaqDto? filter = null, SortFaqDto? sort = null, PagingDto? paging = null)
         {
             var query = _FaqRepository.GetQueryable();
 
@@ -59,43 +60,43 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<FaqListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<Faq, FaqListDto, byte>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreateFaqDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateFaqDto create)
         {
             Faq Faq = _Mapper.Map<Faq>(create);
             await _FaqRepository.Add(Faq,_AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateFaqDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateFaqDto update)
         {
             Faq? Faq = await _FaqRepository.GetAsTracking(update.Id);
             
             if (Faq == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _FaqRepository.Update(_Mapper.Map<Faq>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(byte delete)
+        public async Task<ServiceResponse<Empty>> Delete(byte delete)
         {
 
             Faq? Faq = await _FaqRepository.GetAsTracking(delete);
 
             if (Faq == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _FaqRepository.SoftDelete(Faq, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
     }
 }

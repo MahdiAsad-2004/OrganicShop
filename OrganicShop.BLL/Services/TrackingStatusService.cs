@@ -8,7 +8,7 @@ using OrganicShop.Domain.Entities.Base;
 using OrganicShop.Domain.Enums;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
@@ -36,8 +36,8 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<TrackingStatus,TrackingStatusListDto,long>> GetAll(FilterTrackingStatusDto? filter = null,
-            SortTrackingStatusDto? sort = null , PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<TrackingStatus, TrackingStatusListDto, long>>> GetAll
+            (FilterTrackingStatusDto? filter = null,SortTrackingStatusDto? sort = null , PagingDto? paging = null)
         {
             var query = _TrackingStatusRepository.GetQueryable();
 
@@ -67,20 +67,20 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query , paging).Select(a => _Mapper.Map<TrackingStatusListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<TrackingStatus, TrackingStatusListDto, long>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreateTrackingStatusDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateTrackingStatusDto create)
         {
             //TrackingStatus TrackingStatus = create.ToModel();
 
             if (_OrderRepository.GetQueryable().Any(a => a.Id == create.OrderId) == false)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound(typeof(Order)));
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound(typeof(Order)));
 
             if(_TrackingStatusRepository.GetQueryable().Any(a => a.OrderId == create.OrderId) == true)
-                return new ServiceResponse(EntityResult.EntityExist, "وضعیت های سفارش قبلا ایجاد شده است");
+                return new ServiceResponse<Empty>(ResponseResult.Failed, "! وضعیت های سفارش قبلا ایجاد شده است");
 
             var TrackingStatuses = Enumerable.Empty<TrackingStatus>();
             foreach (var orderStep in EnumExtension.GetArray<OrderStep>())
@@ -96,33 +96,33 @@ namespace OrganicShop.BLL.Services
             }
 
             await _TrackingStatusRepository.Add(TrackingStatuses.ToList(),_AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateTrackingStatusDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateTrackingStatusDto update)
         {
             TrackingStatus? TrackingStatus = await _TrackingStatusRepository.GetAsTracking(update.Id);
             
             if (TrackingStatus == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _TrackingStatusRepository.Update(_Mapper.Map<TrackingStatus>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(long delete)
+        public async Task<ServiceResponse<Empty>> Delete(long delete)
         {
             TrackingStatus? TrackingStatus = await _TrackingStatusRepository.GetAsTracking(delete);
 
             if (TrackingStatus == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _TrackingStatusRepository.SoftDelete(TrackingStatus, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
     }
 }

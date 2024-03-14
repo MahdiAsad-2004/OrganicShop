@@ -6,12 +6,16 @@
 
     <input type="text" disabled hidden id="toast-text" value="@(Model.Text)" />
 
-    <input type="text" disabled hidden id="toast-type" value="@((int)Model.Type)" />
-
-    <input type="text" disabled hidden id="toast-position" value="@(Model.Position)" />
-
-    <input type="text" disabled hidden id="toast-time" value="@(Model.TimeMs)" />
-
 </form>
 
+
+<script>
+
+    let Title = document.getElementById('toast-title').value;
+
+    let Text = document.getElementById('toast-text').value;
+
+    Toast(Title, Text, @((int)Model.Type), @(Model.TimeMs));
+
+</script>
 

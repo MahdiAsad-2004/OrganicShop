@@ -13,7 +13,9 @@ namespace OrganicShop.Domain.Entities
     public class Category : EntityId<int>
     {
         public string Title { get; set; }
-        public string EnTitle { get; set; }
+        public string Image { get; set; }
+        public string? IconClass { get; set; }
+        public string? IconColor { get; set; }
         public CategoryType Type { get; set; }
         public int? ParentId { get; set; }
 

@@ -6,8 +6,8 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IContactUsService : IService<ContactUs>
     {
-        Task<ServiceResponse> Update(UpdateContactUsDto update);
+        Task<ServiceResponse<Empty>> Update(UpdateContactUsDto update);
        
-        Task<UpdateContactUsDto> Get();
+        Task<ServiceResponse<UpdateContactUsDto>> Get();
     }
 }

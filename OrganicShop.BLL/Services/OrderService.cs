@@ -6,7 +6,7 @@ using OrganicShop.Domain.Dtos.TrackingStatusDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
@@ -40,7 +40,8 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<Order, OrderListDto, long>> GetAll(FilterOrderDto? filter = null, SortOrderDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Order, OrderListDto, long>>> GetAll
+            (FilterOrderDto? filter = null, SortOrderDto? sort = null, PagingDto? paging = null)
         {
             var query = _OrderRepository.GetQueryable()
                 .Include(a => a.Receiver)
@@ -83,18 +84,18 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<OrderListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<Order, OrderListDto, long>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreateOrderDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateOrderDto create)
         {
             Order Order = _Mapper.Map<Order>(create);
             var Address = await _AddressRepository.GetAsNoTracking(create.AddressId);
 
             if (Address == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             Order.Address = Address;
             long orderId = await _OrderRepository.Add(Order, _AppUserProvider.User.Id);
@@ -139,36 +140,36 @@ namespace OrganicShop.BLL.Services
             #endregion
 
 
-            if (result1.Result != EntityResult.Success) 
-                return new ServiceResponse(EntityResult.NotFound, _Message.SuccessUpdate());
+            if (result1.Result != ResponseResult.Success) 
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.SuccessUpdate());
 
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateOrderDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateOrderDto update)
         {
             Order? Order = await _OrderRepository.GetAsTracking(update.Id);
 
             if (Order == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.SuccessUpdate());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.SuccessUpdate());
 
             await _OrderRepository.Update(_Mapper.Map<Order>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(long delete)
+        public async Task<ServiceResponse<Empty>> Delete(long delete)
         {
             Order? Order = await _OrderRepository.GetAsTracking(delete);
 
             if (Order == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.SuccessUpdate());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.SuccessUpdate());
 
             await _OrderRepository.SoftDelete(Order, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
     }
 }

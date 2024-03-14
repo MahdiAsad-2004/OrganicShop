@@ -7,7 +7,7 @@ using OrganicShop.Domain.Entities.Base;
 using OrganicShop.Domain.Entities.Relations;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
@@ -38,7 +38,8 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<Discount,DiscountListDto,int>> GetAll(FilterDiscountDto? filter = null, SortDiscountDto? sort = null , PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Discount, DiscountListDto, int>>> GetAll
+            (FilterDiscountDto? filter = null, SortDiscountDto? sort = null , PagingDto? paging = null)
         {
             var query = _DiscountRepository.GetQueryable()
                 .Include(a => a.DiscountUsers)
@@ -97,12 +98,12 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query,paging).Select(a => _Mapper.Map<DiscountListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<Discount, DiscountListDto, int>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreateDiscountDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateDiscountDto create)
         {
             Discount Discount = _Mapper.Map<Discount>(create);
 
@@ -124,12 +125,12 @@ namespace OrganicShop.BLL.Services
             }
 
             await _DiscountRepository.Add(Discount, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateDiscountDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateDiscountDto update)
         {
             Discount? Discount = await _DiscountRepository.GetQueryable()
                 .Include(a => a.DiscountUsers)
@@ -138,7 +139,7 @@ namespace OrganicShop.BLL.Services
                 .FirstOrDefaultAsync(a => a.Id == update.Id);
 
             if (Discount == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             if (update.UsersIds.Any())
             {
@@ -169,21 +170,21 @@ namespace OrganicShop.BLL.Services
             }
 
             await _DiscountRepository.Update(_Mapper.Map<Discount>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(int id)
+        public async Task<ServiceResponse<Empty>> Delete(int id)
         {
 
             Discount? Discount = await _DiscountRepository.GetAsTracking(id);
 
             if (Discount == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _DiscountRepository.SoftDelete(Discount, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
     }
 }

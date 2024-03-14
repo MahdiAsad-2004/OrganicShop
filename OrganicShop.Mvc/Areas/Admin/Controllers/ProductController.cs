@@ -5,7 +5,7 @@ using OrganicShop.Domain.Dtos.ProductDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using System.Security.Cryptography.Xml;
 
 namespace OrganicShop.Mvc.Areas.Admin.Controllers

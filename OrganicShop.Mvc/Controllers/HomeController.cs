@@ -25,11 +25,13 @@ namespace OrganicShop.Mvc.Controllers
         public async Task<IActionResult> TestAction()
         {
             await Console.Out.WriteLineAsync();
+            var t = new Toast(ToastType.Error, "asdadasd 654654a6d4d6a54d ", 5000);
 
-            
+            ToastOnTempData(t);
+            return RedirectToAction("Index");
+
             //return RedirectToAction("Index", new { name = "asd", pass = "zxcv", flag = false });
 
-            var t = new Toast(ToastType.Error, "asdadasd 654654a6d4d6a54d ", 5000);
 
             return _ClientHandleResult.RedirectThenToast(HttpContext,TempData,"Index",t,false);
 

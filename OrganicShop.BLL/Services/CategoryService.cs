@@ -5,24 +5,26 @@ using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Dtos.CategoryDtos;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Enums;
+using OrganicShop.Domain.Dtos.Combo;
+using OrganicShop.BLL.Extensions;
+using OrganicShop.Domain.Enums.Response;
 
 namespace OrganicShop.BLL.Services
 {
 
-    public class CategoryService : Service<Category> , ICategoryService
+    public class CategoryService : Service<Category>, ICategoryService
     {
         #region ctor
 
         private readonly IMapper _Mapper;
         private readonly ICategoryRepository _CategoryRepository;
 
-        public CategoryService(IApplicationUserProvider provider,IMapper mapper ,ICategoryRepository CategoryRepository) : base(provider)
+        public CategoryService(IApplicationUserProvider provider, IMapper mapper, ICategoryRepository CategoryRepository) : base(provider)
         {
             _Mapper = mapper;
             _CategoryRepository = CategoryRepository;
@@ -31,7 +33,8 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<Category,CategoryListDto,int>> GetAll(FilterCategoryDto? filter = null, SortCategoryDto? sort = null,PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Category, CategoryListDto, int>>> GetAll
+            (FilterCategoryDto? filter = null, SortCategoryDto? sort = null, PagingDto? paging = null)
         {
             var query = _CategoryRepository.GetQueryable();
 
@@ -45,9 +48,6 @@ namespace OrganicShop.BLL.Services
 
             if (filter.Title != null)
                 query = query.Where(q => EF.Functions.Like(q.Title, $"%{filter.Title}%"));
-
-            if (filter.EnTitle != null)
-                query = query.Where(q => EF.Functions.Like(q.EnTitle, $"%{filter.EnTitle}%"));
 
             if (filter.Type != null)
                 query = query.Where(q => q.Type == filter.Type);
@@ -67,58 +67,80 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<CategoryListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<Category, CategoryListDto, int>>(ResponseResult.Success, "", pageDto);
+        }
+
+
+        public async Task<ServiceResponse<UpdateCategoryDto>> Get(int Id)
+        {
+            var entity = await _CategoryRepository
+                .GetAsNoTracking(Id);
+
+            if (entity == null)
+                return new ServiceResponse<UpdateCategoryDto>(ResponseResult.NotFound, null);
+
+            return new ServiceResponse<UpdateCategoryDto>(ResponseResult.Success, _Mapper.Map<UpdateCategoryDto>(entity));
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreateCategoryDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateCategoryDto create)
         {
+            //HasPermission(a => a.Categories_Admin);
+
             Category? Category = new Category();
 
-            if (_CategoryRepository.GetQueryable().Any(a => a.Title.Contains(create.Title, StringComparison.OrdinalIgnoreCase)))
-                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create,a => nameof(a.Title)));
-
-            if (_CategoryRepository.GetQueryable().Any(a => a.EnTitle.Contains(create.EnTitle, StringComparison.OrdinalIgnoreCase)))
-                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create, a => nameof(a.EnTitle)));
+            if (_CategoryRepository.GetQueryable().Any(a => EF.Functions.Like(a.Title, create.Title)))
+                return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.EntityExist(create, a => nameof(a.Title)));
 
             Category = _Mapper.Map<Category>(create);
+
+            //// Saving Image
+            Category.Image = await create.ImageFile.SaveFile(PathExtensions.CategoryImage);
+
             await _CategoryRepository.Add(Category, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateCategoryDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateCategoryDto update)
         {
             Category? Category = new Category();
 
             if (_CategoryRepository.GetQueryable().Any(a => a.Title.Contains(update.Title, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
-                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Title)));
-
-            if (_CategoryRepository.GetQueryable().Any(a => a.EnTitle.Contains(update.EnTitle, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
-                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Title)));
+                return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.EntityExist(update, a => nameof(a.Title)));
 
             Category = await _CategoryRepository.GetAsTracking(update.Id);
 
             if (Category == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _CategoryRepository.Update(_Mapper.Map<Category>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(int id)
+        public async Task<ServiceResponse<Empty>> Delete(int id)
         {
             Category? Category = await _CategoryRepository.GetAsTracking(id);
 
             if (Category == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _CategoryRepository.SoftDelete(Category, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
+        }
+
+
+        public async Task<ServiceResponse<List<ComboDto<Category>>>> GetCombos()
+        {
+              var comboDtos = _CategoryRepository
+                .GetQueryable()
+                .Select(a => _Mapper.Map<ComboDto<Category>>(a))
+                .ToList();
+            return new ServiceResponse<List<ComboDto<Category>>>(ResponseResult.Success, comboDtos);
         }
     }
 }

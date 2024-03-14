@@ -7,13 +7,13 @@ namespace OrganicShop.Domain.IServices
 {
     public interface ICommentService : IService<Comment>
     {
-        Task<PageDto<Comment,CommentListDto,long>> GetAll(FilterCommentDto? filter = null, SortCommentDto? sort = null,PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Comment, CommentListDto, long>>> GetAll(FilterCommentDto? filter = null, SortCommentDto? sort = null,PagingDto? paging = null);
 
-        Task<ServiceResponse> Create(CreateCommentDto create);
+        Task<ServiceResponse<Empty>> Create(CreateCommentDto create);
 
-        Task<ServiceResponse> Update(UpdateCommentDto update);
+        Task<ServiceResponse<Empty>> Update(UpdateCommentDto update);
         
-        Task<ServiceResponse> Delete(long delete);
+        Task<ServiceResponse<Empty>> Delete(long delete);
         
     }
 }

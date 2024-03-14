@@ -6,7 +6,7 @@ using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Domain.Dtos.BankCardDtos;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Response;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using AutoMapper;
@@ -31,7 +31,8 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<BankCard, BankCardListDto, long>> GetAll(FilterBankCardDto?filter = null, SortBankCardDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<BankCard, BankCardListDto, long>>> GetAll
+            (FilterBankCardDto?filter = null, SortBankCardDto? sort = null, PagingDto? paging = null)
         {
             var query = _BankCardRepository.GetQueryable();
 
@@ -59,49 +60,49 @@ namespace OrganicShop.BLL.Services
             pageDto.Pager = pageDto.SetPager(query, paging);
 
 
-            return pageDto;
+            return new ServiceResponse<PageDto<BankCard, BankCardListDto, long>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreateBankCardDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateBankCardDto create)
         {
             if (await _BankCardRepository.GetQueryable().Where(a => a.UserId == create.UserId).CountAsync() > 8)
-                return new ServiceResponse(EntityResult.MaxCreate , _Message.MaxCreate(8));
+                return new ServiceResponse<Empty>(ResponseResult.Failed , _Message.MaxCreate(8));
 
             BankCard BankCard = _Mapper.Map<BankCard>(create);
             await _BankCardRepository.Add(BankCard, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
             
 
-        public async Task<ServiceResponse> Update(UpdateBankCardDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateBankCardDto update)
         {
             BankCard? BankCard = await _BankCardRepository.GetAsTracking(update.Id);
 
             if (BankCard == null)
-                return new ServiceResponse(EntityResult.Success, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.Success, _Message.NotFound());
 
             if (BankCard.UserId != update.UserId)
-                return new ServiceResponse(EntityResult.Success, _Message.NoAccess());
+                return new ServiceResponse<Empty>(ResponseResult.Success, _Message.NoAccess());
 
             await _BankCardRepository.Update(_Mapper.Map<BankCard>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(long delete)
+        public async Task<ServiceResponse<Empty>> Delete(long delete)
         {
 
             BankCard? BankCard = await _BankCardRepository.GetAsTracking(delete);
 
             if (BankCard == null)
-                return new ServiceResponse(EntityResult.Success, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.Success, _Message.NotFound());
 
             await _BankCardRepository.SoftDelete(BankCard, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
     }
 }

@@ -417,6 +417,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\media\images\category\" />
     <Folder Include="wwwroot\media\images\user\" />
     <Folder Include="wwwroot\media\images\product\" />
   </ItemGroup>

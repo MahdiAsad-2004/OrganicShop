@@ -19,7 +19,10 @@ namespace OrganicShop.Mvc.ValidationsAttributes
             FormatsString = string.Join("/", Formats);
         }
 
-
+        public override bool IsValid(object? value)
+        {
+            return true;
+        }
 
 
         public void AddValidation(ClientModelValidationContext context)

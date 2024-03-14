@@ -5,7 +5,7 @@ using OrganicShop.Domain.Dtos.PictureDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.IProviders;
@@ -30,7 +30,7 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<Picture , PictureListDto,long>> GetAll(FilterPictureDto? filter = null , SortPictureDto? sort = null , PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Picture, PictureListDto, long>>> GetAll(FilterPictureDto? filter = null , SortPictureDto? sort = null , PagingDto? paging = null)
         {
             var query = _PictureRepository.GetQueryable();
 
@@ -63,21 +63,20 @@ namespace OrganicShop.BLL.Services
             //pageDto.List = pageDto.SetPaging(query , paging).Select(a => a.ToListDto()).ToList();
             //pageDto.Pager = pageDto.SetPager(query, paging);
 
-
-            return pageDto;
+            return new ServiceResponse<PageDto<Picture, PictureListDto, long>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreatePictureDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreatePictureDto create)
         {
             //Picture Picture = create.ToModel();
 
             //if (await _PictureRepository.GetQueryable().AnyAsync(a => a.Title.Contains(create.Title, StringComparison.OrdinalIgnoreCase)))
-            //    return EntityResult.EntityExist;
+            //    return ResponseResult.EntityExist;
 
             //await _PictureRepository.Add(Picture, _AppUserProvider.User.Id);
-            //return EntityResult.success;
+            //return ResponseResult.success;
 
 
 
@@ -87,18 +86,18 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<ServiceResponse> Update(UpdatePictureDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdatePictureDto update)
         {
             //Picture? Picture = await _PictureRepository.GetAsTracking(update.Id);
 
             //if (Picture == null)
-            //    return EntityResult.NotFound;
+            //    return ResponseResult.NotFound;
 
             //if (await _PictureRepository.GetQueryable().AnyAsync(a => a.Title.Contains(update.Title, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
-            //    return EntityResult.EntityExist;
+            //    return ResponseResult.EntityExist;
 
             //await _PictureRepository.Update(update.ToModel(Picture), _AppUserProvider.User.Id);
-            //return EntityResult.success;
+            //return ResponseResult.success;
 
 
 
@@ -107,15 +106,15 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<ServiceResponse> Delete(long delete)
+        public async Task<ServiceResponse<Empty>> Delete(long delete)
         {
             Picture? Picture = await _PictureRepository.GetAsTracking(delete);
 
             if (Picture == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.SuccessDelete());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.SuccessDelete());
 
             await _PictureRepository.SoftDelete(Picture, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
     }
 }

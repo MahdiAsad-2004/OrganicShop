@@ -5,7 +5,7 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
 {
     public class HomeController : BaseAdminController<HomeController>
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }

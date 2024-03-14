@@ -40,24 +40,13 @@
 
 <script src="~/lib/sweetAlert2/sweetalert2.min.js"></script>
 
+<script src="~/lib/custom/ajaxRequest.js"></script>
+
 <script src="~/lib/custom/ajaxResponseHanler.js"></script>
 
-<script src="~/lib/custom/ajaxRequest.js"></script>
 
 
 <script>
-    let toast_form = document.getElementById('toast-form');
-
-    if (toast_form) {
-
-        let Title = document.getElementById('toast-title').value;
-        let Text = document.getElementById('toast-text').value;
-        let Type = document.getElementById('toast-type').value;
-        let Position = document.getElementById('toast-position').value;
-        let Time = document.getElementById('toast-time').value;
-
-        Toast(Title, Text, Type, Time);
-    }
 
     // let loadingBackground = document.getElementById('loading-background');
     // let loadingSvg = document.getElementById('loading-svg');

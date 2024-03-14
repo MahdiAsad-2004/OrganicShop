@@ -7,13 +7,13 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IFaqService : IService<Faq>
     {
-        Task<PageDto<Faq,FaqListDto,byte>> GetAll(FilterFaqDto? filter = null, SortFaqDto? sort = null,PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Faq, FaqListDto, byte>>> GetAll(FilterFaqDto? filter = null, SortFaqDto? sort = null,PagingDto? paging = null);
 
-        Task<ServiceResponse> Create(CreateFaqDto create);
+        Task<ServiceResponse<Empty>> Create(CreateFaqDto create);
 
-        Task<ServiceResponse> Update(UpdateFaqDto update);
+        Task<ServiceResponse<Empty>> Update(UpdateFaqDto update);
         
-        Task<ServiceResponse> Delete(byte delete);
+        Task<ServiceResponse<Empty>> Delete(byte delete);
         
     }
 }

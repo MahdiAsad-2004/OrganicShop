@@ -5,7 +5,7 @@ using OrganicShop.Domain.Dtos.TrackingDescriptionDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
@@ -34,8 +34,8 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<TrackingDescription,TrackingDescriptionListDto,long>> GetAll(FilterTrackingDescriptionDto? filter = null 
-            , SortTrackingDescriptionDto? sort = null , PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<TrackingDescription, TrackingDescriptionListDto, long>>> GetAll
+            (FilterTrackingDescriptionDto? filter = null ,SortTrackingDescriptionDto? sort = null , PagingDto? paging = null)
         {
             var query = _TrackingDescriptionRepository.GetQueryable();
 
@@ -74,57 +74,57 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query , paging).Select(a => _Mapper.Map<TrackingDescriptionListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<TrackingDescription, TrackingDescriptionListDto, long>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreateTrackingDescriptionDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateTrackingDescriptionDto create)
         {
             TrackingDescription TrackingDescription = _Mapper.Map<TrackingDescription>(create);
 
             #region relation
 
             if (await _OrderRepository.GetQueryable().AnyAsync(a => a.Id == create.OrderId) == false)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound(typeof(Order)));
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound(typeof(Order)));
 
             #endregion
 
             await _TrackingDescriptionRepository.Add(TrackingDescription,_AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateTrackingDescriptionDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateTrackingDescriptionDto update)
         {
             TrackingDescription? TrackingDescription = await _TrackingDescriptionRepository.GetAsTracking(update.Id);
             
             if (TrackingDescription == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             #region relation
 
             if (await _OrderRepository.GetQueryable().AnyAsync(a => a.Id == update.OrderId) == false)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound(typeof(Order)));
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound(typeof(Order)));
 
             #endregion
 
             await _TrackingDescriptionRepository.Update(_Mapper.Map<TrackingDescription>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(long delete)
+        public async Task<ServiceResponse<Empty>> Delete(long delete)
         {
             TrackingDescription? TrackingDescription = await _TrackingDescriptionRepository.GetAsTracking(delete);
 
             if (TrackingDescription == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound())      ;
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound())      ;
 
             await _TrackingDescriptionRepository.SoftDelete(TrackingDescription, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
     }
 }

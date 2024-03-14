@@ -16,9 +16,8 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace OrganicShop.Mvc.Controllers.Base.Result
 {
-    public class ClientHandleResult<TController> : Controller where TController : Controller
+    public class ClientHandleResult<TController> where TController : Controller
     {
-
 
         #region private methods
 
@@ -98,11 +97,13 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
         {
             httpContext.Response.Headers.Add("ResponseDataType", "toast");
 
-            //var x = new ContentResult();
-            //x.Content = JsonSerializer.Serialize(message);
-            //return x;
+            var content = new ContentResult()
+            {
+                Content = JsonSerializer.Serialize(message),
+            };
+            return content;
 
-            return Content(JsonSerializer.Serialize(message));
+            //return Content(JsonSerializer.Serialize(message));
         }
 
         #endregion
@@ -110,19 +111,38 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
 
 
         #region partial
-        public IActionResult Partial(HttpContext httpContext, string name, object? model, Toast message)
+
+        public IActionResult Partial(HttpContext httpContext, PartialViewResult partialView)
         {
             httpContext.Response.Headers.Add("ResponseDataType", "partial");
-            message.SetToastOnResponse(httpContext.Response);
-            return PartialView(name, model);
+            return partialView;
         }
-        public IActionResult Partial(HttpContext httpContext, string name, object? model, Toast message, string targetElementId)
+
+        #endregion
+
+
+
+        #region partial => toast
+
+        public IActionResult PartialThenToast(HttpContext httpContext, PartialViewResult partialView, Toast message)
         {
-            httpContext.Response.Headers.Add("ResponseDataType", "partial");
-            httpContext.Response.Headers.Add("targetElementId", targetElementId);
+            httpContext.Response.Headers.Add("ResponseDataType", "partial-toast");
             message.SetToastOnResponse(httpContext.Response);
-            return PartialView(name, model);
+            return partialView;
         }
+        //public IActionResult Partial(HttpContext httpContext, string name, object? model, Toast message)
+        //{
+        //    httpContext.Response.Headers.Add("ResponseDataType", "partial");
+        //    message.SetToastOnResponse(httpContext.Response);
+        //    return PartialView(name, model);
+        //}
+        //public IActionResult Partial(HttpContext httpContext, string name, object? model, Toast message, string targetElementId)
+        //{
+        //    httpContext.Response.Headers.Add("ResponseDataType", "partial");
+        //    httpContext.Response.Headers.Add("targetElementId", targetElementId);
+        //    message.SetToastOnResponse(httpContext.Response);
+        //    return PartialView(name, model);
+        //}
 
         #endregion
 
@@ -140,7 +160,8 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
                 IsReplace = replace,
                 TimeOut = 0,
             };
-            return Content(redirect.GetJsonStrng());
+            return new ContentResult() {Content = redirect.GetJsonStrng()};
+            //return Content(redirect.GetJsonStrng());
         }
         public IActionResult ToastThenRedirect(HttpContext httpContext, string action, string controller, Toast message, bool replace)
         {
@@ -152,7 +173,8 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
                 IsReplace = replace,
                 TimeOut = 0,
             };
-            return Content(redirect.GetJsonStrng());
+            return new ContentResult() { Content = redirect.GetJsonStrng() };
+            //return Content(redirect.GetJsonStrng());
         }
         public IActionResult ToastThenRedirect(HttpContext httpContext, string action, string controller, object routeValues,
             Toast message, bool replace)
@@ -165,7 +187,8 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
                 IsReplace = replace,
                 TimeOut = 0,
             };
-            return Content(redirect.GetJsonStrng());
+            return new ContentResult() { Content = redirect.GetJsonStrng() };
+            //return Content(redirect.GetJsonStrng());
         }
 
         #endregion
@@ -184,7 +207,8 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
                 IsReplace = replace,
                 TimeOut = 0,
             };
-            return Content(redirect.GetJsonStrng());
+            return new ContentResult() { Content = redirect.GetJsonStrng() };
+            //return Content(redirect.GetJsonStrng());
         }
         public IActionResult RedirectThenToast(HttpContext httpContext,ITempDataDictionary tempdata ,string action, string controller, Toast message, bool replace)
         {
@@ -196,7 +220,8 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
                 IsReplace = replace,
                 TimeOut = 0,
             };
-            return Content(redirect.GetJsonStrng());
+            return new ContentResult() { Content = redirect.GetJsonStrng() };
+            //return Content(redirect.GetJsonStrng());
         }
         public IActionResult RedirectThenToast(HttpContext httpContext,ITempDataDictionary tempdata ,string actionName, string controller, object routeValues,
             Toast message, bool replace)
@@ -209,7 +234,8 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
                 IsReplace = replace,
                 TimeOut = 0,
             };
-            return Content(redirect.GetJsonStrng());
+            return new ContentResult() { Content = redirect.GetJsonStrng() };
+            //return Content(redirect.GetJsonStrng());
         }
 
         #endregion
@@ -221,8 +247,8 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
         public IActionResult ToastThenRfresh(HttpContext httpContext, Toast message)
         {
             httpContext.Response.Headers.Add("ResponseDataType", "toast-refresh");
-            message.SetToastOnResponse(httpContext.Response);
-            return Content("");
+            return new ContentResult() { Content = message.Serialize()};
+            //return Content(message.Serialize());
         }
 
         #endregion

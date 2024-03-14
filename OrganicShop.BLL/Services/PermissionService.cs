@@ -5,7 +5,7 @@ using OrganicShop.Domain.Dtos.PermissionDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Response;
 using OrganicShop.Domain.Dtos.Combo;
 using AutoMapper;
@@ -35,7 +35,7 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<Permission, PermissionListDto, byte>> GetAll(FilterPermissionDto? filter = null,
+        public async Task<ServiceResponse<PageDto<Permission,PermissionListDto,byte>>> GetAll(FilterPermissionDto? filter = null,
             SortPermissionDto? sort = null, PagingDto? paging = null)
         {
             var query = _PermissionRepository.GetQueryable();
@@ -77,12 +77,12 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<PermissionListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<Permission, PermissionListDto, byte>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreatePermissionDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreatePermissionDto create)
         {
             Permission Permission = _Mapper.Map<Permission>(create);
 
@@ -91,62 +91,64 @@ namespace OrganicShop.BLL.Services
             if (create.ParentId != null)
             {
                 if (_PermissionRepository.GetQueryable().Any(a => a.Id == create.ParentId) == false)
-                    return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                    return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
                 Permission.ParentId = create.ParentId;
             }
 
             #endregion
 
             await _PermissionRepository.Add(Permission, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdatePermissionDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdatePermissionDto update)
         {
             Permission? Permission = await _PermissionRepository.GetAsTracking(update.Id);
 
             if (Permission == null)
-                return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+                return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
 
             #region relation
 
             if (update.ParentId != null)
             {
                 if (_PermissionRepository.GetQueryable().Any(a => a.Id == update.ParentId) == false)
-                    return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                    return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
             }
 
             #endregion
 
             await _PermissionRepository.Update(_Mapper.Map<Permission>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(byte delete)
+        public async Task<ServiceResponse<Empty>> Delete(byte delete)
         {
 
             Permission? Permission = await _PermissionRepository.GetAsTracking(delete);
 
             if (Permission == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _PermissionRepository.SoftDelete(Permission, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
 
 
 
 
-        public async Task<List<ComboDto<Permission>>> GetCombos()
-            => _PermissionRepository    
+        public async Task<ServiceResponse<List<ComboDto<Permission>>>> GetCombos()
+        {
+            var comboDtos = _PermissionRepository
             .GetQueryable()
             .Select(a => _Mapper.Map<ComboDto<Permission>>(a))
             .ToList();
-
+            return new ServiceResponse<List<ComboDto<Permission>>>(ResponseResult.Success,comboDtos);
+        }
 
 
     }

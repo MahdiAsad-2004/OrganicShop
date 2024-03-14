@@ -8,7 +8,7 @@ using OrganicShop.Domain.Entities.Base;
 using OrganicShop.Domain.Entities.Relations;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
@@ -39,7 +39,7 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<PageDto<Product, ProductListDto, long>> GetAll(FilterProductDto? filter = null, SortProductDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Product, ProductListDto, long>>> GetAll(FilterProductDto? filter = null, SortProductDto? sort = null, PagingDto? paging = null)
         {
             var query = _ProductRepository.GetQueryable()
                 .Include(a => a.Category)
@@ -102,12 +102,12 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<ProductListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<Product, ProductListDto, long>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreateProductDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateProductDto create)
         {
             Product Product = _Mapper.Map<Product>(create);
             Product.UpdatedPrice = null;
@@ -190,17 +190,17 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             await _ProductRepository.Add(Product, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateProductDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateProductDto update)
         {
             Product? Product = await _ProductRepository.GetAsTracking(update.Id);
 
             if (Product == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             #region discounts
 
@@ -270,20 +270,20 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             await _ProductRepository.Update(_Mapper.Map<Product>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(long delete)
+        public async Task<ServiceResponse<Empty>> Delete(long delete)
         {
             Product? Product = await _ProductRepository.GetAsTracking(delete);
 
             if (Product == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _ProductRepository.SoftDelete(Product, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
     }
 }

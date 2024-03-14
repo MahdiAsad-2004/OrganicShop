@@ -5,12 +5,12 @@ using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Enums;
+using OrganicShop.Domain.Enums.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -33,7 +33,8 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<CoProduct, CoProductListDto, long>> GetAll(FilterCoProductDto? filter = null, SortCoProductDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<CoProduct, CoProductListDto, long>>> GetAll
+            (FilterCoProductDto? filter = null, SortCoProductDto? sort = null, PagingDto? paging = null)
         {
             var query = _CoProductRepository.GetQueryable();
 
@@ -75,12 +76,12 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<CoProductListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<CoProduct, CoProductListDto, long>>(ResponseResult.Success,pageDto);
         }
 
 
 
-        public async Task<ServiceResponse> Create(CreateCoProductDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateCoProductDto create)
         {
             CoProduct? CoProduct = new();
 
@@ -122,17 +123,17 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateCoProductDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateCoProductDto update)
         {
             CoProduct? CoProduct = await _CoProductRepository.GetAsTracking(update.Id);
 
             if (CoProduct == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             if (update.OrderId != null && update.BasketId == null)
             {
@@ -165,23 +166,23 @@ namespace OrganicShop.BLL.Services
             #endregion
 
 
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(long id)
+        public async Task<ServiceResponse<Empty>> Delete(long id)
         {
 
             CoProduct? CoProduct = await _CoProductRepository.GetAsTracking(id);
 
             if (CoProduct == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             CoProduct.BasketId = null;
 
             await _CoProductRepository.SoftDelete(CoProduct, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
     }
 }

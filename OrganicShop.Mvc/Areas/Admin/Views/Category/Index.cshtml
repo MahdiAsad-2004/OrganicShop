@@ -1,0 +1,166 @@
+﻿@using OrganicShop.Domain.Dtos.CategoryDtos
+@model PageDto<Category,CategoryListDto,int>
+
+@section Styles {
+    <!-- Data Table css -->
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/datatables.css">
+}
+
+
+
+
+
+
+
+
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="title-header option-title">
+                        <h5>لیست دسته ها</h5>
+                        <form class="d-inline-flex">
+                            <a href="/Admin/Category/Create"
+                               class="align-items-center btn btn-theme d-flex">
+                                <i data-feather="plus-square"></i>افزودن دسته جدید
+                            </a>
+                        </form>
+                    </div>
+
+                    <div class="table-responsive category-table">
+                        <div>
+                            <table class="table all-package theme-table" id="table_id">
+                                <thead>
+                                    <tr>
+                                        <th>عنوان</th>
+                                        <th>عنوان سر دسته</th>
+                                        <th>تاریخ</th>
+                                        <th>تصویر</th>
+                                        <th>آیکن</th>
+                                        <th>تنظیمات</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @foreach (var item in Model.List)
+                                    {
+                                        <tr>
+                                            <td>@item.Title</td>
+
+                                            <td>@(item.ParentTitle ?? "_")</td>
+
+                                            <td>@item.CreateDate.ToString("yyyy/MM/dd")</td>
+
+                                            <td>
+                                                <div class="table-image">
+                                                    <img src="~/media/images/category/@item.Image" class="img-fluid"
+                                                         alt="@item.Title">
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div class="category-icon">
+                                                    <i class="@item.IconClass" style="color:@item.IconColor; font-size:30px;"></i>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <a href="javascript:void(0)">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="javascript:void(0)" onclick="SetCategoryOnModal(@item.Id,'@item.Title')" data-bs-toggle="modal"
+                                                           data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Modals {
+    <div class="modal fade theme-modal remove-coupon" id="exampleModalToggle" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel22">آیا اطمینان دارید ؟</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="remove-box">
+                        <p>دسته با عنوان  ' <i id="category-name"></i> ' حذف شود</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal" id="modal-close-button">خیر</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" onclick="DeleteCategory()">بله</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form hidden method="delete" href="/Admin/Category/Delete" id="delete-category-form" onsubmit="AjaxRequest(event)">
+        <input name="Id" id="category-id" value="0" />
+        <button id="delete-category-submit" hidden></button>
+    </form>
+
+}
+
+
+
+
+
+
+@section Scripts {
+
+    <!-- Data table js -->
+    <script src="~/admin/assets/js/jquery.dataTables.js"></script>
+    <script src="~/admin/assets/js/custom-data-table.js"></script>
+
+
+
+    <script>
+
+        let inputId = document.getElementById('category-id');
+        let categoryNameElem = document.getElementById('category-name');
+        let modalCloseButton = document.getElementById('modal-close-button');
+        let deleteCategorySubmit = document.getElementById('delete-category-submit');
+
+        function SetCategoryOnModal(id, name) {
+            inputId.setAttribute('value', id);
+            categoryNameElem.innerHTML = name;
+        }
+
+        function DeleteCategory() {
+            modalCloseButton.click();
+            deleteCategorySubmit.click();
+            inputId.setAttribute('value', 0);
+            categoryNameElem.innerHTML = 'NULL';
+        }
+
+    </script>
+
+}

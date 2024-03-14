@@ -1,6 +1,6 @@
 ﻿using OrganicShop.Domain.Dtos.Base;
 using OrganicShop.Domain.Entities.Base;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 using System.ComponentModel;
 using System.Reflection;
 

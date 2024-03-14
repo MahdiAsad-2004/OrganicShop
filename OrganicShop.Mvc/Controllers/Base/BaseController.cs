@@ -43,6 +43,14 @@ namespace OrganicShop.Mvc.Controllers.Base
 
 
 
+        public IActionResult Refresh() 
+        {
+            var route = $"{GetActionAreaName()}/{ControllerContext.ActionDescriptor.ControllerName}/{ControllerContext.ActionDescriptor.ActionName}";
+            return Redirect(route);   
+        }
+
+
+
         //#region Toast
 
         //protected IActionResult Toast(Toast message)

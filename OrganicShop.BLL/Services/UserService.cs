@@ -5,13 +5,9 @@ using OrganicShop.Domain.Dtos.UserDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
-using System.Dynamic;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Response;
 using AutoMapper;
-using OrganicShop.Domain.Dtos.AddressDtos;
-using System.Reflection;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Entities.Relations;
 using OrganicShop.Domain.Entities.Base;
@@ -36,7 +32,8 @@ namespace OrganicShop.BLL.Services
 
 
         
-        public async Task<PageDto<User,UserListDto,long>> GetAll(FilterUserDto? filter = null, SortUserDto? sort = null,PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<User, UserListDto, long>>> GetAll
+            (FilterUserDto? filter = null, SortUserDto? sort = null,PagingDto? paging = null)
         {
             var query = _userRepository.GetQueryable()
                 .AsQueryable();
@@ -75,7 +72,7 @@ namespace OrganicShop.BLL.Services
 
             await Console.Out.WriteLineAsync($"************** {_AppUserProvider.User.Id}  {_AppUserProvider.User.UserName} ***************");
 
-            return pageDto;
+            return new ServiceResponse<PageDto<User, UserListDto, long>>(ResponseResult.Success,pageDto);
         }
 
 
@@ -92,13 +89,13 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<ServiceResponse> Create(CreateUserDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateUserDto create)
         {
             if (await _userRepository.GetQueryable().AnyAsync(a => a.PhoneNumber == create.PhoneNumber))
-                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create,a => nameof(a.PhoneNumber)));
+                return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.EntityExist(create,a => nameof(a.PhoneNumber)));
 
             if (await _userRepository.GetQueryable().AnyAsync(a => a.Email == create.Email))
-                return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(create, a => nameof(a.Email)));
+                return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.EntityExist(create, a => nameof(a.Email)));
 
             User user = _Mapper.Map<User>(create);
             
@@ -111,54 +108,54 @@ namespace OrganicShop.BLL.Services
             }
 
             await _userRepository.Add(user,_AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateUserDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateUserDto update)
         {
             //if (await _userRepository.GetQueryable().AnyAsync(a => a.Id != update.Id && a.Email == update.Email))
-            //    return new ServiceResponse(EntityResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Email)));
+            //    return new ServiceResponse<Empty>(ResponseResult.EntityExist, _Message.EntityExist(update, a => nameof(a.Email)));
 
             User? user = await _userRepository.GetAsTracking(update.Id);
             
             if (user == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _userRepository.Update(_Mapper.Map<User>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(long delete)
+        public async Task<ServiceResponse<Empty>> Delete(long delete)
         {
             User? user = await _userRepository.GetAsTracking(delete);
 
             if (user == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _userRepository.SoftDelete(user, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
 
 
 
-        public async Task<ServiceResponse> ChangePassword(ChangePasswordDto changePassword)
+        public async Task<ServiceResponse<Empty>> ChangePassword(ChangePasswordDto changePassword)
         {
             User? user = await _userRepository.GetAsNoTracking(changePassword.Id);
 
             if (user == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             if (user.Password != changePassword.Password)
-                return new ServiceResponse(EntityResult.Failed, "رمز عبور نادرست است");
+                return new ServiceResponse<Empty>(ResponseResult.Failed, "رمز عبور نادرست است");
 
             user = await _userRepository.GetAsTracking(changePassword.Id);
             user!.Password = changePassword.NewPassword;
             await _userRepository.Update(user, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, "رمز عبور با موفقیت تغییر یافت");
+            return new ServiceResponse<Empty>(ResponseResult.Success, "رمز عبور با موفقیت تغییر یافت");
         }
 
 

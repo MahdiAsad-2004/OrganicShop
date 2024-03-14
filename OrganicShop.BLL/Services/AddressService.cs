@@ -5,7 +5,8 @@ using OrganicShop.BLL.Providers;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
@@ -34,7 +35,7 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<PageDto<Address, AddressListDto, long>> GetAll(FilterAddressDto? filter = null, SortAddressDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Address, AddressListDto, long>>> GetAll(FilterAddressDto? filter = null, SortAddressDto? sort = null, PagingDto? paging = null)
         {
             var query = _AddressRepository.GetQueryable();
             
@@ -61,52 +62,52 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<AddressListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return pageDto;
+            return new ServiceResponse<PageDto<Address, AddressListDto, long>>(ResponseResult.Success, pageDto);
         }
 
 
      
 
 
-        public async Task<ServiceResponse> Create(CreateAddressDto create)
+        public async Task<ServiceResponse<Empty>> Create(CreateAddressDto create)
         {
             if (await _AddressRepository.GetQueryable().Where(a => a.UserId == create.UserId).CountAsync() > 4)
-                return new ServiceResponse(EntityResult.MaxCreate, _Message.MaxCreate(4));
+                return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.MaxCreate(4));
 
             Address Address = _Mapper.Map<Address>(create);
             await _AddressRepository.Add(Address, _AppUserProvider.User.Id);
 
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessCreate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateAddressDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateAddressDto update)
         {
             Address? Address = await _AddressRepository.GetAsTracking(update.Id);
 
             if (Address == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             if (Address.UserId != update.UserId)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NoAccess());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NoAccess());
 
             await _AddressRepository.Update(_Mapper.Map<Address>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 
 
-        public async Task<ServiceResponse> Delete(long delete)
+        public async Task<ServiceResponse<Empty>> Delete(long delete)
         {
 
             Address? Address = await _AddressRepository.GetAsTracking(delete);
 
             if (Address == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _AddressRepository.SoftDelete(Address, _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessDelete());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
 
 

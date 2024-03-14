@@ -7,13 +7,13 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IPropertyService : IService<Property>
     {
-        Task<PageDto<Property,PropertyListDto,int>> GetAll(FilterPropertyDto? filter = null , SortPropertyDto? sort = null , PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Property, PropertyListDto, int>>> GetAll(FilterPropertyDto? filter = null , SortPropertyDto? sort = null , PagingDto? paging = null);
 
-        Task<ServiceResponse> Create(CreatePropertyDto create);
+        Task<ServiceResponse<Empty>> Create(CreatePropertyDto create);
 
-        Task<ServiceResponse> Update(UpdatePropertyDto update);
+        Task<ServiceResponse<Empty>> Update(UpdatePropertyDto update);
         
-        Task<ServiceResponse> Delete(int delete);
+        Task<ServiceResponse<Empty>> Delete(int delete);
         
     }
 }

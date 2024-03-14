@@ -7,13 +7,13 @@ namespace OrganicShop.Domain.IServices
 {
     public interface ITagService : IService<Tag>
     {
-        Task<PageDto<Tag , TagListDto,int>> GetAll(FilterTagDto? filter = null , SortTagDto? sort = null , PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Tag, TagListDto, int>>> GetAll(FilterTagDto? filter = null , SortTagDto? sort = null , PagingDto? paging = null);
 
-        Task<ServiceResponse> Create(CreateTagDto create);
+        Task<ServiceResponse<Empty>> Create(CreateTagDto create);
 
-        Task<ServiceResponse> Update(UpdateTagDto update);
+        Task<ServiceResponse<Empty>> Update(UpdateTagDto update);
         
-        Task<ServiceResponse> Delete(int delete);
+        Task<ServiceResponse<Empty>> Delete(int delete);
         
     }
 }

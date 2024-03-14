@@ -4,11 +4,11 @@ using OrganicShop.Domain.Dtos.ContactUsDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
 using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Enums.Response;
 
 namespace OrganicShop.BLL.Services
 {
@@ -29,23 +29,23 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<UpdateContactUsDto> Get()
+        public async Task<ServiceResponse<UpdateContactUsDto>> Get()
         {
-            var contactUs = await _ContactUsRepository.GetQueryable().FirstAsync();
-            return _Mapper.Map<UpdateContactUsDto>(contactUs);
+            var contactUs = await _ContactUsRepository.GetQueryable().FirstAsync();            
+            return new ServiceResponse<UpdateContactUsDto>(ResponseResult.Success, _Mapper.Map<UpdateContactUsDto>(contactUs));
         }
 
 
 
-        public async Task<ServiceResponse> Update(UpdateContactUsDto update)
+        public async Task<ServiceResponse<Empty>> Update(UpdateContactUsDto update)
         {
             ContactUs? ContactUs = await _ContactUsRepository.GetQueryable().FirstAsync();
 
             if (ContactUs == null)
-                return new ServiceResponse(EntityResult.NotFound, _Message.NotFound());
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             await _ContactUsRepository.Update(_Mapper.Map<ContactUs>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse(EntityResult.Success, _Message.SuccessUpdate());
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
     }

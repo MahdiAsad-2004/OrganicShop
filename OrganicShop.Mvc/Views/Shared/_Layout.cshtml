@@ -22,11 +22,7 @@
 
 <body class="bg-effect">
 
-    @if (TempData["Toast"] != null)
-    {
-        var toast = Toast.GetToastFromTempData(TempData["Toast"]);
-        <partial name="_ToastPartial" model="toast" />
-    }
+   
 
     <!-- Loader Start -->
     <div class="fullpage-loader">
@@ -52,6 +48,12 @@
     <partial name="_BackToTop" />
 
     <partial name="_SiteScripts" />
+
+    @if (TempData["Toast"] != null)
+    {
+        var toast = Toast.GetToastFromTempData(TempData["Toast"]);
+        <partial name="_ToastPartial" model="toast" />
+    }
 
     @RenderSection("Scripts", false)
 

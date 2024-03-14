@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OrganicShop.DAL.Repositories;
 using OrganicShop.Domain.Dtos.Page;
 using OrganicShop.Domain.Dtos.UserDtos;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using OrganicShop.Domain.IServices;
-using OrganicShop.Domain.Enums.EntityResults;
-using System.Security.Cryptography.Xml;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Dtos.Combo;
 using OrganicShop.Mvc.Models.Toast;
 using OrganicShop.Mvc.Extensions;
@@ -60,20 +58,11 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
             if (createUser != null)
             {
                 var response = await _UserService.Create(createUser);
-                switch (response.Result)
+                if(response.Result == ResponseResult.Success)
                 {
-                    case EntityResult.Success:
-                        break;
 
-                    case EntityResult.EntityExist:
-                        break;
-
-                    case EntityResult.Failed:
-                        break;
-
-                    default:
-                        throw new Exception("no handled result."); 
                 }
+                
             }
             else
             {

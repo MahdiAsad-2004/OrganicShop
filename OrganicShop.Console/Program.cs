@@ -20,9 +20,13 @@ using System.ComponentModel;
 using OrganicShop.Domain.Dtos.Base;
 using AutoMapper;
 using OrganicShop.Domain.Dtos.UserDtos;
+using OrganicShop.BLL.Extensions;
+using OrganicShop.Domain.Dtos.CategoryDtos;
+
 
 Console.WriteLine("Hello, World!\n");
 
+//var category = new Category();
 
 
 
@@ -30,6 +34,51 @@ Console.WriteLine("Hello, World!\n");
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//var create = new CreateCategoryDto()
+//{
+//    Title = "Titleee             ",
+//    Type = CategoryType.Product,
+//    ImageFile = null,
+//    ParentId = null,
+//    IconClass = null,
+//    IconColor = null,
+//};
+//MapperConfiguration mapperConfiguration = new MapperConfiguration(c =>
+//{
+//    c.ValueTransformers.Add<string?>(a => a == null ? null : a.Trim());
+//    c.CreateMap<CreateCategoryDto, Category>();
+//});
+ 
+//var _Mapper = mapperConfiguration.CreateMapper();
+
+
+//category = _Mapper.Map<Category>(create);
+
+//Console.WriteLine($"{category.Title} --- {category.Type} --- {category.IconClass} --- {category.IconColor}");
 
 
 

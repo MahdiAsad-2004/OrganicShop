@@ -8,11 +8,11 @@ let MessageTypes = [
 let MessagePositions = ["top", "top-start", "top-end", "center", "center-start", "center-end", "bottom", "bottom-start", "bottom-end"];
 
 let Message = {
-    Title: "", Text: "", Position: 0, Type: 0,TimeMs: 0,
+    Title: "", Text: "", Position: 0, Type: 0, TimeMs: 0,
 };
 
 let Redirect = {
-    Url: "",IsReplace: "",TimeOut: 0,
+    Url: "", IsReplace: "", TimeOut: 0,
 };
 
 let Messagetype = MessageTypes[0];
@@ -36,6 +36,9 @@ function HandleResponse(data, jqxhr) {
     if (ResponseDataType == 'partial') {
         Partial(data, jqxhr);
     }
+    else if (ResponseDataType == 'partial-toast') {
+        PartialThenToast(data, jqxhr);
+    }
     else if (ResponseDataType == 'redirect-toast') {
         RedirectThenToast(data, jqxhr);
     }
@@ -54,6 +57,16 @@ function HandleResponse(data, jqxhr) {
 
 
 function Partial(data, jqxhr) {
+    TargetElementId = jqxhr.getResponseHeader('targetElementId');
+    if (TargetElementId) {
+        ViewContainer = document.getElementById(TargetElementId);
+    }
+    ViewContainer.innerHTML = data;
+}
+
+
+
+function PartialThenToast(data, jqxhr) {
     TargetElementId = jqxhr.getResponseHeader('targetElementId');
     if (TargetElementId) {
         ViewContainer = document.getElementById(TargetElementId);
@@ -80,7 +93,7 @@ function ToastThenRedirect(data, jqxhr) {
         else {
             location.assign(Redirect.Url);
         }
-    }, Message.TimeMs+1000)
+    }, Message.TimeMs + 1000)
 }
 
 
@@ -97,10 +110,8 @@ function RedirectThenToast(data, jqxhr) {
 }
 
 
-function ToastThenRefresh(data,jqxhr) {
-    MessageString = jqxhr.getResponseHeader("Message");
-    Message = JSON.parse(MessageString);
-    Redirect = JSON.parse(data);
+function ToastThenRefresh(data, jqxhr) {
+    Message = JSON.parse(data);
     HandleMessage(Message);
     setTimeout(function () {
         location.reload();

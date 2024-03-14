@@ -16,27 +16,11 @@ namespace OrganicShop.Domain.Entities.SeedDatas
 
         public readonly byte Discounts_Admin = 6;
 
-        public readonly byte Giving_Permission = 7;
+        public readonly byte Categories_Admin = 7;
 
-        //public static readonly string  = "";
+        public readonly byte Giving_Permission = 8;
 
-        //public static readonly string  = "";
-
-        //public static readonly string  = "";
-
-        //public static readonly string  = "";
-
-        //public static readonly string  = "";
-
-        //public static readonly string  = "";
-
-        //public static readonly string  = "";
-
-        //public static readonly string  = "";
-
-        //public static readonly string  = "";
-
-        //public static readonly string  = "";
+        //public readonly byte  =  ;
 
 
         public static readonly List<Permission> Permissions = new List<Permission>()
@@ -53,7 +37,9 @@ namespace OrganicShop.Domain.Entities.SeedDatas
 
             new Permission(){ Id = 6, Title = "مدیریت تخفیف ها", EnTitle = "Discounts Admin", ParentId = 1,},
 
-            new Permission(){ Id = 7, Title = "صدور مجوز", EnTitle = "Giving Permission", ParentId = 4,},
+            new Permission(){ Id = 7, Title = "مدیریت دسته ها", EnTitle = "Categories Admin", ParentId = 1,},
+
+            new Permission(){ Id = 8, Title = "صدور مجوز", EnTitle = "Giving Permission", ParentId = 4,},
 
             //new Permission(){ },
         };

@@ -6,6 +6,7 @@ using OrganicShop.Domain.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,22 +14,22 @@ namespace OrganicShop.DAL.Repositories
 {
     public abstract class CrudRepository<TEntity, TKey> :
         IReadRepository<TEntity, TKey>
-        ,IWriteRepository<TEntity, TKey>
-        ,IDeleteRepository<TEntity, TKey>
+        , IWriteRepository<TEntity, TKey>
+        , IDeleteRepository<TEntity, TKey>
         where TEntity : EntityId<TKey>, IAggregateRoot
         where TKey : struct
     {
 
-
-
-        public required OrganicShopDbContext _context { protected get; init; }
+        protected OrganicShopDbContext _context { get; init; }
+        protected DbSet<TEntity> _dbSet { init; get; }
         public CrudRepository(OrganicShopDbContext organicShopDbContext)
         {
             _context = organicShopDbContext;
+            _dbSet = _context.Set<TEntity>();
         }
 
 
-        public async Task<TKey> Add(TEntity entity, long id , string? operationDescription = null)
+        public async Task<TKey> Add(TEntity entity, long id, string? operationDescription = null)
         {
             entity.BaseEntity = new BaseEntity(true);
             var operation = new Domain.Entities.Operation
@@ -41,13 +42,13 @@ namespace OrganicShop.DAL.Repositories
                 UserId = id,
                 Description = operationDescription != null ? operationDescription : $"Creating {typeof(TEntity).Name}",
             };
-            await _context.AddAsync(entity);
+            await _dbSet.AddAsync(entity);
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
             return entity.Id;
         }
 
-        public async Task Add(List<TEntity> entities, long id , string? operationDescription = null)
+        public async Task Add(List<TEntity> entities, long id, string? operationDescription = null)
         {
             foreach (var entity in entities)
             {
@@ -63,7 +64,7 @@ namespace OrganicShop.DAL.Repositories
                 UserId = id,
                 Description = operationDescription != null ? operationDescription : $"Creating {typeof(TEntity).Name}s",
             };
-            await _context.AddRangeAsync(entities);
+            await _dbSet.AddRangeAsync(entities);
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
         }
@@ -105,7 +106,7 @@ namespace OrganicShop.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateNoTrackng(TEntity entity, long id, string? operationDescription = null)
+        public async Task UpdateNoTrack(TEntity entity, long id, string? operationDescription = null)
         {
             entity.BaseEntity.LastModified = DateTime.Now;
             var operation = new Domain.Entities.Operation
@@ -118,7 +119,7 @@ namespace OrganicShop.DAL.Repositories
                 UserId = id,
                 Description = operationDescription != null ? operationDescription : $"Editing {typeof(TEntity).Name}",
             };
-            _context.Update(entity);
+            _dbSet.Update(entity);
             await _context.Operations.AddAsync(operation);
             await _context.SaveChangesAsync();
         }
@@ -144,7 +145,7 @@ namespace OrganicShop.DAL.Repositories
 
         public async Task SoftDelete(TKey key, long id, string? operationDescription = null)
         {
-            TEntity entity = await GetAsNoTracking(key);
+            TEntity entity = await GetAsTracking(key);
             _context.Entry(entity).Entity.BaseEntity.DeleteDate = DateTime.Now;
             _context.Entry(entity).Entity.BaseEntity.IsDelete = true;
             var operation = new Domain.Entities.Operation
@@ -161,35 +162,34 @@ namespace OrganicShop.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public virtual async Task<TEntity?> GetAsNoTracking(TKey id)
-        {
-            return await _context
-                        .Set<TEntity>()
-                        .AsNoTracking()
-                        .FirstOrDefaultAsync(a => a.Id.Equals(id));
-        }
+        public virtual async Task<TEntity?> GetAsNoTracking(TKey id) 
+            => await _dbSet
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Id.Equals(id));
+
 
         public virtual async Task<TEntity?> GetAsTracking(TKey id)
-        {
-            return await _context
-                        .Set<TEntity>()
-                        .AsTracking()
-                        .FirstOrDefaultAsync(a => a.Id.Equals(id));
-        }
+            => await _context
+            .Set<TEntity>()
+            .AsTracking()
+            .FirstOrDefaultAsync(a => a.Id.Equals(id));
 
 
         public IQueryable<TEntity> GetQueryable()
-        {
-            return _context
-                  .Set<TEntity>()
-                  .AsNoTracking()
-                  .AsQueryable();
-        }
+            => _dbSet
+            .AsNoTracking()
+            .AsQueryable();
+
+
+        public IQueryable<TEntity> GetQueryableTracking()
+          => _dbSet
+            .AsTracking()
+            .AsQueryable();
 
 
         public async Task Delete(TEntity entity, long id, string? operationDescription = null)
         {
-            _context.Remove(entity);
+            _dbSet.Remove(entity);
             var operation = new Domain.Entities.Operation
             {
                 Date = DateTime.Now,
@@ -204,10 +204,10 @@ namespace OrganicShop.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(TKey key, long id, string? operationDescription = null )
+        public async Task Delete(TKey key, long id, string? operationDescription = null)
         {
             TEntity entity = await GetAsNoTracking(key);
-            _context.Remove(entity);
+            _dbSet.Remove(entity);
             var operation = new Domain.Entities.Operation
             {
                 Date = DateTime.Now,

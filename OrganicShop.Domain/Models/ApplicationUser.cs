@@ -1,7 +1,7 @@
 ﻿using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Entities.SeedDatas;
 using OrganicShop.Domain.Enums;
-using OrganicShop.Domain.Enums.EntityResults;
+using OrganicShop.Domain.Enums.Response;
 
 namespace OrganicShop.Domain.Models
 {

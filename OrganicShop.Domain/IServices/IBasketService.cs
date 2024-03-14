@@ -7,11 +7,12 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IBasketService : IService<Basket>
     {
-        Task<PageDto<Basket, BasketListDto, long>> GetAll(FilterBasketDto? filter = null, SortBasketDto? sort = null, PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Basket, BasketListDto, long>>> GetAll(FilterBasketDto? filter = null, SortBasketDto? sort = null, PagingDto? paging = null);
 
-        Task<ServiceResponse> Create(CreateBasketDto create);
+        Task<ServiceResponse<Empty>> Create(CreateBasketDto create);
 
-        Task<ServiceResponse> Update(UpdateBasketDto update);
+        Task<ServiceResponse<Empty>> Update(UpdateBasketDto update);
+
 
         //Task<DeleteEntityResult> Delete(BasketDeleteDto delete);
 

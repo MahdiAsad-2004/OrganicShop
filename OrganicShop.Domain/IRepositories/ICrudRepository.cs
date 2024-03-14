@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,6 @@ namespace OrganicShop.Domain.IRepositories
         where TKey : struct
     {
         IQueryable<TEntity> GetQueryable();
-        //IQueryable<TEntity> GetQueryableTracking();
         Task<TEntity?> GetAsNoTracking(TKey key);
     }
 
@@ -33,10 +33,11 @@ namespace OrganicShop.Domain.IRepositories
         Task Add(List<TEntity> entities, long id , string? operationDescription = null);
         Task Update(TEntity entity, long id, string? operationDescription = null);
         Task Update(List<TEntity> entities, long id, string? operationDescription = null);
-        Task UpdateNoTrackng(TEntity entity, long id, string? operationDescription = null);
+        Task UpdateNoTrack(TEntity entity, long id, string? operationDescription = null);
         Task SoftDelete(TEntity entity, long id, string? operationDescription = null);
         Task SoftDelete(TKey entity, long id, string? operationDescription = null);
         Task<TEntity?> GetAsTracking(TKey key);
+        IQueryable<TEntity> GetQueryableTracking();
     }
 
 

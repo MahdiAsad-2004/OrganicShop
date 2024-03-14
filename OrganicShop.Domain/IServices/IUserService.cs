@@ -8,17 +8,17 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IUserService : IService<User>
     {
-        Task<PageDto<User, UserListDto, long>> GetAll(FilterUserDto? filter = null, SortUserDto? sort = null, PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<User, UserListDto, long>>> GetAll(FilterUserDto? filter = null, SortUserDto? sort = null, PagingDto? paging = null);
         
         Task<UserListDto> Get(long id);
 
-        Task<ServiceResponse> Create(CreateUserDto create);
+        Task<ServiceResponse<Empty>> Create(CreateUserDto create);
 
-        Task<ServiceResponse> Update(UpdateUserDto update);
+        Task<ServiceResponse<Empty>> Update(UpdateUserDto update);
         
-        Task<ServiceResponse> Delete(long Id);
+        Task<ServiceResponse<Empty>> Delete(long Id);
 
-        Task<ServiceResponse> ChangePassword(ChangePasswordDto changePassword);
+        Task<ServiceResponse<Empty>> ChangePassword(ChangePasswordDto changePassword);
 
         Task<bool> IsEmailExist(string email);
 

@@ -7,14 +7,14 @@ namespace OrganicShop.Domain.IServices
 {
     public interface ITrackingStatusService : IService<TrackingStatus>
     {
-        Task<PageDto<TrackingStatus,TrackingStatusListDto,long>> GetAll(FilterTrackingStatusDto? filter = null
-            , SortTrackingStatusDto? sort = null , PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<TrackingStatus, TrackingStatusListDto, long>>> GetAll
+            (FilterTrackingStatusDto? filter = null,SortTrackingStatusDto? sort = null,PagingDto? paging = null);
 
-        Task<ServiceResponse> Create(CreateTrackingStatusDto create);
+        Task<ServiceResponse<Empty>> Create(CreateTrackingStatusDto create);
 
-        Task<ServiceResponse> Update(UpdateTrackingStatusDto update);
+        Task<ServiceResponse<Empty>> Update(UpdateTrackingStatusDto update);
         
-        Task<ServiceResponse> Delete(long delete);
+        Task<ServiceResponse<Empty>> Delete(long delete);
         
     }
 }

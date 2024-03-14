@@ -1,7 +1,24 @@
 ﻿
 
 
-let Forms = Array.from(document.getElementsByClassName('ajax-request'));
+//let Forms = Array.from(document.getElementsByClassName('ajax-request'));
+
+//let Formss = Array.from(document.getElementsByName('form'));
+//Formss.forEach(function (a) {
+//    if (a.classList.contains('ajax-request')) {
+//        a.onsubmit = function (e) {
+//            e.preventDefault();
+//            console.log('form has ajax request');
+//        }
+//    }
+//    else {
+//        a.onsubmit = function (e) {
+//            console.log('form does not have ajax request');
+//        }
+//    }
+
+//})
+
 
 let As = Array.from(document.getElementsByClassName('ajax-load-partial'));
 
@@ -15,91 +32,88 @@ var fff = document.createElement('form');
 
 let element = document.createElement('form')
 
- let loadingBackground = document.getElementById('loading-background');
- let loadingSvg = document.getElementById('loading-svg');
+let loadingBackground = document.getElementById('loading-background');
+let loadingSvg = document.getElementById('loading-svg');
+
+
+
+
+
+//Forms.forEach(function (elem) {
+//    if (elem.tagName === 'FORM') {
+//        elem.addEventListener('submit', function (e) {
+//            element = elem;
+//            e.preventDefault();
+//            ShowLoading();
+//            OnSubmit();
+//            HideLoading();
+//        })
+//    }
+//});
+
+
+
 
 function ShowLoading() {
     loadingBackground.style.height = '' + document.body.clientHeight + 'px';
     loadingBackground.style.display = 'block';
     loadingSvg.style.display = 'block';
-    console.log('show');
+    //console.log('show');
 }
 
 function HideLoading() {
     loadingBackground.style.display = 'none';
     loadingSvg.style.display = 'none';
-    console.log('hide');
+    //console.log('hide');
 }
 
 //let myPromise = new Promise(ShowLoading);
 
-Forms.forEach(function (elem) {
-    if (elem.tagName === 'FORM') {
-        elem.addEventListener('submit', function (e) {
-            element = elem;
-            e.preventDefault();
-            ShowLoading();
-            OnSubmit();
-            HideLoading();
+
+
+
+
+function AjaxRequest(e) {
+    element = e.target;
+    console.log(e.target);
+    e.preventDefault();
+    ShowLoading();
+    OnSubmit();
+    HideLoading();
+}
+
+
+
+
+
+function OnSubmit() {
+    if ($(element).valid()) {
+        formData = new FormData(element);
+        $.ajax({
+            url: element.getAttribute('href'),
+            method: element.getAttribute('method'),
+            data: formData,
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function (result, textStatus, jqxhr) {
+                HandleResponse(result, jqxhr);
+            },
+            error: function (x, y, z) {
+                console.log(x);
+                console.log(y);
+                console.log(z);
+            },
         });
+        element.reset();
+    }
+    else {
+        console.log('form is invalid');
+    }
+}
 
 
-        function OnSubmit() {
-            if ($(element).valid()) {
-                formData = new FormData(element);
-                $.ajax({
-                    url: element.getAttribute('href'),
-                    method: element.getAttribute('method'),
-                    data: formData,
-                    async: false,
-                    processData: false,
-                    contentType: false,
-                    success: function (result, textStatus, jqxhr) {
-                        HandleResponse(result, jqxhr);
-                    },
-                    error: function (x, y, z) {
-                        console.log(x);
-                        console.log(y);
-                        console.log(z);
-                    },
-                });
-                element.reset();
-            }
-            else {
-                console.log('form is invalid');
-            }
-        }
 
-
-        //element.onsubmit = function (e) {
-        //    e.preventDefault();
-        //    console.log('target: ' + e.target);
-        //    if ($(element).valid()) {
-        //        formData = new FormData(element);
-        //        $.ajax({
-        //            url: element.getAttribute('href'),
-        //            method: element.getAttribute('method'),
-        //            data: formData,
-        //            async: false,
-        //            processData: false,
-        //            contentType: false,
-        //            success: function (result, textStatus, jqxhr) {
-        //                HandleResponse(result, jqxhr);
-        //            },
-        //            error: function (x, y, z) {
-        //                console.log(x);
-        //                console.log(y);
-        //                console.log(z);
-        //            },
-        //        });
-        //        element.reset();
-        //    }
-        //    else {
-        //        console.log('form is invalid');
-        //    }
-        //};
-    }   
-});
 
 
 As.forEach(function (element) {

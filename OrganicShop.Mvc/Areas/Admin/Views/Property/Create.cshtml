@@ -28,7 +28,7 @@
                                 <h5>افزودن ویژگی جدید</h5>
                             </div>
 
-                            <form class="theme-form theme-form-2 mega-form ajax-request" method="post" href="/Admin/Property/Create">
+                            <form class="theme-form theme-form-2 mega-form" onsubmit="AjaxRequest(event)" method="post" action="xxxx" href="/Admin/Property/Create">
                                 <div class="mb-4 row align-items-center">
                                     @* <label class="form-label-title col-sm-3 mb-0">عنوان ویژگی</label> *@
                                     <label class="form-label-title col-sm-3 mb-0" asp-for="Title"></label>
@@ -71,5 +71,5 @@
     <script src="~/admin/assets/js/bootstrap-tagsinput.min.js"></script>
     <script src="~/admin/assets/js/sidebar-menu.js"></script>
 
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" /> 
 }
