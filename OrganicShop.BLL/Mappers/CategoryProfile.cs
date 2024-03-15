@@ -25,6 +25,10 @@ namespace OrganicShop.BLL.Mappers
             CreateMap<UpdateCategoryDto, Category>();
 
 
+            CreateMap<Category,UpdateCategoryDto>()
+                .ForMember(m => m.ImageName, a => a.MapFrom(b => b.Image));
+
+
             CreateMap<Category, ComboDto<Category>>()
                 .ForMember(m => m.Value, a => a.MapFrom(b => b.Id))
                 .ForMember(m => m.Text, a => a.MapFrom(b => b.Title));

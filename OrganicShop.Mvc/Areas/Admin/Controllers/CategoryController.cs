@@ -19,17 +19,22 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         #endregion
 
 
-        public async Task<IActionResult>  Index()
+        public async Task<IActionResult> Index()
         {
-            var page = await _CategoryService.GetAll();
-            return View(page);
+            var response = await _CategoryService.GetAll();
+            if(response.Data != null)
+            {
+                return View(response.Data);
+            }
+            await Console.Out.WriteLineAsync(response.Result.ToString());
+            return NoContent();
         }
 
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewData["Categories"] = await _CategoryService.GetCombos();
+            ViewData["Categories"] = (await _CategoryService.GetCombos()).Data;
             return View();
         }
 
@@ -52,12 +57,48 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
             }
             else
             {
-                ViewData["Categories"] = await _CategoryService.GetCombos();
+                ViewData["Categories"] = (await _CategoryService.GetCombos()).Data;
             }
             return View();
         }
 
 
+
+        [HttpGet("Admin/Category/Edit/{Id}")]
+        public async Task<IActionResult> Edit(int Id = 0)
+        {
+            //if(Id < 0) return NotFound();
+
+            var response = await _CategoryService.Get(Id);
+            var model = response.Data;
+            await Console.Out.WriteLineAsync(Id.ToString());
+            await Console.Out.WriteLineAsync(response.Result.ToString());
+            if (model != null)
+            {
+                ViewData["Categories"] = (await _CategoryService.GetCombos()).Data;
+                return View(model);
+            }
+
+            if (response.Result == ResponseResult.NotFound) return NotFound();
+            
+            if(response.Result == ResponseResult.NoAccess) return Forbid();
+
+            return BadRequest();
+        }
+
+
+        [HttpPut]
+        public async Task<IActionResult> Edit(UpdateCategoryDto update)
+        {
+            return _ClientHandleResult.Toast(HttpContext,new Toast(ToastType.Warning,""));
+            var response = await _CategoryService.Update(update);
+            if (response.Result == ResponseResult.Success)
+            {
+                return _ClientHandleResult.RedirectThenToast(HttpContext, TempData, "Index", new Toast(ToastType.Success, response.Message), true);
+            }
+
+            return _ClientHandleResult.Toast(HttpContext,new Toast(ToastType.Error,response.Message));
+        }
 
 
 

@@ -19,6 +19,7 @@ namespace OrganicShop.Mvc.ValidationsAttributes
         {
             context.Attributes.Add("data-val-maxSize", $"حداکثر سایز {FieldName} KB {Size} است");
             context.Attributes.Add("data-val-maxSize-max", $"{Size}");
+            context.Attributes.Add("data-val", "true");
 
         }
 

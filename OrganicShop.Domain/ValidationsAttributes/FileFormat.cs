@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OrganicShop.Mvc.ValidationsAttributes
 {
@@ -29,6 +30,7 @@ namespace OrganicShop.Mvc.ValidationsAttributes
         {
             context.Attributes.Add("data-val-fileFormat", $"فرمت {FieldName} {string.Join(" / ", Formats)} نیست");
             context.Attributes.Add("data-val-fileFormat-formats", $"{FormatsString}");
+            context.Attributes.Add("data-val", "true");
 
         }
 

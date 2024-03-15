@@ -16,12 +16,10 @@ namespace OrganicShop.Domain.Dtos.CategoryDtos
 
 
         [DisplayName("مشخصات آیکن")]
-        //[Required(ErrorMessage = "{0} ضروری است")]
         [StringLength(30, MinimumLength = 2, ErrorMessage = "{0} باید حداقل {2} و حداکثر {1} حرف داشته باشد")]
         public string? IconClass { get; set; }
 
         [DisplayName("رنگ آیکن")]
-        //[Required(ErrorMessage = "{0} ضروری است")]
         [StringLength(30, MinimumLength = 2, ErrorMessage = "{0} باید حداقل {2} و حداکثر {1} حرف داشته باشد")]
         public string? IconColor { get; set; }
 

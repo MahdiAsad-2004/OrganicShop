@@ -1,18 +1,19 @@
 ﻿@using OrganicShop.Domain.Dtos.CategoryDtos
-@model CreateCategoryDto
+@model UpdateCategoryDto
 @{
     List<ComboDto<Category>> categoryCombos = ViewData["Categories"] as List<ComboDto<Category>>;
+    var idString = Model.Id.ToString();
 }
 
 @section Styles{
-    <link rel="stylesheet" type="text/css" href="~/adminassets/css/vendors/chartist.css">
-    <link rel="stylesheet" type="text/css" href="~/adminassets/css/vendors/date-picker.css">
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/vendors/chartist.css">
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/vendors/date-picker.css">
 
     <!-- Bootstrap-tag input css -->
-    <link rel="stylesheet" type="text/css" href="~/adminassets/css/vendors/bootstrap-tagsinput.css">
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/vendors/bootstrap-tagsinput.css">
 
     <!-- Select2 css -->
-    <link rel="stylesheet" type="text/css" href="~/adminassets/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/select2.min.css">
 }
 
 <div class="container-fluid">
@@ -23,14 +24,17 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="card-header-2">
-                                <h5>دسته بندی جدید</h5>
+                                <h5>ویرایش دسته بندی </h5>
                             </div>
 
-                            <form class="theme-form theme-form-2 mega-form" method="post" enctype="multipart/form-data" >
+                            <form class="theme-form theme-form-2 mega-form" onsubmit="AjaxRequest(event)" method="put" 
+                            enctype="multipart/form-data" href="/Admin/Category/Edit" >
+                                <input asp-for="Id" hidden/>
+
                                 <div class="mb-4 row align-items-center">
                                     <label class="form-label-title col-sm-3 mb-0">عنوان دسته</label>
                                     <div class="col-sm-9">
-                                        <input asp-for="Title" class="form-control" type="text" placeholder="نام دسته بندی جدید">
+                                        <input asp-for="Title" class="form-control" type="text" >
                                         <span class="text-danger mt-1" asp-validation-for="Title"></span>
                                     </div>
                                 </div>
@@ -55,7 +59,10 @@
                                             <option value="">بدون سر دسته</option>
                                             @foreach (var item in categoryCombos)
                                             {
-                                                <option value="@item.Value">@item.Text</option>
+                                                if(item.Value != idString)
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
                                             }
                                         </select>
                                         <span class="text-danger mt-1" asp-validation-for="ParentId"></span>
@@ -64,10 +71,11 @@
 
                                 <div class="mb-4 row align-items-center">
                                     <label class="col-sm-3 col-form-label form-label-title">تصویر دسته</label>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-6">
                                         <input asp-for="ImageFile" type="file" class="form-control">
                                         <span class="text-danger mt-1" asp-validation-for="ImageFile"></span>
                                     </div>
+                                    <img class="col-sm-3 image-fluid rounded-2" src="~/media/images/category/@Model.ImageName" style="border:solid 2px black" alt="" />
                                 </div>
 
                                 <div class="mb-4 row align-items-center">
@@ -87,7 +95,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn ms-auto theme-bg-color text-white">افزودن دسته</button>
+                                <button type="submit" class="btn ms-auto theme-bg-color text-white">ویرایش دسته</button>
                                 
                             </form>
                         </div>
@@ -101,11 +109,11 @@
 
 @section Scripts{
     <!-- select2 js -->
-    <script src="~/adminassets/js/select2.min.js"></script>
-    <script src="~/adminassets/js/select2-custom.js"></script>
+    <script src="~/admin/assets/js/select2.min.js"></script>
+    <script src="~/admin/assets/js/select2-custom.js"></script>
 
     <!-- bootstrap tag-input js -->
-    <script src="~/adminassets/js/bootstrap-tagsinput.min.js"></script>
+    <script src="~/admin/assets/js/bootstrap-tagsinput.min.js"></script>
     <script src="~/admin/assets/js/sidebar-menu.js"></script>
 
     <partial name="_ValidationScriptsPartial"/>

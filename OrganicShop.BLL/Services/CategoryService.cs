@@ -67,21 +67,8 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<CategoryListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return new ServiceResponse<PageDto<Category, CategoryListDto, int>>(ResponseResult.Success, "", pageDto);
+            return new ServiceResponse<PageDto<Category, CategoryListDto, int>>(ResponseResult.Success, pageDto);
         }
-
-
-        public async Task<ServiceResponse<UpdateCategoryDto>> Get(int Id)
-        {
-            var entity = await _CategoryRepository
-                .GetAsNoTracking(Id);
-
-            if (entity == null)
-                return new ServiceResponse<UpdateCategoryDto>(ResponseResult.NotFound, null);
-
-            return new ServiceResponse<UpdateCategoryDto>(ResponseResult.Success, _Mapper.Map<UpdateCategoryDto>(entity));
-        }
-
 
 
         public async Task<ServiceResponse<Empty>> Create(CreateCategoryDto create)
@@ -104,20 +91,42 @@ namespace OrganicShop.BLL.Services
 
 
 
+        public async Task<ServiceResponse<UpdateCategoryDto>> Get(int Id)
+        {
+            var entity = await _CategoryRepository
+                .GetAsNoTracking(Id);
+
+            if (entity == null)
+                return new ServiceResponse<UpdateCategoryDto>(ResponseResult.NotFound, null);
+
+            return new ServiceResponse<UpdateCategoryDto>(ResponseResult.Success, _Mapper.Map<UpdateCategoryDto>(entity));
+        }
+
+
         public async Task<ServiceResponse<Empty>> Update(UpdateCategoryDto update)
         {
             Category? Category = new Category();
 
-            if (_CategoryRepository.GetQueryable().Any(a => a.Title.Contains(update.Title, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
+            if (_CategoryRepository.GetQueryable().Any(a => a.Id != update.Id && EF.Functions.Like(a.Title, update.Title)))
                 return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.EntityExist(update, a => nameof(a.Title)));
 
             Category = await _CategoryRepository.GetAsTracking(update.Id);
 
+            await Console.Out.WriteLineAsync(Category.BaseEntity.CreateDate.ToString());
+            await Console.Out.WriteLineAsync(Category.BaseEntity.LastModified.ToString());
+
             if (Category == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
-            await _CategoryRepository.Update(_Mapper.Map<Category>(update), _AppUserProvider.User.Id);
-            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
+            if(update.ImageFile != null)
+                Category.Image = await update.ImageFile.SaveFile(PathExtensions.CategoryImage);
+
+            await _CategoryRepository.Update(_Mapper.Map(update,Category), _AppUserProvider.User.Id);
+
+            await Console.Out.WriteLineAsync(Category.BaseEntity.CreateDate.ToString());
+            await Console.Out.WriteLineAsync(Category.BaseEntity.LastModified.ToString());
+
+            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
 

@@ -64,7 +64,8 @@ namespace OrganicShop.Domain.Response
         }
         public string NotFound(Type? type)
         {
-            string entityName = _EntityName = type.GetCustomAttribute<DisplayNameAttribute>().DisplayName;
+            var displayAttribute = type.GetCustomAttribute<DisplayNameAttribute>();
+            string entityName = _EntityName = displayAttribute != null ? displayAttribute.DisplayName : type.Name;    
             return $"{entityName} مورد نظر یافت نشد !";
         }
         public string NoAccess()
@@ -105,7 +106,8 @@ namespace OrganicShop.Domain.Response
             var entityType = typeof(Entity);
             var dtoType = typeof(TDto);
             var propertyStr = nameofProperty.Invoke(dto);
-            string propertyName = dtoType.GetProperty(propertyStr).GetCustomAttribute<DisplayNameAttribute>().DisplayName;
+            var displayAttribute = dtoType.GetProperty(propertyStr).GetCustomAttribute<DisplayNameAttribute>();
+            string propertyName = displayAttribute != null ? displayAttribute.DisplayName : dtoType.GetProperty(propertyStr).Name;
             string propertyValue = dtoType.GetProperty(propertyStr).GetValue(dto).ToString();
             return $"{_EntityName} با {propertyName} '{propertyValue}' در حال حاضر وجود دارد";
         }

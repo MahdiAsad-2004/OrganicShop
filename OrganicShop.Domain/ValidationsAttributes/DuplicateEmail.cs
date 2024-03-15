@@ -8,6 +8,7 @@ namespace OrganicShop.Mvc.ValidationsAttributes
         public void AddValidation(ClientModelValidationContext context)
         {
             context.Attributes.Add("data-val-duplicateEmail", "ایمیل از قبل وجود دارد");
+            context.Attributes.Add("data-val", "true");
         }
 
         //protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)

@@ -14,14 +14,14 @@ namespace OrganicShop.Domain.Response
         public ServiceResponse(ResponseResult result,TData? data = null )
         {
             Result = result;
-            Data = result == ResponseResult.Success ? null : data;
+            Data = result != ResponseResult.Success ? null : data;
         }
 
         public ServiceResponse(ResponseResult result, string message, TData? data = null)
         {
             Result = result;
             Message = message;
-            Data = result == ResponseResult.Success ? null : data;
+            Data = result != ResponseResult.Success ? null : data;
         }
     }
 
