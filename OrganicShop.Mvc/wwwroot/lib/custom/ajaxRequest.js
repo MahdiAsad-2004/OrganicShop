@@ -37,23 +37,6 @@ let loadingSvg = document.getElementById('loading-svg');
 
 
 
-
-
-//Forms.forEach(function (elem) {
-//    if (elem.tagName === 'FORM') {
-//        elem.addEventListener('submit', function (e) {
-//            element = elem;
-//            e.preventDefault();
-//            ShowLoading();
-//            OnSubmit();
-//            HideLoading();
-//        })
-//    }
-//});
-
-
-
-
 function ShowLoading() {
     loadingBackground.style.height = '' + document.body.clientHeight + 'px';
     loadingBackground.style.display = 'block';
@@ -143,11 +126,35 @@ As.forEach(function (element) {
 
 
 
-let invalid_inputs;
-function IsInValidInput() {
-    return document.getElementsByClassName('input-validation-error').length;
+let fetchResponse = null;
+let formElem = document.createElement('form');
+let formMethod;
+async function FetchRquest(e) {
+    e.preventDefault();
+    formElem = e.target;
+    try
+    {
+        formMethod = formElem.getAttribute('method').toLowerCase();
+        fetchResponse = await fetch(formElem.getAttribute('href'), {
+            method: formMethod,
+            body: formMethod == 'get' ? null : new FormData(formElem),
+        });
+        HandleFetchResponse(fetchResponse);
+    }
+    catch (er)
+    {
+        Toast('Warning', 'An error was thrown from client',2,5000);
+        console.log(er);
+    }
+
 }
 
 
 
-
+//function P1(response) {
+//    var targetElementId = response.headers.get('ResponseDataType');
+//    if (ttargetElementId) {
+//        document.getElementById('view-container').innerHTML = document.getElementById(TargetElementId).innerHTML = ;
+//    }
+//    ViewContainer.innerHTML = data;
+//}

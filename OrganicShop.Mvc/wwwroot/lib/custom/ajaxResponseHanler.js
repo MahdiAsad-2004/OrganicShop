@@ -56,67 +56,214 @@ function HandleResponse(data, jqxhr) {
 }
 
 
-function Partial(data, jqxhr) {
-    TargetElementId = jqxhr.getResponseHeader('targetElementId');
-    if (TargetElementId) {
-        ViewContainer = document.getElementById(TargetElementId);
-    }
-    ViewContainer.innerHTML = data;
-}
 
-
-
-function PartialThenToast(data, jqxhr) {
-    TargetElementId = jqxhr.getResponseHeader('targetElementId');
-    if (TargetElementId) {
-        ViewContainer = document.getElementById(TargetElementId);
-    }
-    MessageString = jqxhr.getResponseHeader("Message");
-    Message = JSON.parse(MessageString);
-    ViewContainer.innerHTML = data;
-    HandleMessage(Message);
-}
-
-
-
-function ToastThenRedirect(data, jqxhr) {
-    MessageString = jqxhr.getResponseHeader("Message");
-    Message = JSON.parse(MessageString);
-    Redirect = JSON.parse(data);
-    HandleMessage(Message);
-    setTimeout(function () {
-        if (Redirect.IsReplace == true) {
-            console.log("replace action");
-            location.replace(Redirect.Url);
-
+function HandleFetchResponse(response) {
+    if (response.ok) {
+        ResponseDataType = response.headers.get('ResponseDataType');
+        if (ResponseDataType == 'partial') {
+            Partial(response);
         }
-        else {
-            location.assign(Redirect.Url);
+        else if (ResponseDataType == 'partial-toast') {
+            PartialThenToast(response);
         }
-    }, Message.TimeMs + 1000)
-}
-
-
-function RedirectThenToast(data, jqxhr) {
-    Redirect = JSON.parse(data);
-    if (Redirect.IsReplace == true) {
-        console.log("replace action");
-        location.replace(Redirect.Url);
-
+        else if (ResponseDataType == 'redirect-toast') {
+            RedirectThenToast(response);
+        }
+        else if (ResponseDataType == 'toast-redirect') {
+            ToastThenRedirect(response);
+        }
+        else if (ResponseDataType == 'toast-refresh') {
+            ToastThenRefresh(response);
+        }
+        else if (ResponseDataType == 'toast') {
+            response.json().then(a => { HandleMessage(a) });
+        }
     }
     else {
-        location.assign(Redirect.Url);
+        if (response.status == 500) {
+            Toast('Warning', 'Internal Server Warning', 2, 5000);
+        }
+        else if (response.status == 400) {
+            Toast('Warning', 'Bad Request', 2, 5000);
+        }
+        else if (response.status == 401) {
+            Toast('Warning', 'Unauthorized', 2, 5000);
+        }
+        else if (response.status == 403) {
+            Toast('Warning', 'Forbidden', 2, 5000);
+        }
+        else if (response.status == 404) {
+            Toast('Warning', 'Not Found', 2, 5000);
+        }
+        else if (response.status == 405) {
+            Toast('Warning', 'Not Allowed',2, 5000);
+        }
+        else if (response.status == 503) {
+            Toast('Warning', 'Service Unavailable', 2, 5000);
+        }
+        console.log(response);
     }
+
 }
 
 
-function ToastThenRefresh(data, jqxhr) {
-    Message = JSON.parse(data);
+
+
+function Partial(response) {
+    TargetElementId = response.headers.get('targetElementId');
+    if (TargetElementId) {
+        ViewContainer = document.getElementById(TargetElementId);
+    }
+    response.text().then(partial =>
+    {
+        ViewContainer.innerHTML = partial;
+    });
+   
+}
+
+function PartialThenToast(response) {
+    TargetElementId = response.headers.get('targetElementId');
+    if (TargetElementId) {
+        ViewContainer = document.getElementById(TargetElementId);
+    }
+    MessageString = response.headers.get("Message");
+    Message = JSON.parse(MessageString);
+    response.text().then(partial => {
+        ViewContainer.innerHTML = partial;
+    });
+
     HandleMessage(Message);
-    setTimeout(function () {
-        location.reload();
-    }, Message.TimeMs + 1000)
 }
+
+function ToastThenRedirect(response) {
+    MessageString = response.headers.get("Message");
+    Message = JSON.parse(MessageString);
+    response.json().then(redirect =>
+    {
+        HandleMessage(Message);
+        setTimeout(function () {
+            if (redirect.IsReplace == true) {
+                location.replace(redirect.Url);
+
+            }
+            else {
+                location.assign(redirect.Url);
+            }
+        }, Message.TimeMs)
+    })
+  
+}
+
+
+function RedirectThenToast(response) {
+    response.json().then(redirect => {
+        if (redirect.IsReplace == true) {
+            console.log("replace action");
+            location.replace(redirect.Url);
+        }
+        else {
+            location.assign(redirect.Url);
+        }
+    });
+}
+
+function ToastThenRefresh(response) {
+    response.json().then(message =>
+    {
+        HandleMessage(message);
+        setTimeout(function () {
+            location.reload();
+        }, message.TimeMs)
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//function Partial(data, jqxhr) {
+//    TargetElementId = jqxhr.getResponseHeader('targetElementId');
+//    if (TargetElementId) {
+//        ViewContainer = document.getElementById(TargetElementId);
+//    }
+//    ViewContainer.innerHTML = data;
+//}
+
+
+
+//function PartialThenToast(data, jqxhr) {
+//    TargetElementId = jqxhr.getResponseHeader('targetElementId');
+//    if (TargetElementId) {
+//        ViewContainer = document.getElementById(TargetElementId);
+//    }
+//    MessageString = jqxhr.getResponseHeader("Message");
+//    Message = JSON.parse(MessageString);
+//    ViewContainer.innerHTML = data;
+//    HandleMessage(Message);
+//}
+
+
+
+//function ToastThenRedirect(data, jqxhr) {
+//    MessageString = jqxhr.getResponseHeader("Message");
+//    Message = JSON.parse(MessageString);
+//    Redirect = JSON.parse(data);
+//    HandleMessage(Message);
+//    setTimeout(function () {
+//        if (Redirect.IsReplace == true) {
+//            console.log("replace action");
+//            location.replace(Redirect.Url);
+
+//        }
+//        else {
+//            location.assign(Redirect.Url);
+//        }
+//    }, Message.TimeMs + 1000)
+//}
+
+
+//function RedirectThenToast(data, jqxhr) {
+//    Redirect = JSON.parse(data);
+//    if (Redirect.IsReplace == true) {
+//        console.log("replace action");
+//        location.replace(Redirect.Url);
+
+//    }
+//    else {
+//        location.assign(Redirect.Url);
+//    }
+//}
+
+
+//function ToastThenRefresh(data, jqxhr) {
+//    Message = JSON.parse(data);
+//    HandleMessage(Message);
+//    setTimeout(function () {
+//        location.reload();
+//    }, Message.TimeMs + 1000)
+//}
 
 
 
@@ -169,5 +316,16 @@ function Toast(title, text, typeIndex, timeMs) {
         //allowEscapeKey:true,
         //allowEnterKey:true,
     });
-
 }
+
+
+
+
+
+
+
+
+
+
+
+

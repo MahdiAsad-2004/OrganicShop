@@ -25,21 +25,24 @@ namespace OrganicShop.Mvc.Controllers
         public async Task<IActionResult> TestAction()
         {
             await Console.Out.WriteLineAsync();
-            var t = new Toast(ToastType.Error, "asdadasd 654654a6d4d6a54d ", 5000);
+            var t = new Toast(ToastType.Info, "asdadasd 654654a6d4d6a54d ", 5000);
 
-            ToastOnTempData(t);
-            return RedirectToAction("Index");
+            //throw new Exception("custom error thrown");
 
-            //return RedirectToAction("Index", new { name = "asd", pass = "zxcv", flag = false });
+            //ToastOnTempData(t);
+            //return RedirectToAction("Index");
 
+            //return _ClientHandleResult.Toast(HttpContext,t);
 
-            return _ClientHandleResult.RedirectThenToast(HttpContext,TempData,"Index",t,false);
+            return _ClientHandleResult.PartialThenToast(HttpContext, PartialView("Privacy"), t);
+            
+            //return _ClientHandleResult.Partial(HttpContext, PartialView("Privacy"));
 
-            //return _ClientHandleResult.Partial(HttpContext, "Privacy", null, t);
+            //return _ClientHandleResult.RedirectThenToast(HttpContext,TempData,"Index",t,true);
 
-            //return _ClientHandleResult.ToastThenRedirect(HttpContext, "Index", "Home", new {name = "asd",pass="zxcv",flag=false }, t, false);
+            //return _ClientHandleResult.ToastThenRedirect(HttpContext,"Index",t,true);
 
-            return _ClientHandleResult.Toast(HttpContext,t);
+            //return _ClientHandleResult.ToastThenRfresh(HttpContext,t);
 
         }
 
