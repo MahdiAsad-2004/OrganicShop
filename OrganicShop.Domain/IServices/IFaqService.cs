@@ -7,7 +7,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IFaqService : IService<Faq>
     {
-        Task<ServiceResponse<PageDto<Faq, FaqListDto, byte>>> GetAll(FilterFaqDto? filter = null, SortFaqDto? sort = null,PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Faq, FaqListDto, byte>>> GetAll(FilterFaqDto? filter = null,PagingDto? paging = null);
 
         Task<ServiceResponse<Empty>> Create(CreateFaqDto create);
 

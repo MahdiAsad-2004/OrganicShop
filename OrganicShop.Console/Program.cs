@@ -26,38 +26,78 @@ using OrganicShop.Domain.Dtos.CategoryDtos;
 
 Console.WriteLine("Hello, World!\n");
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//MapperConfiguration mapperConfiguration = new MapperConfiguration(c =>
+//{
+//    c.CreateMap<x, y>().ReverseMap();
+//});
+//var _Mapper = mapperConfiguration.CreateMapper();
+//var xObj = new x(45);
+//var yObj = _Mapper.Map<y>(xObj);
+
+//yObj.ToString();
+
+//public class x
+//{
+//    public int Id { get; set; }
+//    public string Name { get; set; }
+
+//    public x(object obj)
+//    {
+        
+//    }
+//}
+
+//public class y
+//{
+//    public int Id { get; set; }
+//    public string Name { get; set; }
+
+//    public y(bool? flag = null)
+//    {
+            
+//    }
+//}
+
+
+
+
+
+
+
+
+
+
+
+
 //var category = new Category();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //var create = new CreateCategoryDto()
 //{
 //    Title = "Titleee             ",
@@ -72,7 +112,7 @@ Console.WriteLine("Hello, World!\n");
 //    c.ValueTransformers.Add<string?>(a => a == null ? null : a.Trim());
 //    c.CreateMap<CreateCategoryDto, Category>();
 //});
- 
+
 //var _Mapper = mapperConfiguration.CreateMapper();
 
 

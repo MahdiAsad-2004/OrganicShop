@@ -8,8 +8,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IPermissionService : IService<Permission>
     {
-        Task<ServiceResponse<PageDto<Permission, PermissionListDto, byte>>> GetAll
-            (FilterPermissionDto? filter = null, SortPermissionDto? sort = null,PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Permission, PermissionListDto, byte>>> GetAll(FilterPermissionDto? filter = null,PagingDto? paging = null);
 
         Task<ServiceResponse<Empty>> Create(CreatePermissionDto create);
 

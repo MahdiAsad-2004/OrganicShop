@@ -26,9 +26,9 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index(FilterProductDto filter, SortProductDto sort, PagingDto paging)
+        public async Task<IActionResult> Index(FilterProductDto filter,PagingDto paging)
         {
-            var pageDto = await _ProductService.GetAll(filter, sort, paging);
+            var pageDto = await _ProductService.GetAll(filter, paging);
             return View(pageDto);
 
             //return View(new PageDto<Product,ProductListDto,long>());

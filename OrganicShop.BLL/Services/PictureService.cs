@@ -30,12 +30,11 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<ServiceResponse<PageDto<Picture, PictureListDto, long>>> GetAll(FilterPictureDto? filter = null , SortPictureDto? sort = null , PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Picture, PictureListDto, long>>> GetAll(FilterPictureDto? filter = null ,PagingDto? paging = null)
         {
             var query = _PictureRepository.GetQueryable();
 
             if (filter == null) filter = new FilterPictureDto();
-            if (sort == null) sort = new SortPictureDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -49,13 +48,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            sort.ApplyBaseSort(query);
-
-            if (sort.Name == SortOrder.Ascending) query = query.OrderBy(o => o.Name);
-            if (sort.Name == SortOrder.Descending) query = query.OrderByDescending(o => o.Name);
-
-            if (sort.Size == SortOrder.Ascending) query = query.OrderBy(o => o.SizeMB);
-            if (sort.Size == SortOrder.Descending) query = query.OrderByDescending(o => o.SizeMB);
+            query = filter.ApplySortType(query);
 
             #endregion
 

@@ -15,6 +15,5 @@ namespace OrganicShop.Domain.Enums.Response
         NotFound,
 
         Failed,
-
     }
 }

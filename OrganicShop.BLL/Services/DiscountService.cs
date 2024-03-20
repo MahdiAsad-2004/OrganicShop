@@ -38,15 +38,13 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<ServiceResponse<PageDto<Discount, DiscountListDto, int>>> GetAll
-            (FilterDiscountDto? filter = null, SortDiscountDto? sort = null , PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Discount, DiscountListDto, int>>> GetAll(FilterDiscountDto? filter = null, PagingDto? paging = null)
         {
             var query = _DiscountRepository.GetQueryable()
                 .Include(a => a.DiscountUsers)
                 .AsQueryable();
 
             if (filter == null) filter = new FilterDiscountDto();
-            if (sort == null) sort = new SortDiscountDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -81,16 +79,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            query = sort.ApplyBaseSort(query);
-
-            if (sort.Count == SortOrder.Ascending) query = query.OrderBy(o => o.Count);
-            if (sort.Count == SortOrder.Descending) query = query.OrderByDescending(o => o.Count);
-
-            if (sort.Percent == SortOrder.Ascending) query = query.OrderBy(o => o.Percent);
-            if (sort.Percent == SortOrder.Descending) query = query.OrderByDescending(o => o.Percent);
-
-            if (sort.FixedValue == SortOrder.Ascending) query = query.OrderBy(o => o.FixedValue);
-            if (sort.FixedValue == SortOrder.Descending) query = query.OrderByDescending(o => o.FixedValue);
+            query = filter.ApplySortType(query);
 
             #endregion
 

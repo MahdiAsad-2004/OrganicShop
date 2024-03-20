@@ -12,6 +12,7 @@ using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Entities.Relations;
 using OrganicShop.Domain.Entities.Base;
 using OrganicShop.Domain.Enums;
+using OrganicShop.BLL.Extensions;
 
 namespace OrganicShop.BLL.Services
 {
@@ -32,14 +33,12 @@ namespace OrganicShop.BLL.Services
 
 
         
-        public async Task<ServiceResponse<PageDto<User, UserListDto, long>>> GetAll
-            (FilterUserDto? filter = null, SortUserDto? sort = null,PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<User, UserListDto, long>>> GetAll(FilterUserDto? filter = null,PagingDto? paging = null)
         {
             var query = _userRepository.GetQueryable()
                 .AsQueryable();
 
             if (filter == null) filter = new FilterUserDto();
-            if (sort == null) sort = new SortUserDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -59,10 +58,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            query = sort.ApplyBaseSort(query);
-
-            if (sort.Name == SortOrder.Ascending) query = query.OrderBy(a => a.Name);
-            if (sort.Name == SortOrder.Descending) query = query.OrderByDescending(a => a.Name);
+            query = filter.ApplySortType(query);
 
             #endregion
 
@@ -107,6 +103,8 @@ namespace OrganicShop.BLL.Services
                 }
             }
 
+            user.ProfileImage = create.ProfileImage != null ? await create.ProfileImage.SaveFile(PathExtensions.UserImages) : PathExtensions.UserImageDefault;
+
             await _userRepository.Add(user,_AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
@@ -131,6 +129,9 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse<Empty>> Delete(long delete)
         {
+            if(delete < 1)
+                return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
+
             User? user = await _userRepository.GetAsTracking(delete);
 
             if (user == null)

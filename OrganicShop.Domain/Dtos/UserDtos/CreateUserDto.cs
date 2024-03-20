@@ -40,8 +40,8 @@ namespace OrganicShop.Domain.Dtos.UserDtos
 
         [DisplayName("تصویر پروفایل")]
         [MaxSize(500 , FieldName = "تصویر پروفایل")]
-        [FileFormat(new string[] {"jpg"} , FieldName = "تصویر پروفایل")]
-        public IFormFile ProfileImage { get; set; }
+        [FileFormat(new string[] {"jpg","png","jpeg"} , FieldName = "تصویر پروفایل")]
+        public IFormFile? ProfileImage { get; set; }
 
         [DisplayName("مجوز ها")]
         public int[] Permissions { get; set; }

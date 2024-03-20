@@ -39,14 +39,13 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<ServiceResponse<PageDto<Product, ProductListDto, long>>> GetAll(FilterProductDto? filter = null, SortProductDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Product, ProductListDto, long>>> GetAll(FilterProductDto? filter = null,PagingDto? paging = null)
         {
             var query = _ProductRepository.GetQueryable()
                 .Include(a => a.Category)
                 .AsQueryable();
 
             if (filter == null) filter = new FilterProductDto();
-            if (sort == null) sort = new SortProductDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -84,19 +83,9 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            if (sort.Title == SortOrder.Ascending) query = query.OrderBy(o => o.Title);
-            if (sort.Title == SortOrder.Descending) query = query.OrderByDescending(o => o.Title);
-
-            if (sort.Price == SortOrder.Ascending) query = query.OrderBy(o => o.Price);
-            if (sort.Price == SortOrder.Descending) query = query.OrderByDescending(o => o.Price);
-
-            if (sort.SoldCount == SortOrder.Ascending) query = query.OrderBy(o => o.SoldCount);
-            if (sort.SoldCount == SortOrder.Descending) query = query.OrderByDescending(o => o.SoldCount);
-
-            if (sort.Discount == SortOrder.Descending) query = query.OrderByDescending(a => a.Price - a.UpdatedPrice);
+            query = filter.ApplySortType(query);
 
             #endregion
-
 
             PageDto<Product, ProductListDto, long> pageDto = new();
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<ProductListDto>(a)).ToList();

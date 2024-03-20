@@ -7,7 +7,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IOrderService : IService<Order>
     {
-        Task<ServiceResponse<PageDto<Order, OrderListDto, long>>> GetAll(FilterOrderDto? filter = null,SortOrderDto? sort = null,PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Order, OrderListDto, long>>> GetAll(FilterOrderDto? filter = null,PagingDto? paging = null);
 
         Task<ServiceResponse<Empty>> Create(CreateOrderDto create);
 

@@ -32,13 +32,11 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<ServiceResponse<PageDto<Basket, BasketListDto, long>>> GetAll
-            (FilterBasketDto? filter = null, SortBasketDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Basket, BasketListDto, long>>> GetAll(FilterBasketDto? filter = null, PagingDto? paging = null)
         {
             var query = _BasketRepository.GetQueryable();
 
             if (filter == null) filter = new FilterBasketDto();
-            if (sort == null) sort = new SortBasketDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -52,10 +50,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            sort.ApplyBaseSort(query);
-
-            if (sort.TotalPrice == SortOrder.Ascending) query = query.OrderBy(o => o.TotalPrice);
-            if (sort.TotalPrice == SortOrder.Descending) query = query.OrderByDescending(o => o.TotalPrice);
+            query = filter.ApplySortType(query);
 
             #endregion
 

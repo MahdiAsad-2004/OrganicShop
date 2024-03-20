@@ -34,6 +34,7 @@ namespace OrganicShop.DAL
         public DbSet<TrackingDescription> TrackingDescriptions { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<PermissionUsers> PermissionUsers { get; set; }
+        public DbSet<Picture> Pictures { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Picture> ProductImages { get; set; }
         public DbSet<Property> Properties { get; set; }

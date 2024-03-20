@@ -7,8 +7,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface ITrackingStatusService : IService<TrackingStatus>
     {
-        Task<ServiceResponse<PageDto<TrackingStatus, TrackingStatusListDto, long>>> GetAll
-            (FilterTrackingStatusDto? filter = null,SortTrackingStatusDto? sort = null,PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<TrackingStatus, TrackingStatusListDto, long>>> GetAll(FilterTrackingStatusDto? filter = null,PagingDto? paging = null);
 
         Task<ServiceResponse<Empty>> Create(CreateTrackingStatusDto create);
 

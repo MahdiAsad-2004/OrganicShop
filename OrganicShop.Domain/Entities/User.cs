@@ -24,6 +24,7 @@ namespace OrganicShop.Domain.Entities
 
         #region relations
 
+        public Picture? Picture { get; set; }
         public ICollection<Address>? Addresses { get; set; }
         public ICollection<BankCard>? BankCards { get; set; }
         public ICollection<Basket>? Baskets { get; set; }

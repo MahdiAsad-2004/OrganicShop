@@ -7,7 +7,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface ICommentService : IService<Comment>
     {
-        Task<ServiceResponse<PageDto<Comment, CommentListDto, long>>> GetAll(FilterCommentDto? filter = null, SortCommentDto? sort = null,PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Comment, CommentListDto, long>>> GetAll(FilterCommentDto? filter = null,PagingDto? paging = null);
 
         Task<ServiceResponse<Empty>> Create(CreateCommentDto create);
 

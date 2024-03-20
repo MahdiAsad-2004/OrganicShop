@@ -11,6 +11,7 @@ using OrganicShop.Domain.Response;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using AutoMapper;
 using OrganicShop.Domain.IProviders;
+using OrganicShop.Domain.Enums.SortTypes;
 
 namespace OrganicShop.BLL.Services
 {
@@ -31,13 +32,11 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<ServiceResponse<PageDto<BankCard, BankCardListDto, long>>> GetAll
-            (FilterBankCardDto?filter = null, SortBankCardDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<BankCard, BankCardListDto, long>>> GetAll(FilterBankCardDto?filter = null, PagingDto? paging = null)
         {
             var query = _BankCardRepository.GetQueryable();
 
             if (filter == null) filter = new FilterBankCardDto();
-            if (sort == null) sort = new SortBankCardDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -51,7 +50,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            sort.ApplyBaseSort(query);
+            query = filter.ApplySortType(filter.SortBy, query);
 
             #endregion
 

@@ -15,9 +15,10 @@ namespace OrganicShop.DAL.Configurations
         public void Configure(EntityTypeBuilder<Picture> builder)
         {
           
-
-
             builder.HasOne<Product>(a => a.Product).WithMany(a => a.Pictures).HasForeignKey(a => a.ProductId);
+            builder.HasOne(a => a.Category).WithOne(a => a.Picture).HasForeignKey<Picture>(a => a.CategoryPictureId);
+            builder.HasOne(a => a.User).WithOne(a => a.Picture).HasForeignKey<Picture>(a => a.UserPictureId);
+
 
 
             builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);

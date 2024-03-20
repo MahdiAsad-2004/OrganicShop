@@ -31,10 +31,10 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index(FilterPropertyDto filter , SortPropertyDto sort, PagingDto paging)
+        public async Task<IActionResult> Index(FilterPropertyDto filter, PagingDto paging)
         {
             filter.IsBase = true;
-            var pageDto = await _PropertyService.GetAll(filter, sort, paging);
+            var pageDto = await _PropertyService.GetAll(filter, paging);
             return View(pageDto);
         }
 

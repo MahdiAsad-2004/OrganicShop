@@ -13,10 +13,15 @@ namespace OrganicShop.Domain.Entities
     { 
         public string Name { get; set; }
         public float SizeMB { get; set; }
+        public bool IsMain { get; set; }
         public long? ProductId { get; set; }
+        public long? UserPictureId { get; set; }
+        public int? CategoryPictureId { get; set; }
 
 
         public Product? Product { get; set; }
+        public User? User { get; set; }
+        public Category? Category { get; set; }
 
     }
 }

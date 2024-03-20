@@ -8,16 +8,19 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Enums
 {
-    public enum BaseSortType
+    public enum OrderSortType
     {
-        None = 0,
+        None,
 
-        Newest = 1,
+        Newest,
 
-        LatestChange = 2,
+        LatestChange,
 
-        Oldest = 3,
+        Oldest,
 
-        LatestDelete = 4,
+
+        TotalPrice,
+
+        TotalPriceDesc,
     }
 }

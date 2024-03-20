@@ -35,13 +35,11 @@ namespace OrganicShop.BLL.Services
 
 
 
-        public async Task<ServiceResponse<PageDto<Permission,PermissionListDto,byte>>> GetAll(FilterPermissionDto? filter = null,
-            SortPermissionDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Permission,PermissionListDto,byte>>> GetAll(FilterPermissionDto? filter = null,PagingDto? paging = null)
         {
             var query = _PermissionRepository.GetQueryable();
 
             if (filter == null) filter = new FilterPermissionDto();
-            if (sort == null) sort = new SortPermissionDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -63,13 +61,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            sort.ApplyBaseSort(query);
-
-            if (sort.Title == SortOrder.Ascending) query = query.OrderBy(o => o.Title);
-            if (sort.Title == SortOrder.Descending) query = query.OrderByDescending(o => o.Title);
-
-            if (sort.EnTitle == SortOrder.Ascending) query = query.OrderBy(o => o.EnTitle);
-            if (sort.EnTitle == SortOrder.Descending) query = query.OrderByDescending(o => o.EnTitle);
+            query = filter.ApplySortType(query);
 
             #endregion
 

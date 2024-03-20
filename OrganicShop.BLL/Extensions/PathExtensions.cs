@@ -13,7 +13,9 @@ namespace OrganicShop.BLL.Extensions
 
         public static string CategoryImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\category\\");
 
-        public static string UserImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\user\\");
+        public static string UserImages = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\user\\");
+        
+        public static string UserImageDefault = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\user\\user.png");
 
         public static string ProductImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\product\\");
 

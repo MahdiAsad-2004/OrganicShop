@@ -41,18 +41,24 @@ function ShowLoading() {
     loadingBackground.style.height = '' + document.body.clientHeight + 'px';
     loadingBackground.style.display = 'block';
     loadingSvg.style.display = 'block';
-    //console.log('show');
+    console.log('show');
 }
 
 function HideLoading() {
     loadingBackground.style.display = 'none';
     loadingSvg.style.display = 'none';
-    //console.log('hide');
+    console.log('hide');
 }
 
 //let myPromise = new Promise(ShowLoading);
 
 
+
+//document.getElementById('asdf').onclick = () => {
+//    loadingBackground.style.display = 'block';
+//    loadingSvg.style.display = 'block';
+//    console.log(loadingBackground);
+//}
 
 
 
@@ -130,6 +136,7 @@ let fetchResponse = null;
 let formElem = document.createElement('form');
 let formMethod;
 async function FetchRquest(e) {
+    ShowLoading();
     e.preventDefault();
     formElem = e.target;
     try
@@ -146,7 +153,7 @@ async function FetchRquest(e) {
         Toast('Warning', 'An error was thrown from client',2,5000);
         console.log(er);
     }
-
+    HideLoading();
 }
 
 

@@ -1,5 +1,8 @@
 ﻿using OrganicShop.Domain.Dtos.Base;
 using OrganicShop.Domain.Entities;
+using OrganicShop.Domain.Entities.Base;
+using OrganicShop.Domain.Enums;
+using OrganicShop.Domain.Enums.SortTypes;
 
 namespace OrganicShop.Domain.Dtos.DiscountDtos
 {
@@ -9,6 +12,59 @@ namespace OrganicShop.Domain.Dtos.DiscountDtos
         public long? ProductId { get; set; }
         public bool? IsDefault { get; set; }
         public bool? IsPercent { get; set; }
+        public DiscountSortType SortBy { get; set; } = DiscountSortType.None;
+
+
+
+        public IQueryable<Discount> ApplySortType(IQueryable<Discount> query)
+        {
+
+            switch (SortBy)
+            {
+                case DiscountSortType.None:
+                    break;
+
+                case DiscountSortType.Newest:
+                    query = query.OrderByDescending(a => a.Id);
+                    break;
+
+                case DiscountSortType.LatestChange:
+                    query = query.OrderByDescending(a => a.BaseEntity.LastModified);
+                    break;
+
+                case DiscountSortType.Oldest:
+                    query = query.OrderBy(a => a.Id);
+                    break;
+
+                case DiscountSortType.Percent:
+                    query = query.OrderBy(a => a.Percent);
+                    break;
+
+                case DiscountSortType.PercentDesc:
+                    query = query.OrderByDescending(a => a.Percent);
+                    break;
+
+                case DiscountSortType.FixedValue:
+                    query = query.OrderBy(a => a.FixedValue);
+                    break;
+
+                case DiscountSortType.FixedValueDesc:
+                    query = query.OrderByDescending(a => a.FixedValue);
+                    break;
+
+                case DiscountSortType.Count:
+                    query = query.OrderBy(a => a.Count);
+                    break;
+
+                case DiscountSortType.CountDesc:
+                    query = query.OrderByDescending(a => a.Count);
+                    break;
+
+
+            }
+
+            return query;
+        }
 
     }
 

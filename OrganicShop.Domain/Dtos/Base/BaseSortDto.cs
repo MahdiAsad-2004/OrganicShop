@@ -1,5 +1,5 @@
 ﻿using OrganicShop.Domain.Entities.Base;
-using OrganicShop.Domain.Enums;
+using OrganicShop.Domain.Enums.SortTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,9 +35,9 @@ namespace OrganicShop.Domain.Dtos.Base
                     query = query.OrderBy(a => a.Id);
                     break;
 
-                case BaseSortType.LatestDelete:
-                    query = query.OrderByDescending(a => a.BaseEntity.DeleteDate);
-                    break;
+                //case BaseSortType.LatestDelete:
+                //    query = query.OrderByDescending(a => a.BaseEntity.DeleteDate);
+                //    break;
             }
 
             return query;

@@ -8,7 +8,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IUserService : IService<User>
     {
-        Task<ServiceResponse<PageDto<User, UserListDto, long>>> GetAll(FilterUserDto? filter = null, SortUserDto? sort = null, PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<User, UserListDto, long>>> GetAll(FilterUserDto? filter = null,PagingDto? paging = null);
         
         Task<UserListDto> Get(long id);
 

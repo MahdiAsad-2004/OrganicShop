@@ -14,12 +14,17 @@ namespace OrganicShop.Mvc.ValidationsAttributes
 
         }
 
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+        {
+            return ValidationResult.Success;
+        }
+
 
         public void AddValidation(ClientModelValidationContext context)
         {
             context.Attributes.Add("data-val-maxSize", $"حداکثر سایز {FieldName} KB {Size} است");
             context.Attributes.Add("data-val-maxSize-max", $"{Size}");
-            context.Attributes.Add("data-val", "true");
+            context.Attributes.TryAdd("data-val", "true");
 
         }
 

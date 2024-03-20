@@ -33,13 +33,11 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<ServiceResponse<PageDto<Category, CategoryListDto, int>>> GetAll
-            (FilterCategoryDto? filter = null, SortCategoryDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Category, CategoryListDto, int>>> GetAll(FilterCategoryDto? filter = null, PagingDto? paging = null)
         {
             var query = _CategoryRepository.GetQueryable();
 
             if (filter == null) filter = new FilterCategoryDto();
-            if (sort == null) sort = new SortCategoryDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -56,10 +54,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            sort.ApplyBaseSort(query);
-
-            if (sort.Title == SortOrder.Ascending) query = query.OrderBy(o => o.Title);
-            if (sort.Title == SortOrder.Descending) query = query.OrderByDescending(o => o.Title);
+            query = filter.ApplySortType(query);
 
             #endregion
 
@@ -83,7 +78,8 @@ namespace OrganicShop.BLL.Services
             Category = _Mapper.Map<Category>(create);
 
             //// Saving Image
-            Category.Image = await create.ImageFile.SaveFile(PathExtensions.CategoryImage);
+            Category.Picture = await create.ImageFile.SaveFileAsync(PathExtensions.CategoryImage);
+            Category.Picture.IsMain = true;
 
             await _CategoryRepository.Add(Category, _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
@@ -119,7 +115,10 @@ namespace OrganicShop.BLL.Services
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             if(update.ImageFile != null)
-                Category.Image = await update.ImageFile.SaveFile(PathExtensions.CategoryImage);
+            {
+                Category.Picture = await update.ImageFile.SaveFileAsync(PathExtensions.CategoryImage);
+                Category.Picture.IsMain = true;
+            }
 
             await _CategoryRepository.Update(_Mapper.Map(update,Category), _AppUserProvider.User.Id);
 

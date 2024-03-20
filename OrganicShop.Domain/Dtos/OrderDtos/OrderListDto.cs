@@ -1,4 +1,5 @@
 ﻿using OrganicShop.Domain.Dtos.Base;
+using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.OrderDtos
@@ -12,6 +13,7 @@ namespace OrganicShop.Domain.Dtos.OrderDtos
         public string TrackingCode { get; set; }
         public DeliveryType DeliveryType { get; set; }
         public OrderStatus OrderStatus { get; set; }
+       
     }
 
 

@@ -9,6 +9,7 @@ using OrganicShop.Domain.Dtos.Combo;
 using OrganicShop.Mvc.Models.Toast;
 using OrganicShop.Mvc.Extensions;
 using System.Text.Json;
+using OrganicShop.Domain.Dtos.Base;
 
 namespace OrganicShop.Mvc.Areas.Admin.Controllers
 {
@@ -30,14 +31,24 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index(FilterUserDto filter, SortUserDto sort, PagingDto paging)
+        public async Task<IActionResult> Index(FilterUserDto filter, PagingDto paging)
         {
-            var pageDto = await _UserService.GetAll(filter, sort, paging);
+            var response = await _UserService.GetAll(filter, paging);
 
-            //ToastTempData(new Toast(ToastType.Info , "" ,6000));
+            switch (response.Result)
+            {
+                case ResponseResult.Success:
+                    return View(response.Data);
 
-            return View(pageDto);
-            //return View(new PageDto<User,UserListDto,long>());
+                case ResponseResult.NoAccess:
+                    return Forbid();
+
+                case ResponseResult.NotFound:
+                    return NotFoundPage();
+
+                default:
+                    return BadRequest();
+            }
         }
 
 
@@ -45,8 +56,7 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewData["Permissions"] = await _PermissionService.GetCombos();
-            Response.Headers.Add("MyHeaderKey", "MyHeaderValue");
+            ViewData["Permissions"] = (await _PermissionService.GetCombos()).Data;
             return View();
         }
 
@@ -58,15 +68,17 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
             if (createUser != null)
             {
                 var response = await _UserService.Create(createUser);
-                if(response.Result == ResponseResult.Success)
+                if (response.Result == ResponseResult.Success)
                 {
-
+                    ToastOnTempData(new Toast(ToastType.Success, response.Message));
+                    return Refresh();
                 }
-                
+                ToastOnTempData(new Toast(ToastType.Error, response.Message,7000));
+                return Refresh();
             }
             else
             {
-                ViewData["Permissions"] = await _PermissionService.GetCombos();
+                ViewData["Permissions"] = (await _PermissionService.GetCombos()).Data;
             }
             return View();
         }

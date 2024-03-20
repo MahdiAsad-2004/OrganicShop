@@ -29,13 +29,11 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<ServiceResponse<PageDto<Comment, CommentListDto, long>>> GetAll
-            (FilterCommentDto? filter = null, SortCommentDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Comment, CommentListDto, long>>> GetAll(FilterCommentDto? filter = null, PagingDto? paging = null)
         {
             var query = _CommentRepository.GetQueryable();
 
             if (filter == null) filter = new FilterCommentDto();
-            if (sort == null) sort = new SortCommentDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -52,10 +50,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            sort.ApplyBaseSort(query);
-
-            if (sort.Rate == SortOrder.Ascending) query = query.OrderBy(o => o.Rate);
-            if (sort.Rate == SortOrder.Descending) query = query.OrderByDescending(o => o.Rate);
+            query = filter.ApplySortType(query);
 
             #endregion
 

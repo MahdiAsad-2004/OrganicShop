@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using OrganicShop.Domain.Entities;
+using OrganicShop.Domain.Entities.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +38,27 @@ namespace OrganicShop.BLL.Extensions
             return fileName;
         }
 
+
+
+        public static async Task<Picture> SaveFileAsync(this IFormFile file, string path)
+        {
+
+            var fileName = $"{Guid.NewGuid().ToString().Replace("-", "").Substring(1, 16)}{Path.GetExtension(file.FileName)}";
+
+            string filePath = Path.Combine(path, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.CreateNew))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return new Picture
+            {
+                Name = fileName,
+                SizeMB = file.Length / 1024 / 1000,
+                BaseEntity = new BaseEntity(true),
+            };
+        }
 
     }
 }

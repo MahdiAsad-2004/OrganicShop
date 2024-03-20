@@ -33,13 +33,11 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<ServiceResponse<PageDto<CoProduct, CoProductListDto, long>>> GetAll
-            (FilterCoProductDto? filter = null, SortCoProductDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<CoProduct, CoProductListDto, long>>> GetAll(FilterCoProductDto? filter = null, PagingDto? paging = null)
         {
             var query = _CoProductRepository.GetQueryable();
 
             if (filter == null) filter = new FilterCoProductDto();
-            if (sort == null) sort = new SortCoProductDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -62,13 +60,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            sort.ApplyBaseSort(query);
-
-            if (sort.Price == SortOrder.Ascending) query = query.OrderBy(o => o.Price);
-            if (sort.Price == SortOrder.Descending) query = query.OrderByDescending(o => o.Price);
-
-            if (sort.Count == SortOrder.Ascending) query = query.OrderBy(o => o.Count);
-            if (sort.Count == SortOrder.Descending) query = query.OrderByDescending(o => o.Count);
+            query = filter.ApplySortType(query);
 
             #endregion
 

@@ -7,7 +7,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IPictureService : IService<Picture>
     {
-        Task<ServiceResponse<PageDto<Picture, PictureListDto, long>>> GetAll(FilterPictureDto? filter = null , SortPictureDto? sort = null , PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Picture, PictureListDto, long>>> GetAll(FilterPictureDto? filter = null ,PagingDto? paging = null);
 
         Task<ServiceResponse<Empty>> Create(CreatePictureDto create);
 

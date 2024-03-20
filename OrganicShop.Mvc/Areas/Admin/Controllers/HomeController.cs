@@ -9,5 +9,19 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         {
             return View();
         }
+
+
+
+        public async Task<IActionResult> Test()
+        {
+            var t = new Toast(ToastType.Info, "Hiiiiii");
+            
+            return _ClientHandleResult.PartialThenToast(HttpContext,PartialView("Index"),t);
+        }
+
+
+        
+
+
     }
 }

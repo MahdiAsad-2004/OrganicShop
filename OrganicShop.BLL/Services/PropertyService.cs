@@ -32,13 +32,11 @@ namespace OrganicShop.BLL.Services
 
         
 
-        public async Task<ServiceResponse<PageDto<Property, PropertyListDto, int>>> GetAll
-            (FilterPropertyDto? filter = null, SortPropertyDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Property, PropertyListDto, int>>> GetAll(FilterPropertyDto? filter = null,PagingDto? paging = null)
         {
             var query = _PropertyRepository.GetQueryable();
 
             if (filter == null) filter = new FilterPropertyDto();
-            if (sort == null) sort = new SortPropertyDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -55,13 +53,9 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            query = sort.ApplyBaseSort(query);
-
-            if (sort.Priority == SortOrder.Ascending) query = query.OrderBy(o => o.Priority); 
-            if (sort.Priority == SortOrder.Descending) query = query.OrderByDescending(o => o.Priority);
+            query = filter.ApplySortType(filter.SortBy,query);
 
             #endregion
-
 
             PageDto<Property, PropertyListDto, int> pageDto = new();
             pageDto.List = pageDto.SetPaging(query,paging).Select(a => _Mapper.Map<PropertyListDto>(a)).ToList();

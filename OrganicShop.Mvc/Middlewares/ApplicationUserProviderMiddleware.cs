@@ -74,6 +74,35 @@ namespace OrganicShop.Mvc.Middlewares
 
 
 
+    //public class MyMiddleware
+    //{
+    //    private readonly RequestDelegate _next;
+    //    private readonly WebApplication _application;
+
+    //    public MyMiddleware(RequestDelegate next, WebApplication application)
+    //    {
+    //        _next = next;
+    //        _application = application;
+    //    }
+
+
+
+    //    public async Task Invoke(HttpContext httpContext)
+    //    {
+
+    //        await _next(httpContext);
+
+    //        await httpContext.Response.WriteAsync("Before Hello from ");
+    //        httpContext.Response.ContentType = "text/html";
+    //        httpContext.Response.StatusCode = 401;
+           
+
+
+    //    }
+
+    //}
+
+
 
 
 

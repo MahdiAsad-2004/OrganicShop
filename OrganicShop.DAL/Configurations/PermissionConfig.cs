@@ -25,142 +25,185 @@ namespace OrganicShop.DAL.Configurations
 
             builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);
 
-
-
-
             builder.HasData(PermissionsSeed.Permissions);
 
-            //-----------------------------------------------------------------
-
-            //builder.HasData(new Permission
-            //{
-            //    Id = 1,
-            //    Title = "مدیر سایت",
-            //    EnTitle = "Main Admin",
-            //});
-            builder.OwnsOne(a => a.BaseEntity).HasData(new
+            var permissionsBaseEntity = new List<object>();
+            
+            foreach (var item in PermissionsSeed.Permissions)
             {
-                PermissionId = (byte)1,
-                CreateDate = DateTime.Now,
-                LastModified = DateTime.Now,
-                IsActive = true,
-                IsDelete = false,
-            });
+               permissionsBaseEntity.Add(new
+               {
+                   PermissionId = (byte)item.Id,
+                   CreateDate = DateTime.Now,
+                   LastModified = DateTime.Now,
+                   IsActive = true,
+                   IsDelete = false,
+               });
+            }
 
-            //------------------------------------------------------------------
+            builder.OwnsOne(a => a.BaseEntity).HasData(permissionsBaseEntity);
 
-            //builder.HasData(new Permission
+
+
+
+
+
+
+
+
+            //foreach (var item in PermissionsSeed.Permissions)
             //{
-            //    Id = 2,
-            //    Title = "مدیریت کاربران",
-            //    EnTitle = "Users Admin",
-            //    ParentId = 1,
-            //});
-            builder.OwnsOne(a => a.BaseEntity).HasData(new
-            {
-                PermissionId = (byte)2,
-                CreateDate = DateTime.Now,
-                LastModified = DateTime.Now,
-                IsActive = true,
-                IsDelete = false,
-            });
+            //    builder.OwnsOne(a => a.BaseEntity).HasData(new
+            //    {
+            //        PermissionId = (byte)item.Id,
+            //        CreateDate = DateTime.Now,
+            //        LastModified = DateTime.Now,
+            //        IsActive = true,
+            //        IsDelete = false,
+            //    });
+            //}
 
-            //-----------------------------------------------------------------
 
-            //builder.HasData(new Permission
+            ////-----------------------------------------------------------------
+
+            ////builder.HasData(new Permission
+            ////{
+            ////    Id = 1,
+            ////    Title = "مدیر سایت",
+            ////    EnTitle = "Main Admin",
+            ////});
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
             //{
-            //    Id = 3,
-            //    Title = "مدیریت محصولات",
-            //    EnTitle = "Products Admin",
-            //    ParentId = 1,
+            //    PermissionId = (byte)1,
+            //    CreateDate = DateTime.Now,
+            //    LastModified = DateTime.Now,
+            //    IsActive = true,
+            //    IsDelete = false,
             //});
-            builder.OwnsOne(a => a.BaseEntity).HasData(new
-            {
-                PermissionId = (byte)3,
-                CreateDate = DateTime.Now,
-                LastModified = DateTime.Now,
-                IsActive = true,
-                IsDelete = false,
-            });
 
-            //-----------------------------------------------------------------
+            ////------------------------------------------------------------------
 
-            //builder.HasData(new Permission
+            ////builder.HasData(new Permission
+            ////{
+            ////    Id = 2,
+            ////    Title = "مدیریت کاربران",
+            ////    EnTitle = "Users Admin",
+            ////    ParentId = 1,
+            ////});
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
             //{
-            //    Id = 4,
-            //    Title = "مدیریت مجوز ها",
-            //    EnTitle = "Permissions Admin",
-            //    ParentId = 1,
-
+            //    PermissionId = (byte)2,
+            //    CreateDate = DateTime.Now,
+            //    LastModified = DateTime.Now,
+            //    IsActive = true,
+            //    IsDelete = false,
             //});
-            builder.OwnsOne(a => a.BaseEntity).HasData(new
-            {
-                PermissionId = (byte)4,
-                CreateDate = DateTime.Now,
-                LastModified = DateTime.Now,
-                IsActive = true,
-                IsDelete = false,
-            });
 
-            //-----------------------------------------------------------------
+            ////-----------------------------------------------------------------
 
-            //builder.HasData(new Permission
+            ////builder.HasData(new Permission
+            ////{
+            ////    Id = 3,
+            ////    Title = "مدیریت محصولات",
+            ////    EnTitle = "Products Admin",
+            ////    ParentId = 1,
+            ////});
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
             //{
-            //    Id = 5,
-            //    Title = "مدیریت نظرات",
-            //    EnTitle = "Comments Admin",
-            //    ParentId = 1,
-
+            //    PermissionId = (byte)3,
+            //    CreateDate = DateTime.Now,
+            //    LastModified = DateTime.Now,
+            //    IsActive = true,
+            //    IsDelete = false,
             //});
-            builder.OwnsOne(a => a.BaseEntity).HasData(new
-            {
-                PermissionId = (byte)5,
-                CreateDate = DateTime.Now,
-                LastModified = DateTime.Now,
-                IsActive = true,
-                IsDelete = false,
-            });
 
-            //-----------------------------------------------------------------
+            ////-----------------------------------------------------------------
 
-            //builder.HasData(new Permission
+            ////builder.HasData(new Permission
+            ////{
+            ////    Id = 4,
+            ////    Title = "مدیریت مجوز ها",
+            ////    EnTitle = "Permissions Admin",
+            ////    ParentId = 1,
+
+            ////});
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
             //{
-            //    Id = 6,
-            //    Title = "مدیریت تخفیف ها",
-            //    EnTitle = "Discounts Admin",
-            //    ParentId = 1,
-
+            //    PermissionId = (byte)4,
+            //    CreateDate = DateTime.Now,
+            //    LastModified = DateTime.Now,
+            //    IsActive = true,
+            //    IsDelete = false,
             //});
-            builder.OwnsOne(a => a.BaseEntity).HasData(new
-            {
-                PermissionId = (byte)6,
-                CreateDate = DateTime.Now,
-                LastModified = DateTime.Now,
-                IsActive = true,
-                IsDelete = false,
-            });
 
-            //-----------------------------------------------------------------
+            ////-----------------------------------------------------------------
 
-            //builder.HasData(new Permission
+            ////builder.HasData(new Permission
+            ////{
+            ////    Id = 5,
+            ////    Title = "مدیریت نظرات",
+            ////    EnTitle = "Comments Admin",
+            ////    ParentId = 1,
+
+            ////});
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
             //{
-            //    Id = 7,
-            //    Title = "صدور مجوز",
-            //    EnTitle = "Giving Permission",
-            //    ParentId = 4,
-
+            //    PermissionId = (byte)5,
+            //    CreateDate = DateTime.Now,
+            //    LastModified = DateTime.Now,
+            //    IsActive = true,
+            //    IsDelete = false,
             //});
-            builder.OwnsOne(a => a.BaseEntity).HasData(new
-            {
-                PermissionId = (byte)7,
-                CreateDate = DateTime.Now,
-                LastModified = DateTime.Now,
-                IsActive = true,
-                IsDelete = false,
-            });
 
-            //-----------------------------------------------------------------
+            ////-----------------------------------------------------------------
 
+            ////builder.HasData(new Permission
+            ////{
+            ////    Id = 6,
+            ////    Title = "مدیریت تخفیف ها",
+            ////    EnTitle = "Discounts Admin",
+            ////    ParentId = 1,
+
+            ////});
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
+            //{
+            //    PermissionId = (byte)6,
+            //    CreateDate = DateTime.Now,
+            //    LastModified = DateTime.Now,
+            //    IsActive = true,
+            //    IsDelete = false,
+            //});
+
+            ////-----------------------------------------------------------------
+
+            ////builder.HasData(new Permission
+            ////{
+            ////    Id = 7,
+            ////    Title = "صدور مجوز",
+            ////    EnTitle = "Giving Permission",
+            ////    ParentId = 4,
+
+            ////});
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
+            //{
+            //    PermissionId = (byte)7,
+            //    CreateDate = DateTime.Now,
+            //    LastModified = DateTime.Now,
+            //    IsActive = true,
+            //    IsDelete = false,
+            //});
+
+
+            ////-----------------------------------------------------------------
+
+            //builder.OwnsOne(a => a.BaseEntity).HasData(new
+            //{
+            //    PermissionId = (byte)8,
+            //    CreateDate = DateTime.Now,
+            //    LastModified = DateTime.Now,
+            //    IsActive = true,
+            //    IsDelete = false,
+            //});
         }
     }
 }

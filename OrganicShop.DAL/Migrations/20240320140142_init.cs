@@ -37,7 +37,8 @@ namespace OrganicShop.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EnTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IconClass = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IconColor = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false),
                     ParentId = table.Column<int>(type: "int", nullable: true),
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -451,14 +452,17 @@ namespace OrganicShop.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductImages",
+                name: "Picture",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SizeMB = table.Column<float>(type: "real", nullable: false),
+                    IsMain = table.Column<bool>(type: "bit", nullable: false),
                     ProductId = table.Column<long>(type: "bigint", nullable: true),
+                    UserPictureId = table.Column<long>(type: "bigint", nullable: true),
+                    CategoryPictureId = table.Column<int>(type: "int", nullable: true),
                     BaseEntity_CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseEntity_IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -467,11 +471,21 @@ namespace OrganicShop.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductImages", x => x.Id);
+                    table.PrimaryKey("PK_Picture", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductImages_Products_ProductId",
+                        name: "FK_Picture_Categories_CategoryPictureId",
+                        column: x => x.CategoryPictureId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Picture_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Picture_Users_UserPictureId",
+                        column: x => x.UserPictureId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
@@ -659,20 +673,20 @@ namespace OrganicShop.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "ContactUs",
                 columns: new[] { "Id", "Address", "Description", "Email1", "Email2", "Office1", "Office2", "Office3", "Phone1", "Phone2", "Phone3", "PhoneNumber1", "PhoneNumber2", "PhoneNumber3", "BaseEntity_CreateDate", "BaseEntity_DeleteDate", "BaseEntity_IsActive", "BaseEntity_IsDelete", "BaseEntity_LastModified" },
-                values: new object[] { (byte)1, "Address", "Descriptions", "OrganicShop@gmail.com", null, "Tehran", null, null, "02134658899", null, null, "09121234455", null, null, new DateTime(2024, 3, 5, 18, 1, 13, 979, DateTimeKind.Local).AddTicks(4759), null, true, false, new DateTime(2024, 3, 5, 18, 1, 13, 979, DateTimeKind.Local).AddTicks(4817) });
+                values: new object[] { (byte)1, "Address", "Descriptions", "OrganicShop@gmail.com", null, "Tehran", null, null, "02134658899", null, null, "09121234455", null, null, new DateTime(2024, 3, 20, 17, 31, 41, 945, DateTimeKind.Local).AddTicks(4988), null, true, false, new DateTime(2024, 3, 20, 17, 31, 41, 945, DateTimeKind.Local).AddTicks(5108) });
 
             migrationBuilder.InsertData(
                 table: "Permissions",
                 columns: new[] { "Id", "EnTitle", "ParentId", "Title", "BaseEntity_CreateDate", "BaseEntity_DeleteDate", "BaseEntity_IsActive", "BaseEntity_IsDelete", "BaseEntity_LastModified" },
-                values: new object[] { (byte)1, "Main Admin", null, "مدیر سایت", new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3105), null, true, false, new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3150) });
+                values: new object[] { (byte)1, "Main Admin", null, "مدیر سایت", new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1905), null, true, false, new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1948) });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "Name", "Password", "PhoneNumber", "ProfileImage", "Role", "BaseEntity_CreateDate", "BaseEntity_DeleteDate", "BaseEntity_IsActive", "BaseEntity_IsDelete", "BaseEntity_LastModified" },
                 values: new object[,]
                 {
-                    { 1L, "mas1379as@gmail.com", "Mahdi Asadi", "123456", "09369753041", "joker.jpg", 2, new DateTime(2024, 3, 5, 18, 1, 13, 989, DateTimeKind.Local).AddTicks(1690), null, true, false, new DateTime(2024, 3, 5, 18, 1, 13, 989, DateTimeKind.Local).AddTicks(1731) },
-                    { 2L, "TestEmail@gmail.com", "AmirAli", "1234", "09331234566", null, 3, new DateTime(2024, 3, 5, 18, 1, 13, 989, DateTimeKind.Local).AddTicks(1854), null, true, true, new DateTime(2024, 3, 5, 18, 1, 13, 989, DateTimeKind.Local).AddTicks(1860) }
+                    { 1L, "mas1379as@gmail.com", "Mahdi Asadi", "123456", "09369753041", "joker.jpg", 2, new DateTime(2024, 3, 20, 17, 31, 41, 956, DateTimeKind.Local).AddTicks(8981), null, true, false, new DateTime(2024, 3, 20, 17, 31, 41, 956, DateTimeKind.Local).AddTicks(9032) },
+                    { 2L, "TestEmail@gmail.com", "AmirAli", "1234", "09331234566", null, 3, new DateTime(2024, 3, 20, 17, 31, 41, 956, DateTimeKind.Local).AddTicks(9167), null, true, true, new DateTime(2024, 3, 20, 17, 31, 41, 956, DateTimeKind.Local).AddTicks(9174) }
                 });
 
             migrationBuilder.InsertData(
@@ -680,12 +694,13 @@ namespace OrganicShop.DAL.Migrations
                 columns: new[] { "Id", "EnTitle", "ParentId", "Title", "BaseEntity_CreateDate", "BaseEntity_DeleteDate", "BaseEntity_IsActive", "BaseEntity_IsDelete", "BaseEntity_LastModified" },
                 values: new object[,]
                 {
-                    { (byte)2, "Users Admin", (byte)1, "مدیریت کاربران", new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3261), null, true, false, new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3267) },
-                    { (byte)3, "Products Admin", (byte)1, "مدیریت محصولات", new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3361), null, true, false, new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3366) },
-                    { (byte)4, "Permissions Admin", (byte)1, "مدیریت مجوز ها", new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3444), null, true, false, new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3448) },
-                    { (byte)5, "Comments Admin", (byte)1, "مدیریت نظرات", new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3519), null, true, false, new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3523) },
-                    { (byte)6, "Discounts Admin", (byte)1, "مدیریت تخفیف ها", new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3590), null, true, false, new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3594) },
-                    { (byte)7, "Giving Permission", (byte)4, "صدور مجوز", new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3673), null, true, false, new DateTime(2024, 3, 5, 18, 1, 13, 985, DateTimeKind.Local).AddTicks(3693) }
+                    { (byte)2, "Users Admin", (byte)1, "مدیریت کاربران", new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1963), null, true, false, new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1965) },
+                    { (byte)3, "Products Admin", (byte)1, "مدیریت محصولات", new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1975), null, true, false, new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1977) },
+                    { (byte)4, "Permissions Admin", (byte)1, "مدیریت مجوز ها", new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1985), null, true, false, new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1987) },
+                    { (byte)5, "Comments Admin", (byte)1, "مدیریت نظرات", new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1992), null, true, false, new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1994) },
+                    { (byte)6, "Discounts Admin", (byte)1, "مدیریت تخفیف ها", new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(1998), null, true, false, new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(2000) },
+                    { (byte)7, "Categories Admin", (byte)1, "مدیریت دسته ها", new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(2003), null, true, false, new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(2028) },
+                    { (byte)8, "Giving Permission", (byte)4, "صدور مجوز", new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(2031), null, true, false, new DateTime(2024, 3, 20, 17, 31, 41, 951, DateTimeKind.Local).AddTicks(2033) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -779,9 +794,23 @@ namespace OrganicShop.DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductImages_ProductId",
-                table: "ProductImages",
+                name: "IX_Picture_CategoryPictureId",
+                table: "Picture",
+                column: "CategoryPictureId",
+                unique: true,
+                filter: "[CategoryPictureId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Picture_ProductId",
+                table: "Picture",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Picture_UserPictureId",
+                table: "Picture",
+                column: "UserPictureId",
+                unique: true,
+                filter: "[UserPictureId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -843,7 +872,7 @@ namespace OrganicShop.DAL.Migrations
                 name: "PermissionUsers");
 
             migrationBuilder.DropTable(
-                name: "ProductImages");
+                name: "Picture");
 
             migrationBuilder.DropTable(
                 name: "ProductTag");

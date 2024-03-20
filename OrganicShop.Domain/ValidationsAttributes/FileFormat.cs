@@ -20,17 +20,16 @@ namespace OrganicShop.Mvc.ValidationsAttributes
             FormatsString = string.Join("/", Formats);
         }
 
-        public override bool IsValid(object? value)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            return true;
+            return ValidationResult.Success;
         }
-
 
         public void AddValidation(ClientModelValidationContext context)
         {
             context.Attributes.Add("data-val-fileFormat", $"فرمت {FieldName} {string.Join(" / ", Formats)} نیست");
             context.Attributes.Add("data-val-fileFormat-formats", $"{FormatsString}");
-            context.Attributes.Add("data-val", "true");
+            context.Attributes.TryAdd("data-val", "true");
 
         }
 

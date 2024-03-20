@@ -29,13 +29,11 @@ namespace OrganicShop.BLL.Services
         #endregion
 
 
-        public async Task<ServiceResponse<PageDto<Faq, FaqListDto, byte>>> GetAll
-            (FilterFaqDto? filter = null, SortFaqDto? sort = null, PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Faq, FaqListDto, byte>>> GetAll(FilterFaqDto? filter = null, PagingDto? paging = null)
         {
             var query = _FaqRepository.GetQueryable();
 
             if (filter == null) filter = new FilterFaqDto();
-            if (sort == null) sort = new SortFaqDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -52,7 +50,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            sort.ApplyBaseSort(query);
+            query = filter.ApplySortType(filter.SortBy,query);
 
             #endregion
 

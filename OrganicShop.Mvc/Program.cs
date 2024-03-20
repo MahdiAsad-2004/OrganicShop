@@ -10,6 +10,7 @@ using OrganicShop.Mvc.Middlewares;
 using OrganicShop.BLL.Providers;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Mvc.Controllers.Base;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +59,7 @@ app.UseAuthorization();
 app.UseMiddleware<ApplicationUserProviderMiddleware>(app);
 
 
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -66,6 +68,9 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+
+
 
 
 
@@ -89,5 +94,5 @@ void RegisterServices(IServiceCollection services)
 
 
 
-
 app.Run();
+

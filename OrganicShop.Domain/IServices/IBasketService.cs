@@ -7,7 +7,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IBasketService : IService<Basket>
     {
-        Task<ServiceResponse<PageDto<Basket, BasketListDto, long>>> GetAll(FilterBasketDto? filter = null, SortBasketDto? sort = null, PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Basket, BasketListDto, long>>> GetAll(FilterBasketDto? filter = null, PagingDto? paging = null);
 
         Task<ServiceResponse<Empty>> Create(CreateBasketDto create);
 

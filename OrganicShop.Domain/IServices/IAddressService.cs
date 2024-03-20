@@ -8,8 +8,7 @@ namespace OrganicShop.Domain.IServices
 {
     public interface IAddressService : IService<Address>
     {
-        Task<ServiceResponse<PageDto<Address, AddressListDto, long>>> GetAll
-            (FilterAddressDto? filter = null , SortAddressDto? sort = null , PagingDto? paging = null);
+        Task<ServiceResponse<PageDto<Address, AddressListDto, long>>> GetAll(FilterAddressDto? filter = null ,PagingDto? paging = null);
 
         Task<ServiceResponse<Empty>> Create(CreateAddressDto create);
 

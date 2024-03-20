@@ -35,12 +35,11 @@ namespace OrganicShop.BLL.Services
 
 
         public async Task<ServiceResponse<PageDto<TrackingDescription, TrackingDescriptionListDto, long>>> GetAll
-            (FilterTrackingDescriptionDto? filter = null ,SortTrackingDescriptionDto? sort = null , PagingDto? paging = null)
+            (FilterTrackingDescriptionDto? filter = null ,PagingDto? paging = null)
         {
             var query = _TrackingDescriptionRepository.GetQueryable();
 
             if (filter == null) filter = new FilterTrackingDescriptionDto();
-            if (sort == null) sort = new SortTrackingDescriptionDto();
             if (paging == null) paging = new PagingDto();
 
             #region filter
@@ -60,13 +59,7 @@ namespace OrganicShop.BLL.Services
 
             #region sort
 
-            sort.ApplyBaseSort(query);
-
-            if (sort.Title == SortOrder.Ascending) query = query.OrderBy(o => o.Title);
-            if (sort.Title == SortOrder.Descending) query = query.OrderByDescending(o => o.Title);
-
-            if (sort.Date == SortOrder.Ascending) query = query.OrderBy(o => o.Date);
-            if (sort.Date == SortOrder.Descending) query = query.OrderByDescending(o => o.Date);
+            query = filter.ApplySortType(query);
 
             #endregion
 

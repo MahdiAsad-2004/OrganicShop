@@ -33,6 +33,40 @@
 <!-- Theme js -->
 <script src="~/admin/assets/js/script.js"></script>
 
+<script>
+
+   
+
+    let IsfilterMenuOpen = false;
+    let filterMenuHeader = document.getElementsByClassName('filter-menu-header')[0];
+    let filterMenuForm = document.getElementsByClassName('filter-menu-form')[0];
+
+    function ToggleFilterMenu() {
+        console.log('toggle');
+        console.log(filterMenuForm);
+        console.log(IsfilterMenuOpen);
+
+
+        document.getElementsByClassName('filter-menu-form')[0].style.display = IsfilterMenuOpen ? 'none' : 'flex';
+        //filterMenuForm.style.display = IsfilterMenuOpen ? 'none' : 'flex';
+        IsfilterMenuOpen = !IsfilterMenuOpen;
+    }
+
+    let filterMenuInputs = document.getElementsByClassName('filter-menu-input');
+
+    for(var input of filterMenuInputs){
+        input.onfocus = (e) => {
+            e.target.style.border = '#0da487 3px solid';
+            e.target.previousElementSibling.style.fontWeight = '900';
+        };
+        input.onblur = (e) => {
+            e.target.style.border = '#0da487 1px solid';
+            e.target.previousElementSibling.style.fontWeight = '500';
+        };
+    }
+    
+
+</script>
 
 @* ------------------------------------------------------------ 9 Scripts --------------------------------------------------------- *@
 

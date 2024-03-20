@@ -1,4 +1,5 @@
 ﻿using OrganicShop.Domain.Dtos.Base;
+using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.OrderDtos
@@ -10,6 +11,40 @@ namespace OrganicShop.Domain.Dtos.OrderDtos
         public DeliveryType? DeliveryType { get; set; }
         public string? UserPhoneNumber { get; set; }
         public string? TrackingCode { get; set; }
+        public OrderSortType SortBy { get; set; } = OrderSortType.None;
+
+
+        public IQueryable<Order> ApplySortType(IQueryable<Order> query)
+        {
+
+            switch (SortBy)
+            {
+                case OrderSortType.None:
+                    break;
+
+                case OrderSortType.Newest:
+                    query = query.OrderByDescending(a => a.Id);
+                    break;
+
+                case OrderSortType.LatestChange:
+                    query = query.OrderByDescending(a => a.BaseEntity.LastModified);
+                    break;
+
+                case OrderSortType.Oldest:
+                    query = query.OrderBy(a => a.Id);
+                    break;
+
+                case OrderSortType.TotalPrice:
+                    query = query.OrderBy(a => a.TotalPrice);
+                    break;
+
+                case OrderSortType.TotalPriceDesc:
+                    query = query.OrderByDescending(a => a.TotalPrice);
+                    break;
+            }
+
+            return query;
+        }
     }
 
 
