@@ -1,5 +1,7 @@
 ﻿using MD.PersianDateTime;
 using System.Globalization;
+using System.Net.NetworkInformation;
+using System.Text;
 
 
 namespace OrganicShop.BLL.Extensions
@@ -66,6 +68,42 @@ namespace OrganicShop.BLL.Extensions
         }
 
 
+
+
+
+        public static string LogString<T>(this T obj)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            Console.WriteLine($"{typeof(T).Name}:");
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                stringBuilder.AppendLine($"\t{prop.Name}: {prop.GetValue(obj)}");
+            }
+            return stringBuilder.ToString();
+        }
+
+        public static async void LogAsync<T>(this T obj)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            Console.WriteLine($"{typeof(T).Name}:");
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                stringBuilder.AppendLine($"\t{prop.Name}: {prop.GetValue(obj)}");
+            }
+            await Console.Out.WriteLineAsync(stringBuilder.ToString());
+        }
+
+
+        public static void Log<T>(this T obj)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            Console.WriteLine($"{typeof(T).Name}:");
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                stringBuilder.AppendLine($"\t{prop.Name}: {prop.GetValue(obj)}");
+            }
+            Console.Out.WriteLine(stringBuilder.ToString());
+        }
 
     }
 }

@@ -10,6 +10,7 @@ using OrganicShop.Mvc.Models.Toast;
 using OrganicShop.Mvc.Extensions;
 using System.Text.Json;
 using OrganicShop.Domain.Dtos.Base;
+using OrganicShop.BLL.Extensions;
 
 namespace OrganicShop.Mvc.Areas.Admin.Controllers
 {
@@ -39,6 +40,33 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
             {
                 case ResponseResult.Success:
                     return View(response.Data);
+
+                case ResponseResult.NoAccess:
+                    return Forbid();
+
+                case ResponseResult.NotFound:
+                    return NotFoundPage();
+
+                default:
+                    return BadRequest();
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> UsersTable(FilterUserDto filter, PagingDto paging)
+        {
+            //return _ClientHandleResult.Json(HttpContext,paging);
+            //return _ClientHandleResult.Json(HttpContext,filter);
+            var response = await _UserService.GetAll(filter, paging);
+            filter.LogAsync();
+            paging.LogAsync();
+            //var response = await _UserService.GetAll();
+            
+            switch (response.Result)
+            {
+                case ResponseResult.Success:
+                    return _ClientHandleResult.Partial(HttpContext,PartialView("_UsersTable",response.Data), "users-partial");
 
                 case ResponseResult.NoAccess:
                     return Forbid();
@@ -82,6 +110,7 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
             }
             return View();
         }
+
 
 
         [HttpGet("Admin/User/{id}/Permissions")]

@@ -36,6 +36,7 @@ namespace OrganicShop.BLL.Services
         public async Task<ServiceResponse<PageDto<User, UserListDto, long>>> GetAll(FilterUserDto? filter = null,PagingDto? paging = null)
         {
             var query = _userRepository.GetQueryable()
+                .Include(a => a.Picture)
                 .AsQueryable();
 
             if (filter == null) filter = new FilterUserDto();
@@ -51,8 +52,11 @@ namespace OrganicShop.BLL.Services
             if (filter.PhoneNumber != null)
                 query = query.Where(a => EF.Functions.Like(a.PhoneNumber, $"%{filter.PhoneNumber}%"));
 
-            if (filter.Name != null)
+            if (filter.Email != null)
                 query = query.Where(a => EF.Functions.Like(a.Email, $"%{filter.Email}%"));
+
+            if(filter.Role != null)
+                query = query.Where(a => a.Role == filter.Role);
 
             #endregion
 
@@ -103,7 +107,7 @@ namespace OrganicShop.BLL.Services
                 }
             }
 
-            user.ProfileImage = create.ProfileImage != null ? await create.ProfileImage.SaveFile(PathExtensions.UserImages) : PathExtensions.UserImageDefault;
+            user.Picture = create.ProfileImage != null ? await create.ProfileImage.SaveFileAsync(PathExtensions.UserImages) : null;
 
             await _userRepository.Add(user,_AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
@@ -120,6 +124,9 @@ namespace OrganicShop.BLL.Services
             
             if (user == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
+
+            if(update.ProfileImage != null)
+                user.Picture =  await update.ProfileImage.SaveFileAsync(PathExtensions.UserImages);
 
             await _userRepository.Update(_Mapper.Map<User>(update), _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());

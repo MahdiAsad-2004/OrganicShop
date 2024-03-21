@@ -78,6 +78,9 @@ function HandleFetchResponse(response) {
         else if (ResponseDataType == 'toast') {
             response.json().then(a => { HandleMessage(a) });
         }
+        else if (ResponseDataType == 'json') {
+            response.json().then(a => { console.log(a); });
+        }
     }
     else {
         if (response.status == 500) {
@@ -111,12 +114,15 @@ function HandleFetchResponse(response) {
 
 function Partial(response) {
     TargetElementId = response.headers.get('targetElementId');
-    if (TargetElementId) {
-        ViewContainer = document.getElementById(TargetElementId);
-    }
     response.text().then(partial =>
     {
-        ViewContainer.innerHTML = partial;
+        if (TargetElementId) {
+            document.getElementById(TargetElementId).innerHTML = partial;
+        }
+        else {
+            ViewContainer.innerHTML = partial;
+
+        }
     });
    
 }

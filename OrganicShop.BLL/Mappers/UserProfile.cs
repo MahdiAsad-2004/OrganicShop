@@ -12,13 +12,15 @@ namespace OrganicShop.BLL.Mappers
 
             CreateMap<User, UserListDto>()
                 //.ForMember(m => m.Addresses, a => a.MapFrom(b => b.Addresses != null ? b.Addresses : new List<Address>()))
+                .ForMember(m => m.ProfileImage, a => a.MapFrom(b => b.Picture != null ? b.Picture.Name : "user.png"));
+
+
+            CreateMap<CreateUserDto, User>()
+                .ForMember(m => m.Email , a => a.AddTransform(b => b.ToLower()));
+
+
+            CreateMap<UpdateUserDto, User>()
                 .ForMember(m => m.Email, a => a.AddTransform(b => b.ToLower()));
-
-
-            CreateMap<CreateUserDto, User>();
-
-
-            CreateMap<UpdateUserDto, User>();
 
         }
 

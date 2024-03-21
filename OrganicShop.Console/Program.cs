@@ -22,15 +22,59 @@ using AutoMapper;
 using OrganicShop.Domain.Dtos.UserDtos;
 using OrganicShop.BLL.Extensions;
 using OrganicShop.Domain.Dtos.CategoryDtos;
+using System.Text;
+using Microsoft.Extensions.Primitives;
 
 
 Console.WriteLine("Hello, World!\n");
 
 
+var x = new User
+{
+    Id = 4,
+    Name = "fsdfs",
+    BaseEntity = new BaseEntity(true),
+};
+
+Console.WriteLine(Log(x));
 
 
 
 
+
+static string Log<T>(T obj)
+{
+    StringBuilder stringBuilder = new StringBuilder();
+    Console.WriteLine($"{typeof(T).Name}:");
+    foreach (var prop in typeof(T).GetProperties())
+    {
+        //if (prop.GetType() == typeof(string) || prop.GetType() == typeof(int) || prop.GetType() == typeof(long) || prop.GetType() == typeof(DateTime) || prop.GetType() == typeof(bool))
+        //{
+        //    stringBuilder.AppendLine($"\t{prop.Name}: {prop.GetValue(obj)}");
+        //}
+        //if (prop.GetValue(obj) != null)
+        //{
+        //    if(prop.GetValue(obj).GetType().IsEnum == false && prop.GetValue(obj).GetType().IsValueType == false && prop.GetValue(obj).GetType().IsString() == false)
+        //    {
+        //        stringBuilder.AppendLine($"\t{prop.Name}: {prop.GetValue(obj)}");
+        //    }
+        //    else
+        //    {
+        //        Log(prop.GetValue(obj));
+        //    }
+        //}
+        //else
+        //{
+        //    Log(prop.GetValue(obj));
+        //}
+
+        stringBuilder.AppendLine($"\t{prop.Name}: {prop.GetValue(obj)}");
+        //Console.WriteLine(prop.GetValue(obj) != null ? prop.GetValue(obj).GetType() : "null");
+        //Console.WriteLine(prop.GetType().GetType());
+    }
+    return stringBuilder.ToString();
+}
+ 
 
 
 

@@ -14,7 +14,8 @@
                 <p class="text-center p-2 filter-menu-header" onclick="ToggleFilterMenu()" onselectstart="return false">
                     <i class="fa-regular fa-filter-list" style="color: #ffffff; font-size:30px;"></i>
                 </p>
-                <form class="filter-menu-form row col-12">
+                <form class="filter-menu-form row col-12" method="post" href="/Admin/User/UsersTable" onsubmit="FetchRquest(event)">
+                    <input name="paging.PageNumber" id="filter-pageNumber" hidden value="1"/>
                     <div class="form-group col-3 mb-1 ">
                         <label class="form-label filter-menu-label">نام کاربر</label>
                         <input name="filter.Name" class="form-control filter-menu-input" type="number" />
@@ -30,7 +31,7 @@
                     <div class="form-group col-3 mb-1 ">
                         <label class="form-label filter-menu-label">نقش</label>
                         <select name="filter.Role" class="form-control filter-menu-input">
-                            <option>---- همه -----</option>
+                            <option value=" ">---------- همه ----------</option>
                             @foreach (var role in EnumExtension.GetArray<Role>())
                             {
                                 <option value="@((byte)role)">@role.ToStringValue()</option>
@@ -39,111 +40,32 @@
                     </div>
                     <div class="form-group col-3 mb-1 ">
                         <label class="form-label filter-menu-label">مرتب سازی</label>
-                        <select name="sort" class="form-control filter-menu-input">
-                            <option>---- بدون انخاب -----</option>
-                            @foreach (var sortType in EnumExtension.GetArray<BaseSortType>())
+                        <select name="filter.SortBy" class="form-control filter-menu-input">
+                            <option value=" ">---- بدون مرتب سازی -----</option>
+                            @foreach (var sortType in EnumExtension.GetArray<UserSortType>())
                             {
                                 <option value="@((byte)sortType)">@sortType.ToStringValue()</option>
                             }
                         </select>
                     </div>
+                    <div class="form-group col-3 mb-1 ">
+                        <label class="form-label filter-menu-label">تعداد در صفحه</label>
+                        <select name="paging.PageItemsCount" class="form-control filter-menu-input">
+                            <option value=" ">------------- پیشفرض -------------</option>
+                            <option value="12">12</option>
+                            <option value="24">24</option>
+                            <option value="48">48</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-3 mt-2 mr-3">
+                        <label class="form-label filter-menu-label"></label>
+                        <button type="submit" id="filter-menu-submit" class="btn btn-primary form-control">اعمال</button>
+                    </div>
                 </form>
             </div>
-            <div class="card card-table">
-                <div class="card-body">
-                    <div class="title-header option-title">
-                        <h5>لیست کاربران</h5>
-                        <form class="d-inline-flex">
-                            <a href="/Admin/User/Create" class="align-items-center btn btn-theme d-flex">
-                                <i data-feather="plus"></i>افزودن کاربر جدید
-                            </a>
-                        </form>
-                    </div>
-
-                    <div class="table-responsive table-product">
-                        <table class="table all-package theme-table" id="table_id">
-                            <thead>
-                                <tr>
-                                    <th>تصویر</th>
-                                    <th>نام</th>
-                                    <th>شماره همراه</th>
-                                    <th>ایمیل</th>
-                                    <th>تنظیمات</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                @foreach (var item in Model.List)
-                                {
-                                    <tr>
-                                        <td>
-                                            <div class="table-image">
-                                                <img src="~/media/images/user/@item.ProfileImage" class="img-fluid"
-                                                     alt="@item.Name">
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <div class="user-name">
-                                                <span>@item.Name</span>
-                                                <span>@item.Role.ToStringValue()</span>
-                                            </div>
-                                        </td>
-
-                                        <td>@item.PhoneNumber</td>
-
-                                        <td>@item.Email</td>
-
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="order-detail.html">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="/Admin/User/@item.Id/Permissions">
-                                                        <i class="ri-pencil-line"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                       data-bs-target="#exampleModalToggle" onclick="SetUser('@item.Id','@item.Name')">
-                                                        <i class="ri-delete-bin-line"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                }
-
-
-
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-                <div class="card-footer d-flex justify-content-center pb-0">
-                    <div class="pagination">
-                        <a class="pagination-arrow"><i class="fa-solid fa-arrow-left"></i></a>
-                        <a>1</a>
-                        <p><i style="padding-top: 5px;" class="fa-solid fa-ellipsis"></i></p>
-                        <a>8</a>
-                        <a>9</a>
-                        <a>10</a>
-                        <a class="pagination-item-active">11</a>
-                        <a>12</a>
-                        <a>13</a>
-                        <a>14</a>
-                        <p><i class="fa-solid fa-ellipsis"></i></p>
-                        <a>20</a>
-                        <a class="pagination-arrow"><i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </div>
+            <div id="users-partial">
+                <partial name="_UsersTable" model="Model"></partial>
             </div>
         </div>
     </div>
@@ -218,7 +140,7 @@
             UserNameLi.innerHTML = 'NULL';
             UserIdInput.setAttribute('value', '0');
         }
-
+    
 
     </script>
 

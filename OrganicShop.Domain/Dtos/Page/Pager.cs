@@ -10,6 +10,8 @@ namespace OrganicShop.Domain.Dtos.Page
 {
     public class Pager<Entity>
     {
+        public int CurrentPage { get; set; }
+        public int PageItemCount { get; set; }
         public int PageShowAfterAndBeforeCurrent { get; set; }
         public int AllItemsCount { get; private set; }
         public int PageItemNumberStart { get; private set; }
@@ -25,6 +27,8 @@ namespace OrganicShop.Domain.Dtos.Page
 
         public Pager(int PageNumber, int PageItemCount, IQueryable<Entity> query)
         {
+            CurrentPage = PageNumber;
+            this.PageItemCount = PageItemCount;
             AllItemsCount = query.Count();
             PageItemNumberEnd = AllItemsCount > PageItemCount ? (PageItemCount * PageNumber) : AllItemsCount;
             PageItemNumberStart = ((PageNumber - 1) * PageItemCount) + 1;
