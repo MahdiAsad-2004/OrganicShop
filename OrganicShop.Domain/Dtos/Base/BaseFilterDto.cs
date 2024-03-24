@@ -20,15 +20,15 @@ namespace OrganicShop.Domain.Dtos.Base
         {
             switch (ActiveFilter)
             {
+                case IsActiveFilter.All:
+                    break;
+
                 case IsActiveFilter.Active:
                     query = query.Where(a => a.BaseEntity.IsActive == true);
                     break;
 
                 case IsActiveFilter.NotActive:
                     query = query.Where(a => a.BaseEntity.IsActive == false);
-                    break;
-
-                case IsActiveFilter.All:
                     break;
             }
 

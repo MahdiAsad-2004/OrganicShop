@@ -39,7 +39,7 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
             switch (response.Result)
             {
                 case ResponseResult.Success:
-                    return View(response.Data);
+                    return View("Indexx",response.Data);
 
                 case ResponseResult.NoAccess:
                     return Forbid();
@@ -66,7 +66,7 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
             switch (response.Result)
             {
                 case ResponseResult.Success:
-                    return _ClientHandleResult.Partial(HttpContext,PartialView("_UsersTable",response.Data), "users-partial");
+                    return _ClientHandleResult.Partial(HttpContext,PartialView("_UsersTable",response.Data), "table-container");
 
                 case ResponseResult.NoAccess:
                     return Forbid();

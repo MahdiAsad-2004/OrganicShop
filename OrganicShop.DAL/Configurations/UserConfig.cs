@@ -69,7 +69,7 @@ namespace OrganicShop.DAL.Configurations
                 CreateDate = DateTime.Now,
                 LastModified = DateTime.Now,
                 IsActive = true,
-                IsDelete = true,
+                IsDelete = false,
 
             });
 

@@ -16,5 +16,17 @@ namespace OrganicShop.BLL.Extensions
             return Enum.GetValues(typeof(MyEnum)) as MyEnum[];
         }
 
+
+        //public static Dictionary<string,long> GetArray(this Enum e)
+        //{
+        //    var dic = new Dictionary<string,long>();
+
+        //    foreach (var item in Enum.GetValues(e.GetType()))
+        //    {
+        //        item.LogAsync();
+        //    }
+
+        //    return dic;
+        //}
     }
 }

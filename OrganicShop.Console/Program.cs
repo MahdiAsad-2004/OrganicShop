@@ -24,19 +24,43 @@ using OrganicShop.BLL.Extensions;
 using OrganicShop.Domain.Dtos.CategoryDtos;
 using System.Text;
 using Microsoft.Extensions.Primitives;
+using OrganicShop.Domain.Enums.EnumValues;
 
 
 Console.WriteLine("Hello, World!\n");
 
 
-var x = new User
-{
-    Id = 4,
-    Name = "fsdfs",
-    BaseEntity = new BaseEntity(true),
-};
 
-Console.WriteLine(Log(x));
+
+foreach (var item in Enum.GetValues(typeof(CategoryType)))
+{
+    //Console.WriteLine(item.GetType().Name);
+    Console.WriteLine(item.ToString());
+    Console.WriteLine(item.GetType());
+}
+
+//EnumExtension.GetArray();
+
+
+
+
+
+
+
+
+
+
+
+
+
+//var x = new User
+//{
+//    Id = 4,
+//    Name = "fsdfs",
+//    BaseEntity = new BaseEntity(true),
+//};
+
+//Console.WriteLine(Log(x));
 
 
 

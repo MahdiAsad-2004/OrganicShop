@@ -49,6 +49,24 @@ namespace OrganicShop.Domain.Enums.EnumValues
 
         }
 
+        public static string ToStringValue(this IsActiveFilter activeFilter)
+        {
+            switch (activeFilter)
+            {
+                case IsActiveFilter.All:
+                    return "همه";
+
+                case IsActiveFilter.Active:
+                    return "فعال";
+
+                case IsActiveFilter.NotActive:
+                    return "غیر فعال";
+
+                default:
+                    throw new Exception("Enum value not found");
+            }
+        }
+
         public static string ToStringValue(this Role role)
         {
             switch (role)
@@ -455,15 +473,6 @@ namespace OrganicShop.Domain.Enums.EnumValues
                     throw new Exception("Enum value not found");
             }
         }
-
-
-
-
-
-
-
-
-
 
 
 
