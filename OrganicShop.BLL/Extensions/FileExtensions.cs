@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Entities.Base;
+using OrganicShop.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,12 @@ namespace OrganicShop.BLL.Extensions
 {
     public static class FileExtensions
     {
-        public static async Task<string> SaveFile(this IFormFile file, string path)
+        public static async Task<string> SaveFile(this IFormFile file, PathKey pathKey)
         {
             
             var fileName = $"{Guid.NewGuid().ToString().Replace("-", "").Substring(1,16)}{Path.GetExtension(file.FileName)}";
 
-            string filePath = Path.Combine(path, fileName);
+            string filePath = Path.Combine(pathKey.GetPath(), fileName);
 
             using (var stream = new FileStream(filePath, FileMode.CreateNew))
             {
@@ -28,12 +29,12 @@ namespace OrganicShop.BLL.Extensions
 
 
 
-        public static async Task<Picture> SavePictureAsync(this IFormFile file, string path)
+        public static async Task<Picture> SavePictureAsync(this IFormFile file, PathKey pathKey , PictureType pictureType)
         {
 
             var fileName = $"{Guid.NewGuid().ToString().Replace("-", "").Substring(1, 16)}{Path.GetExtension(file.FileName)}";
 
-            string filePath = Path.Combine(path, fileName);
+            string filePath = Path.Combine(pathKey.GetPath(), fileName);
 
             using (var stream = new FileStream(filePath, FileMode.CreateNew))
             {
@@ -44,16 +45,17 @@ namespace OrganicShop.BLL.Extensions
             {
                 Name = fileName,
                 SizeMB = (float)file.Length / 1024 / 1000,
+                Type = pictureType,
                 BaseEntity = new BaseEntity(true),
             };
         }
 
-        public static async Task<Picture> SavePictureAsync(this Picture picture, IFormFile file, string path)
+        public static async Task<Picture> SavePictureAsync(this IFormFile file,Picture picture,PathKey pathKey)
         {
 
             var fileName = $"{Guid.NewGuid().ToString().Replace("-", "").Substring(1, 16)}{Path.GetExtension(file.FileName)}";
 
-            string filePath = Path.Combine(path, fileName);
+            string filePath = Path.Combine(pathKey.GetPath(), fileName);
 
             using (var stream = new FileStream(filePath, FileMode.CreateNew))
             {
@@ -62,6 +64,7 @@ namespace OrganicShop.BLL.Extensions
             picture.Name = fileName;
             picture.SizeMB = (float)file.Length / 1024 / 1000;
             picture.BaseEntity.LastModified = DateTime.Now;
+            //picture.Type = pathKey.GetPictureType();
             return picture;
         }
 
@@ -93,22 +96,25 @@ namespace OrganicShop.BLL.Extensions
         //}
 
 
-        public static async Task<List<Picture>> SaveAndUpdateMainPictureAsync(this List<Picture> pictures, IFormFile file, string path)
-        {
+        //public static async Task<List<Picture>> SaveAndUpdateMainPictureAsync(this List<Picture> pictures, IFormFile file, PathKey pathKey)
+        //{
 
-            var fileName = $"{Guid.NewGuid().ToString().Replace("-", "").Substring(1, 16)}{Path.GetExtension(file.FileName)}";
+        //    var fileName = $"{Guid.NewGuid().ToString().Replace("-", "").Substring(1, 16)}{Path.GetExtension(file.FileName)}";
 
-            string filePath = Path.Combine(path, fileName);
+        //    string filePath = Path.Combine(pathKey.GetPath(), fileName);
 
-            using (var stream = new FileStream(filePath, FileMode.CreateNew))
-            {
-                await file.CopyToAsync(stream);
-            }
-            pictures.First(a => a.IsMain).Name = fileName;
-            pictures.First(a => a.IsMain).SizeMB = (float)file.Length / 1024 / 1000;
-            pictures.First(a => a.IsMain).BaseEntity.LastModified = DateTime.Now;
-            return pictures;
-        }
+        //    using (var stream = new FileStream(filePath, FileMode.CreateNew))
+        //    {
+        //        await file.CopyToAsync(stream);
+        //    }
+        //    var mainPicture = pictures.First(a => a.IsMain);
+
+        //    mainPicture.Name = fileName;
+        //    mainPicture.SizeMB = (float)file.Length / 1024 / 1000;
+        //    //mainPicture.Type = pathKey.GetPictureType();
+        //    mainPicture.BaseEntity.LastModified = DateTime.Now;
+        //    return pictures;
+        //}
 
 
         public static async Task<bool> DeletePictureFile(this Picture picture)

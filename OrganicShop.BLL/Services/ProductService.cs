@@ -158,14 +158,14 @@ namespace OrganicShop.BLL.Services
             #region pictures
 
             var pictures = new List<Picture>();
-            var pictureMain = await create.MainImageFile.SavePictureAsync(PathExtensions.ProductImages);
+            var pictureMain = await create.MainImageFile.SavePictureAsync(PathKey.ProductImages , PictureType.Product);
             pictureMain.IsMain = true;
             pictures.Add(pictureMain);
             if (create.PictureFiles != null)
             {
                 foreach (var pictureFile in create.PictureFiles)
                 {
-                    pictures.Add(await pictureFile.SavePictureAsync(PathExtensions.ProductImages));
+                    pictures.Add(await pictureFile.SavePictureAsync(PathKey.ProductImages,PictureType.Product));
                 }
             }
             Product.Pictures = pictures;
@@ -286,10 +286,9 @@ namespace OrganicShop.BLL.Services
             if (update.MainPictureFile != null)
             {
                 Product.Pictures.First(a => a.IsMain).BaseEntity.IsDelete = true;
-                var mainPicture = await update.MainPictureFile.SavePictureAsync(PathExtensions.ProductImages);
+                var mainPicture = await update.MainPictureFile.SavePictureAsync(PathKey.ProductImages, PictureType.Product);
                 mainPicture.IsMain = true;
                 Product.Pictures.Add(mainPicture);
-                // = await Product.Pictures.ToList().SaveAndUpdateMainPictureAsync(update.MainPictureFile, PathExtensions.ProductImage);
             }
 
             if(update.OldPicturesDic == null)
@@ -297,24 +296,21 @@ namespace OrganicShop.BLL.Services
                 foreach (var picture in Product.Pictures.Where(a => a.IsMain == false))
                 {
                     picture.BaseEntity.IsDelete = true;
-                    //Product.Pictures.Remove(picture);
                 }
             }
             else
             {
                 foreach (var picture in Product.Pictures.Where(a => a.IsMain == false).ExceptBy(update.OldPicturesDic.Keys, a => a.Id))
                 {
-                    //Product.Pictures.Remove(picture);
                     picture.BaseEntity.IsDelete = true;
                 }
             }
             
-
             if (update.NewPictureFiles != null)
             {
                 foreach (var file in update.NewPictureFiles)
                 {
-                    Product.Pictures.Add(await file.SavePictureAsync(PathExtensions.ProductImages));
+                    Product.Pictures.Add(await file.SavePictureAsync(PathKey.ProductImages, PictureType.Product));
                 }
             }
 

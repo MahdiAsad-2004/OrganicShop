@@ -1,5 +1,6 @@
 ﻿using OrganicShop.Domain.Dtos.PictureDtos;
 using OrganicShop.Domain.Entities;
+using OrganicShop.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,60 +12,65 @@ namespace OrganicShop.BLL.Extensions
 {
     public static class PathExtensions
     {
-        
-        public static string CurrentDirectory = Directory.GetCurrentDirectory();
 
-        public static string CategoryImages = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\category\\");
+        public static readonly string CurrentDirectory = Directory.GetCurrentDirectory();
+                      
+        public static readonly string CategoryImages = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\category\\");
 
-        public static string UserImages = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\user\\");
-        
-        public static string UserImageDefault = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\user\\user.png");
+        public static readonly string UserImages = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\user\\");
+                      
+        public static readonly string UserImageDefault = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\user\\user.png");
 
-        public static string ProductImages = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\product\\");
+        public static readonly string ProductImages = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\images\\product\\");
 
         
         
-        public static string GetPictureFilePath(this Picture picture)
+
+
+        public static string GetPath(this PathKey pathKey)
         {
-            string filePath = string.Empty;
+            switch (pathKey)
+            {
+                case PathKey.ProductImages:
+                    return PathExtensions.ProductImages;
 
-            if (picture.ProductId != null)
-                return Path.Combine(ProductImages, picture.Name);
+                case PathKey.CategoryImages:
+                    return PathExtensions.CategoryImages;
 
-            if (picture.CategoryPictureId != null)
-                return Path.Combine(CategoryImages, picture.Name);
+                case PathKey.UserImages:
+                    return PathExtensions.UserImages;
 
-            if (picture.UserPictureId != null)
-                return Path.Combine(UserImages, picture.Name);
-
-            throw new Exception("Picture file path not found");
+                default: throw new Exception("Invalid enum");
+            }
         }
+        //public static PictureType GetPictureType(this PathKey pathKey)
+        //{
+        //    switch (pathKey)
+        //    {
+        //        case PathKey.ProductImages:
+        //            return PictureType.Product;
 
-        public static string GetPictureUrl(this Picture picture)
-        {
-            if (picture.ProductId != null)
-                return $"/media/images/product/{picture.Name}";
+        //        case PathKey.CateGoryImages:
+        //            return PictureType.Category;
 
-            if (picture.CategoryPictureId != null)
-                return $"/media/images/category/{picture.Name}";
-            
-            if (picture.UserPictureId != null)
-                return $"/media/images/userr/{picture.Name}";
+        //        case PathKey.UserImages:
+        //            return PictureType.User;
 
-            throw new Exception("Picture url not found");
-        }
-        public static string GetPictureUrl(this PictureListDto picture)
-        {
-            if (picture.ProductId != null)
-                return $"/media/images/product/{picture.Name}";
+        //        default: throw new Exception("Invalid Path Key");
+        //    }
+        //}
+       
 
-            if (picture.CategoryPictureId != null)
-                return $"/media/images/category/{picture.Name}";
-
-            if (picture.UserPictureId != null)
-                return $"/media/images/userr/{picture.Name}";
-
-            throw new Exception("Picture url not found");
-        }
     }
+
+
+
+    public enum PathKey
+    {
+        ProductImages , CategoryImages , UserImages , 
+
+    }
+
+
+
 }

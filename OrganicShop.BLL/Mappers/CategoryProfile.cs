@@ -16,7 +16,7 @@ namespace OrganicShop.BLL.Mappers
             CreateMap<Category, CategoryListDto>()
                 .ForMember(m => m.CreateDate, a => a.MapFrom(b => b.BaseEntity.CreateDate.ToPersianDate()))
                 .ForMember(m => m.Type, a => a.MapFrom(b => b.Type.ToStringValue()))
-                .ForMember(m => m.ImageName, a => a.MapFrom(b => b.Picture.Name))
+                .ForMember(m => m.ImageName, a => a.MapFrom(b => b.Picture != null ? b.Picture.Name : string.Empty))
                 .ForMember(m => m.ParentTitle, a => a.MapFrom(b => b.Parent != null ? b.Parent.Title : null));
 
 

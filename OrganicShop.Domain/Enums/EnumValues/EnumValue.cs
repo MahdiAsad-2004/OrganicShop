@@ -475,6 +475,25 @@ namespace OrganicShop.Domain.Enums.EnumValues
         }
 
 
+        public static string ToStringValue(this PictureType pictureType)
+        {
+            switch (pictureType)
+            {
+                case PictureType.Product:
+                    return "محصول";
+
+                case PictureType.Category:
+                    return "دسته بندی";
+
+                case PictureType.User:
+                    return "کاربر";
+
+                default:
+                    throw new Exception("Enum value not found");
+            }
+        }
+
+
 
 
 

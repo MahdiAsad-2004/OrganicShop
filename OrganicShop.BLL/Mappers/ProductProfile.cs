@@ -17,7 +17,7 @@ namespace OrganicShop.BLL.Mappers
             CreateMap<Product, ProductListDto>()
                 .ForMember(m => m.DiscountedPrice, a => a.MapFrom(b => b.GetDefaultDiscountedPrice() ?? b.Price))
                 .ForMember(m => m.CategoryTitle, a => a.MapFrom(b => b.Category.Title))
-                .ForMember(m => m.MainImageName, a => a.MapFrom(b => b.Pictures.First(p => p.IsMain).Name))
+                .ForMember(m => m.MainImageName, a => a.MapFrom(b => b.Pictures.GetMainPictureName() ?? string.Empty))
                 .ForMember(m => m.ImageNames, a => a.MapFrom(b => b.Pictures.Select(p => p.Name).ToArray()))
                 .ForMember(m => m.IsActive, a => a.MapFrom(b => b.BaseEntity.IsActive));
 

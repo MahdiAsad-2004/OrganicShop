@@ -37,15 +37,7 @@
                             </td>
                             <td>@item.Name</td>
                             <td>@item.SizeMB.ToSize()</td>
-                            <td>
-                                @if (item.ProductId != null) pictureType = "محصول";
-                                else if (item.CategoryPictureId != null) pictureType = "دسته بندی";
-                                else if (item.UserPictureId != null) pictureType = "کاربر";
-                                else pictureType = "_";
-
-                                @pictureType
-
-                            </td>
+                            <td>@item.Type.ToStringValue()</td>
                             <td>
                                 <ul>
                                     <li>

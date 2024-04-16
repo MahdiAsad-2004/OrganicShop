@@ -14,6 +14,7 @@ using OrganicShop.Domain.Dtos.Combo;
 using OrganicShop.BLL.Extensions;
 using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.Dtos.DiscountDtos;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace OrganicShop.BLL.Services
 {
@@ -77,7 +78,7 @@ namespace OrganicShop.BLL.Services
             var entity = await _CategoryRepository.GetQueryable()
                 .Include(a => a.Picture)
                 .FirstOrDefaultAsync(a => a.Id.Equals(Id));
-                
+
             if (entity == null)
                 return new ServiceResponse<UpdateCategoryDto>(ResponseResult.NotFound, null);
 
@@ -97,8 +98,11 @@ namespace OrganicShop.BLL.Services
             Category = _Mapper.Map<Category>(create);
 
             //// Saving Image
-            Category.Picture = await create.ImageFile.SavePictureAsync(PathExtensions.CategoryImages);
+
+
+            Category.Picture = await create.ImageFile.SavePictureAsync( PathKey.CategoryImages , PictureType.Category);
             Category.Picture.IsMain = true;
+            Category.Picture.Type = PictureType.Category;
 
             await _CategoryRepository.Add(Category, _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
@@ -119,14 +123,19 @@ namespace OrganicShop.BLL.Services
             if (Category == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
-            if(update.ImageFile != null)
+            if (update.ImageFile != null)
             {
-                Category.Picture = await Category.Picture.SavePictureAsync(update.ImageFile, PathExtensions.CategoryImages);
+                if (Category.Picture != null)
+                    Category.Picture = await update.ImageFile.SavePictureAsync(Category.Picture, PathKey.CategoryImages);
+                else
+                    Category.Picture = await update.ImageFile.SavePictureAsync(PathKey.CategoryImages, PictureType.Category);
+
                 Category.Picture.IsMain = true;
                 Category.Picture.BaseEntity.LastModified = DateTime.Now;
+                Category.Picture.Type = PictureType.Category;
             }
 
-            await _CategoryRepository.Update(_Mapper.Map(update,Category), _AppUserProvider.User.Id);
+            await _CategoryRepository.Update(_Mapper.Map(update, Category), _AppUserProvider.User.Id);
 
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
@@ -147,10 +156,10 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse<List<ComboDto<Category>>>> GetCombos()
         {
-              var comboDtos = _CategoryRepository
-                .GetQueryable()
-                .Select(a => _Mapper.Map<ComboDto<Category>>(a))
-                .ToList();
+            var comboDtos = _CategoryRepository
+              .GetQueryable()
+              .Select(a => _Mapper.Map<ComboDto<Category>>(a))
+              .ToList();
             return new ServiceResponse<List<ComboDto<Category>>>(ResponseResult.Success, comboDtos);
         }
     }

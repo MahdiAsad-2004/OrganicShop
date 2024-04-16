@@ -107,7 +107,7 @@ namespace OrganicShop.BLL.Services
                 }
             }
 
-            user.Picture = create.ProfileImage != null ? await create.ProfileImage.SavePictureAsync(PathExtensions.UserImages) : null;
+            user.Picture = create.ProfileImage != null ? await create.ProfileImage.SavePictureAsync(PathKey.UserImages , PictureType.User) : null;
 
             await _userRepository.Add(user,_AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
@@ -125,9 +125,13 @@ namespace OrganicShop.BLL.Services
             if (user == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
-            if(update.ProfileImage != null)
-                user.Picture =  await update.ProfileImage.SavePictureAsync(PathExtensions.UserImages);
-
+            if(update.ProfileImage != null) 
+            {
+                if(user.Picture != null)
+                    user.Picture =  await update.ProfileImage.SavePictureAsync(user.Picture,PathKey.UserImages );
+                else 
+                    user.Picture =  await update.ProfileImage.SavePictureAsync(PathKey.UserImages ,PictureType.User);
+            }
             await _userRepository.Update(_Mapper.Map<User>(update), _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }

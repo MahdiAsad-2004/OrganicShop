@@ -1,4 +1,5 @@
 ﻿using OrganicShop.Domain.Entities.Base;
+using OrganicShop.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ namespace OrganicShop.Domain.Entities
         public string Name { get; set; }
         public float SizeMB { get; set; }
         public bool IsMain { get; set; }
+        public PictureType Type { get; set; }
         public long? ProductId { get; set; }
         public long? UserPictureId { get; set; }
         public int? CategoryPictureId { get; set; }

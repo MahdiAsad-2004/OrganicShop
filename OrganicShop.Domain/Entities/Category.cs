@@ -21,7 +21,7 @@ namespace OrganicShop.Domain.Entities
 
 
 
-        public Picture Picture { get; set; }
+        public Picture? Picture { get; set; }
         public Category? Parent { get; set; }
         public ICollection<Category> Subs { get; set; }
         public ICollection<Product> Products { get; set; }
