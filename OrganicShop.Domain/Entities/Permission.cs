@@ -18,9 +18,9 @@ namespace OrganicShop.Domain.Entities
 
 
 
-        public Permission? Parent { get; set; }
-        public ICollection<Permission>? Subs { get; set; }
-        public ICollection<PermissionUsers>? PermissionUsers { get; set; }
+        public Permission Parent { get; set; }
+        public ICollection<Permission> Subs { get; set; }
+        public ICollection<PermissionUsers> PermissionUsers { get; set; }
 
 
 

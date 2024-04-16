@@ -1,5 +1,5 @@
 ﻿@using OrganicShop.Domain.Dtos.UserDtos
-@model List<UserListDto>
+@model PageDto<User,UserListDto,long>
 
 <div class="card-body">
     <div class="title-header option-title">
@@ -25,7 +25,7 @@
 
             <tbody>
 
-                @foreach (var item in Model)
+                @foreach (var item in Model.List)
                 {
                     <tr>
                         <td>
@@ -80,9 +80,11 @@
 </div>
 
 
+<div class="card-footer d-flex justify-content-center pb-0">
 
+    <partial name="_PagerPartial" model="Model.Pager" view-data="ViewData" view-data-formId="@("filter-form")" />
 
-
+</div>
 
 
 

@@ -13,14 +13,11 @@ namespace OrganicShop.Domain.Entities
     public class Product : EntityId<long>
     {
         public int Price { get; set; }
-        public int? UpdatedPrice { get; set; }
         public string Title { get; set; }
         public int Stock { get; set; }
         public int SoldCount { get; set; }
         public string ShortDescription { get; set; }
         public string Description { get; set; }
-        public string MainImage { get; set; }
-        public string Barcode { get; set; }
         public int CategoryId { get; set; }
 
 
@@ -28,10 +25,11 @@ namespace OrganicShop.Domain.Entities
 
 
         public Category Category { get; set; }
-        public ICollection<Picture>? Pictures { get; set; }
-        public ICollection<DiscountProducts>? DiscountProducts { get; set; }
-        public ICollection<CoProduct>? CoProducts { get; set; }
-        public ICollection<Tag>? Tags { get; set; }
-        public ICollection<Property>? Properties { get; set; }
+        public ICollection<Picture> Pictures { get; set; }
+        public ICollection<DiscountProducts> DiscountProducts { get; set; }
+        public ICollection<CoProduct> CoProducts { get; set; }
+        public ICollection<TagProducts> TagProducts { get; set; }
+        public ICollection<Property> Properties { get; set; }
+
     }
 }

@@ -25,6 +25,8 @@ using OrganicShop.Domain.Dtos.CategoryDtos;
 using System.Text;
 using Microsoft.Extensions.Primitives;
 using OrganicShop.Domain.Enums.EnumValues;
+using System.Collections.ObjectModel;
+using OrganicShop.Domain.Entities.Relations;
 
 
 Console.WriteLine("Hello, World!\n");
@@ -32,12 +34,97 @@ Console.WriteLine("Hello, World!\n");
 
 
 
-foreach (var item in Enum.GetValues(typeof(CategoryType)))
-{
-    //Console.WriteLine(item.GetType().Name);
-    Console.WriteLine(item.ToString());
-    Console.WriteLine(item.GetType());
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//var product = new Product()
+//{
+//    DiscountProducts = new List<DiscountProducts>
+//    {
+//        new DiscountProducts{ DiscountId = 1 , Discount = new Discount() { Id = 1, Count = 11 }},
+//        new DiscountProducts{ DiscountId = 2 , Discount = new Discount() { Id = 2, Count = 12 }},
+//        new DiscountProducts{ DiscountId = 3 , Discount = new Discount() { Id = 3, Count = 13 }}
+//    }
+//};
+//var discountProduct = product.DiscountProducts.First(a => a.DiscountId == 2);
+//discountProduct.Discount.Count = 1465;
+//discountProduct = product.DiscountProducts.First(a => a.DiscountId == 3);
+//discountProduct.Discount.Id = 333;
+
+//foreach (var item in product.DiscountProducts)
+//{
+//    Console.WriteLine($"{item.Id} --- {item.Discount.Id} --- {item.Discount.Count}");
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+//Console.WriteLine($"{null == default(int?)}");
+
+
+
+
+//var x = new List<Property>()
+//{
+//    new Property{Id = 4 , BaseId = 1, Value = "ad"},
+//    new Property{Id = 5 , BaseId = 2, Value = "asd"},
+//};
+
+
+//Dictionary<int, (string Id, string Value)> Props = new Dictionary<int, (string Id, string Value)>();
+
+//Props = x.ToDictionary(a => a.BaseId.Value, a => (a.Id.ToString(), a.Value));
+
+//(string AA, string BB) m = ("a", "b");
+
+//m = new Tuple<string, string>("sdf", "sdfsfd").ToValueTuple();
+
+//Console.WriteLine(m.AA);
+
+//Console.WriteLine(Props.Count);
+
+
+
+
+
+//Console.WriteLine(DateTime.Now.Date);
+//Console.WriteLine(DateTime.Today);
+//Console.WriteLine(DateTime.Now.ToShortDateString());
+
+
+
+
+
+//foreach (var item in Enum.GetValues(typeof(CategoryType)))
+//{
+//    //Console.WriteLine(item.GetType().Name);
+//    Console.WriteLine(item.ToString());
+//    Console.WriteLine(item.GetType());
+//}
 
 //EnumExtension.GetArray();
 
@@ -98,7 +185,7 @@ static string Log<T>(T obj)
     }
     return stringBuilder.ToString();
 }
- 
+
 
 
 
@@ -139,7 +226,7 @@ static string Log<T>(T obj)
 
 //    public x(object obj)
 //    {
-        
+
 //    }
 //}
 
@@ -150,7 +237,7 @@ static string Log<T>(T obj)
 
 //    public y(bool? flag = null)
 //    {
-            
+
 //    }
 //}
 

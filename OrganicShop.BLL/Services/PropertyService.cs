@@ -11,6 +11,10 @@ using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Enums;
+using OrganicShop.DAL.Repositories;
+using OrganicShop.Domain.Dtos.CategoryDtos;
+using OrganicShop.BLL.Extensions;
+using OrganicShop.Domain.Dtos.Combo;
 
 namespace OrganicShop.BLL.Services
 {
@@ -29,8 +33,6 @@ namespace OrganicShop.BLL.Services
 
         #endregion
 
-
-        
 
         public async Task<ServiceResponse<PageDto<Property, PropertyListDto, int>>> GetAll(FilterPropertyDto? filter = null,PagingDto? paging = null)
         {
@@ -65,6 +67,18 @@ namespace OrganicShop.BLL.Services
         }
 
 
+        public async Task<ServiceResponse<UpdatePropertyDto>> Get(int Id)
+        {
+            var entity = await _PropertyRepository
+                .GetAsNoTracking(Id);
+
+            if (entity == null)
+                return new ServiceResponse<UpdatePropertyDto>(ResponseResult.NotFound, null);
+
+            return new ServiceResponse<UpdatePropertyDto>(ResponseResult.Success, _Mapper.Map<UpdatePropertyDto>(entity));
+        }
+
+
 
         public async Task<ServiceResponse<Empty>> Create(CreatePropertyDto create)
         {
@@ -74,6 +88,7 @@ namespace OrganicShop.BLL.Services
             Property Property = _Mapper.Map<Property>(create);
 
             Property.IsBase = true;
+            Property.BaseId = null;
             Property.Value = string.Empty;
 
             await _PropertyRepository.Add(Property,_AppUserProvider.User.Id);
@@ -84,14 +99,22 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse<Empty>> Update(UpdatePropertyDto update)
         {
+            if (await _PropertyRepository.GetQueryable().AnyAsync(a => a.Title == update.Title && a.Id != update.Id))
+                return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.EntityExist(update, a => nameof(a.Title)));
+
             Property? Property = await _PropertyRepository.GetAsTracking(update.Id);
             
             if (Property == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
-            await _PropertyRepository.Update(_Mapper.Map<Property>(update), _AppUserProvider.User.Id);
+            Property.IsBase = true;
+            Property.BaseId = null;
+            Property.Value = string.Empty;
+
+            await _PropertyRepository.Update(_Mapper.Map(update, Property), _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
+
 
 
 
@@ -105,5 +128,38 @@ namespace OrganicShop.BLL.Services
             await _PropertyRepository.SoftDelete(Property, _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
+
+
+
+
+
+
+
+
+        public async Task<ServiceResponse<List<ComboDto<Property>>>> GetCombos(FilterPropertyDto? filter = null)
+        {
+            filter = new();
+            var query = _PropertyRepository.GetQueryable();
+
+            #region filter
+
+            if (filter.IsBase != null)
+                query = query.Where(a => a.IsBase == filter.IsBase);
+
+            if (filter.ProductId != null)
+                query = query.Where(a => a.ProductId.Equals(filter.ProductId));
+
+            #endregion
+
+            var comboDtos = query
+                .Select(a => _Mapper.Map<ComboDto<Property>>(a))
+                .ToList();
+            return new ServiceResponse<List<ComboDto<Property>>>(ResponseResult.Success, comboDtos);
+        }
+
+
+
+
     }
+
 }

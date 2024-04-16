@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrganicShop.DAL.Repositories;
+using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Mvc.Controllers.Base.Result;
 using OrganicShop.Mvc.Models.Redirect;
 using OrganicShop.Mvc.Models.Toast;
@@ -42,7 +43,7 @@ namespace OrganicShop.Mvc.Controllers.Base
         }
 
 
-
+      
         public IActionResult Refresh() 
         {
             var route = $"{GetActionAreaName()}/{ControllerContext.ActionDescriptor.ControllerName}/{ControllerContext.ActionDescriptor.ActionName}";
@@ -52,6 +53,28 @@ namespace OrganicShop.Mvc.Controllers.Base
         public IActionResult NotFoundPage()
         {
             return Redirect("/Error/404");
+        }
+
+
+        public IActionResult ResolveNoSuccessResult(ResponseResult result,string? message = null)
+        {
+            switch (result)
+            {
+                case ResponseResult.Success:
+                    throw new Exception("Reponse result is success");
+
+                case ResponseResult.NoAccess:
+                    return Forbid();
+
+                case ResponseResult.NotFound:
+                    return NotFoundPage();
+
+                case ResponseResult.Failed:
+                    Console.WriteLine("=====>>>>> Reponse result: Failed");
+                    return BadRequest();
+                default:
+                    throw new Exception("Unhandled response result");
+            }
         }
 
 

@@ -117,12 +117,6 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
             httpContext.Response.Headers.Add("ResponseDataType", "partial");
             return partialView;
         }
-        public IActionResult Partial(HttpContext httpContext, PartialViewResult partialView,string targetElementId)
-        {
-            httpContext.Response.Headers.Add("ResponseDataType", "partial");
-            httpContext.Response.Headers.Add("targetElementId", targetElementId);
-            return partialView;
-        }
 
         #endregion
 
@@ -271,5 +265,7 @@ namespace OrganicShop.Mvc.Controllers.Base.Result
         }
 
         #endregion
+    
+    
     }
 }

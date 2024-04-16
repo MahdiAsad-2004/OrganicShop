@@ -17,7 +17,9 @@ namespace OrganicShop.DAL.Configurations
            
             builder.HasMany(a =>a.Subs).WithOne(a => a.Parent).HasForeignKey(a => a.ParentId);
             builder.HasMany(a =>a.Products).WithOne(a => a.Category).HasForeignKey(a => a.CategoryId);
-            //builder.HasOne(a => a.Picture).WithOne(a => a.Category).HasPrincipalKey(a => a.)
+            builder.HasOne(a => a.Picture).WithOne(a => a.Category).HasForeignKey<Picture>(a => a.CategoryPictureId);
+            builder.HasMany(a => a.DiscountCategories).WithOne(a => a.Category).HasForeignKey(a => a.CategoryId);
+
 
             builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);
         }

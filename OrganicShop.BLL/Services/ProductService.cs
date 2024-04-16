@@ -14,6 +14,9 @@ using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Enums;
+using OrganicShop.Domain.Dtos.Combo;
+using OrganicShop.DAL.Repositories;
+using OrganicShop.Domain.Dtos.DiscountDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -24,25 +27,31 @@ namespace OrganicShop.BLL.Services
         private readonly IMapper _Mapper;
         private readonly IProductRepository _ProductRepository;
         private readonly ICategoryRepository _CategoryRepository;
+        private readonly IPropertyRepository _PropertyRepository;
         private readonly IDiscountProductsRepository _DiscountProductRepository;
 
-        public ProductService(IApplicationUserProvider provider,IMapper mapper,IProductRepository ProductRepository, ICategoryRepository categoryRepository,
-            IDiscountProductsRepository discountProductRepository) : base(provider)
+        public ProductService(IApplicationUserProvider provider, IMapper mapper, IProductRepository ProductRepository, ICategoryRepository categoryRepository,
+            IDiscountProductsRepository discountProductRepository, IPropertyRepository propertyRepository) : base(provider)
         {
             _Mapper = mapper;
             _ProductRepository = ProductRepository;
             _CategoryRepository = categoryRepository;
             _DiscountProductRepository = discountProductRepository;
+            _PropertyRepository = propertyRepository;
         }
 
         #endregion
 
 
-
-        public async Task<ServiceResponse<PageDto<Product, ProductListDto, long>>> GetAll(FilterProductDto? filter = null,PagingDto? paging = null)
+        public async Task<ServiceResponse<PageDto<Product, ProductListDto, long>>> GetAll(FilterProductDto? filter = null, PagingDto? paging = null)
         {
             var query = _ProductRepository.GetQueryable()
+                .Include(a => a.Pictures)
                 .Include(a => a.Category)
+                    .ThenInclude(a => a.DiscountCategories)
+                        .ThenInclude(a => a.Discount)
+                .Include(a => a.DiscountProducts)
+                    .ThenInclude(a => a.Discount)
                 .AsQueryable();
 
             if (filter == null) filter = new FilterProductDto();
@@ -56,10 +65,7 @@ namespace OrganicShop.BLL.Services
                 query = query.Where(q => q.Id == filter.ProductId);
 
             if (filter.Title != null)
-                query = query.Where(q => EF.Functions.Like(filter.Title, $"%{q.Title}"));
-
-            if (filter.Barcode != null)
-                query = query.Where(q => EF.Functions.Like(filter.Barcode, $"%{q.Barcode}"));
+                query = query.Where(q => EF.Functions.Like(q.Title, $"%{filter.Title}%"));
 
             if (filter.MaxPrice != null)
                 query = query.Where(q => q.Price <= filter.MaxPrice);
@@ -68,16 +74,8 @@ namespace OrganicShop.BLL.Services
                 query = query.Where(q => q.Price >= filter.MinPrice);
 
             if (filter.CategoryId != null)
-            {
-                var category = _CategoryRepository.GetQueryable().Include(a => a.Products).FirstOrDefault(a => a.Id == filter.CategoryId);
-                if (category != null)
-                {
-                    if (category.Products != null)
-                    {
-                        query = category.Products.AsQueryable().IntersectBy(query.Select(a => a.Id), i => i.Id);
-                    }
-                }
-            }
+                query = query.Where(q => q.CategoryId.Equals(filter.CategoryId));
+            
 
             #endregion
 
@@ -91,15 +89,44 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<ProductListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return new ServiceResponse<PageDto<Product, ProductListDto, long>>(ResponseResult.Success,pageDto);
+            return new ServiceResponse<PageDto<Product, ProductListDto, long>>(ResponseResult.Success, pageDto);
         }
+
+
+
+
+
+
+        public async Task<ServiceResponse<UpdateProductDto>> Get(long Id)
+        {
+            if (Id < 1)
+                return new ServiceResponse<UpdateProductDto>(ResponseResult.NotFound, null);
+
+            var product = await _ProductRepository.GetQueryable()
+                .AsNoTracking()
+                .Include(a => a.TagProducts)
+                .Include(a => a.Properties)
+                .Include(a => a.Pictures)
+                .Include(a => a.DiscountProducts)
+                    .ThenInclude(a => a.Discount)
+                .FirstOrDefaultAsync(a => a.Id.Equals(Id));
+
+            if (product != null)
+                return new ServiceResponse<UpdateProductDto>(ResponseResult.Success, _Mapper.Map<UpdateProductDto>(product));
+
+            return new ServiceResponse<UpdateProductDto>(ResponseResult.NotFound, null);
+        }
+
+
+
+
+
 
 
 
         public async Task<ServiceResponse<Empty>> Create(CreateProductDto create)
         {
             Product Product = _Mapper.Map<Product>(create);
-            Product.UpdatedPrice = null;
 
             #region discounts
 
@@ -107,14 +134,16 @@ namespace OrganicShop.BLL.Services
             {
                 var discount = new Discount
                 {
-                    FixedValue = create.Price - create.UpdatedPrice,
+                    Title = "Basic",
+                    FixValue = create.Price - create.UpdatedPrice,
+                    IsFixDiscount = true,
                     BaseEntity = new BaseEntity(true),
                     IsDefault = true,
                 };
 
-                if(create.DiscountCount > 0)
+                if (create.DiscountCount > 0)
                     discount.Count = create.DiscountCount;
-                
+
                 Product.DiscountProducts = new List<DiscountProducts> { new DiscountProducts
                     {
                         Discount = discount,
@@ -122,58 +151,68 @@ namespace OrganicShop.BLL.Services
                         BaseEntity = new BaseEntity(true),
                     }
                 };
-                Product.UpdatedPrice = discount.ApplyDiscount(Product.Price);
             }
 
             #endregion
 
             #region pictures
 
+            var pictures = new List<Picture>();
+            var pictureMain = await create.MainImageFile.SavePictureAsync(PathExtensions.ProductImage);
+            pictureMain.IsMain = true;
+            pictures.Add(pictureMain);
             if (create.PictureFiles != null)
             {
-                var pictures = Enumerable.Empty<Picture>();
-                foreach (var file in create.PictureFiles)
+                foreach (var pictureFile in create.PictureFiles)
                 {
-                    pictures.Append(_Mapper.Map<Picture>(file));
+                    pictures.Add(await pictureFile.SavePictureAsync(PathExtensions.ProductImage));
                 }
-                Product.Pictures = pictures.ToList();
             }
+            Product.Pictures = pictures;
 
             #endregion
 
             #region tags
 
-            if (create.Tags != null)
+            if (create.TagIds != null)
             {
-                var tags = Enumerable.Empty<Tag>();
-                foreach (var str in create.Tags)
+                var tagProducts = new List<TagProducts>();
+                foreach (var tagId in create.TagIds)
                 {
-                    tags.Append(new Tag
+                    tagProducts.Add(new TagProducts
                     {
-                        Title = str,
+                        TagId = tagId,
                         BaseEntity = new BaseEntity(true),
                     });
                 }
-                Product.Tags = tags.ToList();
+                Product.TagProducts = tagProducts;
             }
 
             #endregion
 
             #region properties
 
-            if (create.Properties != null)
+            if(create.PropertiesDictionary != null)
             {
-                var properties = Enumerable.Empty<Property>();
-                foreach (var property in create.Properties)
+                Property? property = null;
+                var properties = new List<Property>();
+                foreach (var propertyDic in create.PropertiesDictionary)
                 {
-                    properties.Append(new Property
+                    property = await _PropertyRepository.GetAsNoTracking(propertyDic.Key);
+                    if (property == null)
+                        return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.NotFound(typeof(Property)));
+
+                    properties.Add(new Property
                     {
-                        Title = property.Key,
-                        Value = property.Value,
+                        Title = property.Title,
+                        Priority = property.Priority,
+                        Value = propertyDic.Value,
+                        IsBase = false,
+                        BaseId = propertyDic.Key,
                         BaseEntity = new BaseEntity(true),
                     });
                 }
-                Product.Properties = properties.ToList();
+                Product.Properties = properties;
             }
 
             #endregion
@@ -186,81 +225,159 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse<Empty>> Update(UpdateProductDto update)
         {
-            Product? Product = await _ProductRepository.GetAsTracking(update.Id);
+            Product? Product = await _ProductRepository.GetQueryableTracking()
+                .Include(a => a.TagProducts)
+                .Include(a => a.Properties)
+                .Include(a => a.Pictures)
+                .Include(a => a.DiscountProducts)
+                    .ThenInclude(a => a.Discount)
+                .FirstOrDefaultAsync(a => a.Id.Equals(update.Id));
 
             if (Product == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             #region discounts
 
-            if (update.Discount.FixedValue != null || update.Discount.Percent != null)
+            Discount discount;
+            DiscountProducts discountProduct;
+            if (update.UpdatedPrice < update.Price)
             {
-                Product.DiscountProducts = new List<DiscountProducts> { new DiscountProducts
+                if(update.DiscountId > 0)
+                {
+                    discountProduct = Product.DiscountProducts.First(a => a.DiscountId == update.DiscountId);
+                    discountProduct.Discount.FixValue = update.UpdatedPrice;
+                    discountProduct.Discount.BaseEntity.LastModified = DateTime.Now;
+                    if (update.DiscountCount > 0)
+                        discountProduct.Discount.Count = update.DiscountCount;
+                }
+                else
+                {
+                    discount = new Discount
                     {
-                        Discount = update.Discount,
+                        Title = "Basic",
+                        FixValue = update.Price - update.UpdatedPrice,
+                        IsFixDiscount = true,
+                        BaseEntity = new BaseEntity(true),
+                        IsDefault = true,
+                    };
+                    discountProduct = new DiscountProducts
+                    {
+                        Discount = discount,
                         Product = Product,
                         BaseEntity = new BaseEntity(true),
-                    } 
-                };
-                Product.UpdatedPrice = update.Discount.ApplyDiscount(Product.Price);
+                    };
+                    Product.DiscountProducts.Add(discountProduct);
+                }
+                
             }
 
             #endregion
 
             #region pictures
 
-            if (update.PictureFiles != null)
+            if (update.MainPictureFile != null)
             {
-                var pictures = Enumerable.Empty<Picture>();
-                foreach (var file in update.PictureFiles)
+                Product.Pictures.First(a => a.IsMain).BaseEntity.IsDelete = true;
+                var mainPicture = await update.MainPictureFile.SavePictureAsync(PathExtensions.ProductImage);
+                mainPicture.IsMain = true;
+                Product.Pictures.Add(mainPicture);
+                // = await Product.Pictures.ToList().SaveAndUpdateMainPictureAsync(update.MainPictureFile, PathExtensions.ProductImage);
+            }
+
+            foreach (var picture in Product.Pictures.ExceptBy(update.OldPicturesDic.Keys,a => a.Id))
+            {
+                Product.Pictures.Remove(picture);   
+            }
+
+            if (update.NewPictureFiles != null)
+            {
+                var pictures = new List<Picture>();
+                foreach (var file in update.NewPictureFiles)
                 {
-                    pictures.Append(_Mapper.Map<Picture>(file));
+                    pictures.Add(await file.SavePictureAsync(PathExtensions.ProductImage));
                 }
-                Product.Pictures = pictures.ToList();
+                Product.Pictures = pictures;
             }
 
             #endregion
 
             #region tags
 
-            if (update.Tags != null)
+            if(update.TagIds != null)
             {
-                var tags = Enumerable.Empty<Tag>();
-                foreach (var str in update.Tags)
+                foreach (var tagId in update.TagIds.ExceptBy(Product.TagProducts.Select(a => a.TagId), a => a))
                 {
-                    tags.Append(new Tag
+                    Product.TagProducts.Add(new TagProducts
                     {
-                        Title = str,
+                        ProductId = update.Id,
+                        TagId = tagId,
                         BaseEntity = new BaseEntity(true),
                     });
                 }
-                Product.Tags = tags.ToList();
+                foreach (var tag in Product.TagProducts.ExceptBy(update.TagIds, a => a.TagId))
+                {
+                    Product.TagProducts.Remove(tag);
+                }
             }
 
             #endregion
 
             #region properties
 
-            if (update.Properties != null)
+            //foreach (var propertyDic in update.Properties.ExceptBy(Product.Properties.Select(a => a.Id), a => a.Value.Id))
+            //{
+            //    property = await _PropertyRepository.GetAsNoTracking(propertyDic.Key);
+            //    if (property == null)
+            //        return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.NotFound(typeof(Property)));
+
+            //    Product.Properties.Add(new Property
+            //    {
+            //        ProductId = update.Id,
+            //        Title = property.Title,
+            //        Priority = property.Priority,
+            //        Value = property.Value,
+            //        IsBase = false,
+            //        BaseEntity = new BaseEntity(true),
+            //    });
+            //}
+            if(update.PropertiesDic != null)
             {
-                var properties = Enumerable.Empty<Property>();
-                foreach (var property in update.Properties)
+                Property? property = null;
+                foreach (var propertyDic in update.PropertiesDic.Where(a => a.Value.Id > 0))
                 {
-                    properties.Append(new Property
+                    property = await _PropertyRepository.GetAsNoTracking(propertyDic.Key);
+                    if (property == null)
+                        return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.NotFound(typeof(Property)));
+
+                    Product.Properties.Add(new Property
                     {
-                        Title = property.Key,
+                        ProductId = update.Id,
+                        Title = property.Title,
+                        Priority = property.Priority,
                         Value = property.Value,
+                        IsBase = false,
                         BaseEntity = new BaseEntity(true),
                     });
                 }
-                Product.Properties = properties.ToList();
+
+
+                foreach (var propperty in Product.Properties.ExceptBy(update.PropertiesDic.Select(a => a.Value.Id), a => a.Id))
+                {
+                    Product.Properties.Remove(propperty);
+                }
+
+                foreach (var propperty in Product.Properties.IntersectBy(update.PropertiesDic.Select(a => a.Value.Id), a => a.Id))
+                {
+                    propperty.Value = update.PropertiesDic[propperty.BaseId.Value].Value;
+                }
             }
 
             #endregion
 
-            await _ProductRepository.Update(_Mapper.Map<Product>(update), _AppUserProvider.User.Id);
+            await _ProductRepository.Update(_Mapper.Map(update , Product), _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
+
 
 
 
@@ -274,5 +391,29 @@ namespace OrganicShop.BLL.Services
             await _ProductRepository.SoftDelete(Product, _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
+
+
+
+        public async Task<ServiceResponse<List<ComboDto<Product>>>> GetCombos()
+        {
+            var comboDtos = _ProductRepository
+              .GetQueryable()
+              .Select(a => _Mapper.Map<ComboDto<Product>>(a))
+              .ToList();
+            return new ServiceResponse<List<ComboDto<Product>>>(ResponseResult.Success, comboDtos);
+        }
+
+
+
+        public async Task<ServiceResponse<List<ComboDto<Product>>>> GetCombos(long[] productIds)
+        {
+            var comboDtos = _ProductRepository
+              .GetQueryable()
+              .Where(a => productIds.Contains(a.Id))
+              .Select(a => _Mapper.Map<ComboDto<Product>>(a))
+              .ToList();
+            return new ServiceResponse<List<ComboDto<Product>>>(ResponseResult.Success, comboDtos);
+        }
+
     }
 }

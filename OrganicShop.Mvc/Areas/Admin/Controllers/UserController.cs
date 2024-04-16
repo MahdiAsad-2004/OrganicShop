@@ -11,6 +11,8 @@ using OrganicShop.Mvc.Extensions;
 using System.Text.Json;
 using OrganicShop.Domain.Dtos.Base;
 using OrganicShop.BLL.Extensions;
+using OrganicShop.Domain.Enums;
+using OrganicShop.BLL.Services;
 
 namespace OrganicShop.Mvc.Areas.Admin.Controllers
 {
@@ -34,6 +36,7 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(FilterUserDto filter, PagingDto paging)
         {
+            filter.ActiveFilter = IsActiveFilter.All;
             var response = await _UserService.GetAll(filter, paging);
 
             switch (response.Result)
@@ -56,27 +59,12 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> UsersTable(FilterUserDto filter, PagingDto paging)
         {
-            //return _ClientHandleResult.Json(HttpContext,paging);
-            //return _ClientHandleResult.Json(HttpContext,filter);
             var response = await _UserService.GetAll(filter, paging);
-            filter.LogAsync();
-            paging.LogAsync();
-            //var response = await _UserService.GetAll();
-            
-            switch (response.Result)
-            {
-                case ResponseResult.Success:
-                    return _ClientHandleResult.Partial(HttpContext,PartialView("_UsersTable",response.Data), "table-container");
 
-                case ResponseResult.NoAccess:
-                    return Forbid();
+            if (response.Result == ResponseResult.Success)
+                return _ClientHandleResult.Partial(HttpContext, PartialView("_UsersTable", response.Data));
 
-                case ResponseResult.NotFound:
-                    return NotFoundPage();
-
-                default:
-                    return BadRequest();
-            }
+            return _ClientHandleResult.Toast(HttpContext, new Toast(ToastType.Error, response.Message));
         }
 
 

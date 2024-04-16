@@ -6,14 +6,14 @@ using OrganicShop.Domain.Enums.SortTypes;
 
 namespace OrganicShop.Domain.Dtos.ProductDtos
 {
-    public class FilterProductDto : BaseFilterDto<Entities.Product, long>
+    public class FilterProductDto : BaseFilterDto<Product, long>
     {
         public string? Title { get; set; }
-        public string? Barcode { get; set; }
-        public int? MaxPrice { get; set; }
         public int? MinPrice { get; set; }
+        public int? MaxPrice { get; set; }
         public long? ProductId { get; set; }
         public int? CategoryId { get; set; }
+        public int? TagId { get; set; }
         public ProductSortType SortBy { get; set; } = ProductSortType.None;
 
 
@@ -62,13 +62,13 @@ namespace OrganicShop.Domain.Dtos.ProductDtos
                     query = query.OrderByDescending(a => a.SoldCount);
                     break;
 
-                case ProductSortType.Discount:
-                    query = query.OrderBy(a => a.UpdatedPrice);
-                    break;
+                //case ProductSortType.Discount:
+                //    query = query.OrderBy(a => a.UpdatedPrice);
+                //    break;
 
-                case ProductSortType.DiscountDesc:
-                    query = query.OrderByDescending(a => a.UpdatedPrice);
-                    break;
+                //case ProductSortType.DiscountDesc:
+                //    query = query.OrderByDescending(a => a.UpdatedPrice);
+                //    break;
 
             }
 

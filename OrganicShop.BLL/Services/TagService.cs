@@ -11,6 +11,8 @@ using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Enums;
+using OrganicShop.DAL.Repositories;
+using OrganicShop.Domain.Dtos.Combo;
 
 namespace OrganicShop.BLL.Services
 {
@@ -61,12 +63,25 @@ namespace OrganicShop.BLL.Services
         }
 
 
+        public async Task<ServiceResponse<UpdateTagDto>> Get(int Id)
+        {
+            if(Id < 1)
+                return new ServiceResponse<UpdateTagDto>(ResponseResult.NotFound,null);
+            
+            var tag = await _TagRepository.GetAsNoTracking(Id);
+            
+            if(tag == null)
+                return new ServiceResponse<UpdateTagDto>(ResponseResult.NotFound,null);
+
+            return new ServiceResponse<UpdateTagDto>(ResponseResult.Success, _Mapper.Map<UpdateTagDto>(tag));
+        }
+
 
         public async Task<ServiceResponse<Empty>> Create(CreateTagDto create)
         {
             Tag Tag = _Mapper.Map<Tag>(create);
 
-            if (await _TagRepository.GetQueryable().AnyAsync(a => a.Title.Contains(create.Title, StringComparison.OrdinalIgnoreCase)))
+            if (await _TagRepository.GetQueryable().AnyAsync(a => EF.Functions.Like(a.Title , create.Title)))
                 return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.EntityExist(create,a => nameof(a.Title)));
 
             await _TagRepository.Add(Tag,_AppUserProvider.User.Id);
@@ -82,10 +97,10 @@ namespace OrganicShop.BLL.Services
             if (Tag == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
-            if (await _TagRepository.GetQueryable().AnyAsync(a => a.Title.Contains(update.Title, StringComparison.OrdinalIgnoreCase) && a.Id != update.Id))
+            if (await _TagRepository.GetQueryable().AnyAsync(a => EF.Functions.Like(a.Title , update.Title) && a.Id != update.Id))
                 return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.EntityExist(update, a => nameof(a.Title)));
 
-            await _TagRepository.Update(_Mapper.Map<Tag>(update), _AppUserProvider.User.Id);
+            await _TagRepository.Update(_Mapper.Map(update,Tag), _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
@@ -101,5 +116,19 @@ namespace OrganicShop.BLL.Services
             await _TagRepository.SoftDelete(Tag, _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
         }
+
+
+
+        public async Task<ServiceResponse<List<ComboDto<Tag>>>> GetCombos()
+        {
+            var comboDtos = _TagRepository
+              .GetQueryable()
+              .Select(a => _Mapper.Map<ComboDto<Tag>>(a))
+              .ToList();
+            return new ServiceResponse<List<ComboDto<Tag>>>(ResponseResult.Success, comboDtos);
+        }
+
+
+
     }
 }

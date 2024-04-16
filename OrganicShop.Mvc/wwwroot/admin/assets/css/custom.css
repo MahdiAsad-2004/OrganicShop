@@ -288,3 +288,57 @@ html[dir="rtl"] .select2-container .select2-selection--single .select2-selection
     align-self:flex-start;
     padding-top:5px;
 }
+
+
+
+.select-container {
+    flex-wrap: wrap;
+    border: #0da487 2px solid;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+    .select-container > li {
+        margin-right: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        width: auto;
+        background-color: mintcream;
+        border: 1px solid black;
+        padding-left: 6px;
+        padding-right: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .select-container > li > span {
+            border-left: 1px black solid;
+            padding: 5px;
+        }
+
+        .select-container > li > i {
+            margin-right: 5px;
+            font-size: 17px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+
+.status-warning span {
+    background-color: rgba(255,87,36,0.1);
+    color: #ff5724;
+    padding: 5px 10px;
+    text-transform: capitalize;
+    display: inline-block;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 400
+}
+
+
+.btn-x :hover {
+    background-color: #dd0000 !important;
+    color: white !important;
+}

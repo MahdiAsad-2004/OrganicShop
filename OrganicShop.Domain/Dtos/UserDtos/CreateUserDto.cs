@@ -39,8 +39,8 @@ namespace OrganicShop.Domain.Dtos.UserDtos
         public Role Role { get; set; }
 
         [DisplayName("تصویر پروفایل")]
-        [MaxSize(500 , FieldName = "تصویر پروفایل")]
-        [FileFormat(new string[] {"jpg","png","jpeg"} , FieldName = "تصویر پروفایل")]
+        [FileSize(500)]
+        [FileFormat(new string[] {"jpg","png","jpeg"})]
         public IFormFile? ProfileImage { get; set; }
 
         [DisplayName("مجوز ها")]

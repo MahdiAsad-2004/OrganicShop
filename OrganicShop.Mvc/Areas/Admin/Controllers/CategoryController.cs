@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrganicShop.Domain.Dtos.CategoryDtos;
+using OrganicShop.Domain.Dtos.Page;
+using OrganicShop.Domain.Dtos.PropertyDtos;
 using OrganicShop.Domain.Enums.Response;
 using OrganicShop.Domain.IServices;
 using OrganicShop.Mvc.Models.Toast;
@@ -19,9 +21,9 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         #endregion
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(FilterCategoryDto filter, PagingDto paging)
         {
-            var response = await _CategoryService.GetAll();
+            var response = await _CategoryService.GetAll(filter,paging);
             if(response.Data != null)
             {
                 return View(response.Data);
@@ -29,6 +31,21 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
             await Console.Out.WriteLineAsync(response.Result.ToString());
             return NoContent();
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Table(FilterCategoryDto filter, PagingDto paging)
+        {
+            var response = await _CategoryService.GetAll(filter,paging);
+            
+            if (response.Result == ResponseResult.Success)
+                return _ClientHandleResult.Partial(HttpContext, PartialView("_Table", response.Data));
+
+            return _ClientHandleResult.Toast(HttpContext,new Toast(ToastType.Error,response.Message));
+        }
+
+
+
 
 
         [HttpGet]
@@ -43,7 +60,6 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         {
             if(create != null)
             {
-                await Console.Out.WriteLineAsync(create.Title);
                 var response = await _CategoryService.Create(create);
 
                 if (response.Result == ResponseResult.Success)
@@ -67,8 +83,6 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         [HttpGet("Admin/Category/Edit/{Id}")]
         public async Task<IActionResult> Edit(int Id = 0)
         {
-            //if(Id < 0) return NotFound();
-
             var response = await _CategoryService.Get(Id);
             var model = response.Data;
             await Console.Out.WriteLineAsync(Id.ToString());
@@ -85,18 +99,14 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
 
             return BadRequest();
         }
-
-
         [HttpPut]
         public async Task<IActionResult> Edit(UpdateCategoryDto update)
         {
-            return _ClientHandleResult.Toast(HttpContext,new Toast(ToastType.Warning,""));
             var response = await _CategoryService.Update(update);
             if (response.Result == ResponseResult.Success)
             {
                 return _ClientHandleResult.RedirectThenToast(HttpContext, TempData, "Index", new Toast(ToastType.Success, response.Message), true);
             }
-
             return _ClientHandleResult.Toast(HttpContext,new Toast(ToastType.Error,response.Message));
         }
 
@@ -105,13 +115,13 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int Id)
         {
-            //var response = await _CategoryService.Delete(Id);
-            if (true)
+            var response = await _CategoryService.Delete(Id);
+            if (response.Result == ResponseResult.Success)
             {
-                var model = await _CategoryService.GetAll();
-                return _ClientHandleResult.PartialThenToast(HttpContext, PartialView("Index",model), new Toast(ToastType.Success, "Success"));
+                var model = (await _CategoryService.GetAll()).Data;
+                return _ClientHandleResult.PartialThenToast(HttpContext, PartialView("_Table", model), new Toast(ToastType.Success, response.Message));
             }
-            //return _ClientHandleResult.Toast(HttpContext, new Toast(ToastType.Error, response.Message));
+            return _ClientHandleResult.Toast(HttpContext, new Toast(ToastType.Error, response.Message));
         }
 
 

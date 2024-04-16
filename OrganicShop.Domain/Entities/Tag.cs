@@ -1,4 +1,5 @@
 ﻿using OrganicShop.Domain.Entities.Base;
+using OrganicShop.Domain.Entities.Relations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +15,6 @@ namespace OrganicShop.Domain.Entities
         public string Title { get; set; }
 
 
-        public ICollection<Product>? Products { get; set; }
-
+        public ICollection<TagProducts> TagProducts { get; set; }
     }
 }

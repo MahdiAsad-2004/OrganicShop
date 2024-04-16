@@ -5,14 +5,11 @@
 }
 
 @section Styles{
-    <link rel="stylesheet" type="text/css" href="~/adminassets/css/vendors/chartist.css">
-    <link rel="stylesheet" type="text/css" href="~/adminassets/css/vendors/date-picker.css">
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/vendors/chartist.css">
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/vendors/date-picker.css">
 
     <!-- Bootstrap-tag input css -->
-    <link rel="stylesheet" type="text/css" href="~/adminassets/css/vendors/bootstrap-tagsinput.css">
-
-    <!-- Select2 css -->
-    <link rel="stylesheet" type="text/css" href="~/adminassets/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/vendors/bootstrap-tagsinput.css">
 }
 
 <div class="container-fluid">
@@ -51,7 +48,7 @@
                                 <div class="mb-4 row align-items-center">
                                     <label asp-for="ParentId" class="form-label-title col-sm-3 mb-0">سر دسته</label>
                                     <div class="col-sm-9">
-                                        <select asp-for="ParentId" class="form-control" >
+                                        <select asp-for="ParentId" class="form-control select-2" >
                                             <option value="">بدون سر دسته</option>
                                             @foreach (var item in categoryCombos)
                                             {
@@ -100,12 +97,9 @@
 
 
 @section Scripts{
-    <!-- select2 js -->
-    <script src="~/adminassets/js/select2.min.js"></script>
-    <script src="~/adminassets/js/select2-custom.js"></script>
 
     <!-- bootstrap tag-input js -->
-    <script src="~/adminassets/js/bootstrap-tagsinput.min.js"></script>
+    <script src="~/admin/assets/js/bootstrap-tagsinput.min.js"></script>
     <script src="~/admin/assets/js/sidebar-menu.js"></script>
 
     <partial name="_ValidationScriptsPartial"/>

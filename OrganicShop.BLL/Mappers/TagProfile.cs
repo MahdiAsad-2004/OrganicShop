@@ -2,6 +2,7 @@
 using OrganicShop.BLL.Extensions;
 using OrganicShop.Domain.Dtos.TagDtos;
 using AutoMapper;
+using OrganicShop.Domain.Dtos.Combo;
 
 namespace OrganicShop.BLL.Mappers
 {
@@ -16,8 +17,17 @@ namespace OrganicShop.BLL.Mappers
             CreateMap<CreateTagDto, Tag>();
 
 
-            CreateMap<UpdateTagDto, Tag>();
+            CreateMap<UpdateTagDto, Tag>() //;
+                .ForPath(m => m.BaseEntity.IsActive , a => a.MapFrom(b => b.IsActive));
 
+
+            CreateMap<Tag, UpdateTagDto>()
+                .ForMember(m => m.IsActive , a => a.MapFrom(b => b.BaseEntity.IsActive));
+
+
+            CreateMap<Tag, ComboDto<Tag>>()
+               .ForMember(m => m.Value, a => a.MapFrom(b => b.Id))
+               .ForMember(m => m.Text, a => a.MapFrom(b => b.Title));
         }
 
 

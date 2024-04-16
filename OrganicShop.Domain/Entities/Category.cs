@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using OrganicShop.Domain.Entities.Relations;
 
 namespace OrganicShop.Domain.Entities
 {
@@ -22,8 +23,9 @@ namespace OrganicShop.Domain.Entities
 
         public Picture Picture { get; set; }
         public Category? Parent { get; set; }
-        public ICollection<Category>? Subs { get; set; }
-        public ICollection<Product>? Products { get; set; }
+        public ICollection<Category> Subs { get; set; }
+        public ICollection<Product> Products { get; set; }
+        public ICollection<DiscountCategories> DiscountCategories { get; set; }
 
     }
 }

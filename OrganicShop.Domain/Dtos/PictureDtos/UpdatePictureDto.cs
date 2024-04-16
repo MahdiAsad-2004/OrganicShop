@@ -1,4 +1,5 @@
-﻿using OrganicShop.Domain.Dtos.Base;
+﻿using Microsoft.AspNetCore.Http;
+using OrganicShop.Domain.Dtos.Base;
 using OrganicShop.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,10 @@ namespace OrganicShop.Domain.Dtos.PictureDtos
 {
     public class UpdatePictureDto : BaseListDto<long>
     {
-        public string Title { get; set; }
+        public string Name { get; set; }
+
+
+
     }
 
 

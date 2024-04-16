@@ -27,8 +27,7 @@
                                 <h5>ویرایش دسته بندی </h5>
                             </div>
 
-                            <form class="theme-form theme-form-2 mega-form" onsubmit="AjaxRequest(event)" method="put" 
-                            enctype="multipart/form-data" href="/Admin/Category/Edit" >
+                            <form class="theme-form theme-form-2 mega-form" onsubmit="FetchRequest(event)" method="put" href="/Admin/Category/Edit" >
                                 <input asp-for="Id" hidden/>
 
                                 <div class="mb-4 row align-items-center">
@@ -72,10 +71,11 @@
                                 <div class="mb-4 row align-items-center">
                                     <label class="col-sm-3 col-form-label form-label-title">تصویر دسته</label>
                                     <div class="col-sm-6">
-                                        <input asp-for="ImageFile" type="file" class="form-control">
+                                        <input onchange="PreviewImage(event,'cateogry-image')" asp-for="ImageFile" type="file" class="form-control">
                                         <span class="text-danger mt-1" asp-validation-for="ImageFile"></span>
                                     </div>
-                                    <img class="col-sm-3 image-fluid rounded-2" src="~/media/images/category/@Model.ImageName" style="border:solid 2px black" alt="" />
+                                    <img id="cateogry-image" class="col-sm-3 image-fluid rounded-2" src="~/media/images/category/@Model.ImageName"
+                                        style="border:solid 2px black" alt="" />
                                 </div>
 
                                 <div class="mb-4 row align-items-center">
@@ -117,4 +117,11 @@
     <script src="~/admin/assets/js/sidebar-menu.js"></script>
 
     <partial name="_ValidationScriptsPartial"/>
+
+
+    <script>
+
+      
+
+    </script>
 }

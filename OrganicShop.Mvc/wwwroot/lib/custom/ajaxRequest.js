@@ -135,26 +135,56 @@ As.forEach(function (element) {
 let fetchResponse = null;
 let formElem = document.createElement('form');
 let formMethod;
-async function FetchRquest(e) {
-    ShowLoading();
+async function FetchRequest(e) {
     e.preventDefault();
     formElem = e.target;
-    try
-    {
-        formMethod = formElem.getAttribute('method').toLowerCase();
-        fetchResponse = await fetch(formElem.getAttribute('href'), {
-            method: formMethod,
-            body: formMethod == 'get' ? null : new FormData(formElem),
-        });
-        HandleFetchResponse(fetchResponse);
+    if ($(formElem).valid()) {
+        ShowLoading();
+        try {
+            formMethod = formElem.getAttribute('method').toLowerCase();
+            fetchResponse = await fetch(formElem.getAttribute('href'), {
+                method: formMethod,
+                body: formMethod == 'get' ? null : new FormData(formElem),
+            });
+            HandleFetchResponse(fetchResponse, e);
+        }
+        catch (er) {
+            Toast('Warning', 'An error was thrown from client', 2, 5000);
+            console.log(er);
+        }
+        HideLoading();
     }
-    catch (er)
-    {
-        Toast('Warning', 'An error was thrown from client',2,5000);
-        console.log(er);
-    }
-    HideLoading();
 }
+
+
+
+let containerId = null;
+let containerElement = document.createElement('div');
+let promiseResponse = null;
+async function LoadPartial(e) {
+    e.preventDefault();
+    containerId = e.target.getAttribute('data-container-id');
+    if (containerId) {
+        containerElement = document.getElementById(containerId);
+        if (containerElement) {
+            try {
+                promiseResponse = await fetch(e.target.getAttribute('href'), {
+                    method: 'get',
+                });
+                promiseResponse.text()
+                    .then(p => containerElement.innerHTML = p);
+            }
+            catch (er) {
+                Toast('Warning', 'An error was thrown from client', 2, 5000);
+                console.log(er);
+            }
+        }
+    }
+}
+
+
+
+
 
 
 

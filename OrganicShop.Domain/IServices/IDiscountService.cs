@@ -9,6 +9,8 @@ namespace OrganicShop.Domain.IServices
     {
         Task<ServiceResponse<PageDto<Discount, DiscountListDto, int>>> GetAll(FilterDiscountDto? filter = null,PagingDto? paging = null);
 
+        Task<ServiceResponse<UpdateDiscountDto>> Get(int Id);
+
         Task<ServiceResponse<Empty>> Create(CreateDiscountDto create);
 
         Task<ServiceResponse<Empty>> Update(UpdateDiscountDto update);

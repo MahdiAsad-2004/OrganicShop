@@ -23,6 +23,9 @@ namespace OrganicShop.BLL.Mappers
                 .ForMember(m => m.SizeMB, a => a.MapFrom(b => b.Length / 1024 / 1000))
                 .ForMember(m => m.BaseEntity, a => a.MapFrom(b => new BaseEntity(true)));
 
+
+            CreateMap<Picture, UpdatePictureDto>();
+
         }
 
 

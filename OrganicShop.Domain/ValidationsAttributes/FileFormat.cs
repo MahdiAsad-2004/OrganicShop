@@ -7,7 +7,6 @@ namespace OrganicShop.Mvc.ValidationsAttributes
     public class FileFormat : ValidationAttribute, IClientModelValidator
     {
         public string[] Formats { get; set; }
-        public string FieldName { get; set; } = "فایل";
         string FormatsString { get; set; }
 
         public FileFormat(string[] formats)
@@ -27,7 +26,7 @@ namespace OrganicShop.Mvc.ValidationsAttributes
 
         public void AddValidation(ClientModelValidationContext context)
         {
-            context.Attributes.Add("data-val-fileFormat", $"فرمت {FieldName} {string.Join(" / ", Formats)} نیست");
+            context.Attributes.Add("data-val-fileFormat", $"فرمت {context.ModelMetadata.DisplayName} {string.Join(" / ", Formats)} نیست");
             context.Attributes.Add("data-val-fileFormat-formats", $"{FormatsString}");
             context.Attributes.TryAdd("data-val", "true");
 

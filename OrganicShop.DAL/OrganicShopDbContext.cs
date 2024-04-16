@@ -25,7 +25,7 @@ namespace OrganicShop.DAL
         public DbSet<ContactUs> ContactUs { get; set; }
         public DbSet<CoProduct> CoProducts { get; set; }
         public DbSet<Discount> Discounts { get; set; }
-        public DbSet<DiscountUsers> DiscountUsers { get; set; }
+        public DbSet<DiscountCategories> DiscountCategories { get; set; }
         public DbSet<DiscountProducts> DiscountProducts { get; set; }
         public DbSet<Faq> Faqs { get; set; }
         public DbSet<Operation> Operations { get; set; }
@@ -39,6 +39,7 @@ namespace OrganicShop.DAL
         public DbSet<Picture> ProductImages { get; set; }
         public DbSet<Property> Properties { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<TagProducts> TagProducts { get; set; }
         public DbSet<User> Users { get; set; }
 
         #endregion

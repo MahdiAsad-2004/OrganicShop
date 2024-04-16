@@ -12,16 +12,18 @@ namespace OrganicShop.Domain.Entities
     public class Property : EntityId<int>
     {
         public string Title { get; set; }
-        public string Value { get; set; }
+        public string? Value { get; set; }
         public bool IsBase { get; set; }
         public int Priority { get; set; }
         public long? ProductId { get; set; }
+        public int? BaseId { get; set; }
 
 
 
 
         public Product? Product { get; set; }
-
+        public Property? Base { get; set; }
+        public ICollection<Property> Childs { get; set; }
 
     }
 }

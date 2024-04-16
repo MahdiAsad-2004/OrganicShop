@@ -109,7 +109,7 @@ namespace OrganicShop.Domain.Response
             var displayAttribute = dtoType.GetProperty(propertyStr).GetCustomAttribute<DisplayNameAttribute>();
             string propertyName = displayAttribute != null ? displayAttribute.DisplayName : dtoType.GetProperty(propertyStr).Name;
             string propertyValue = dtoType.GetProperty(propertyStr).GetValue(dto).ToString();
-            return $"{_EntityName} با {propertyName} '{propertyValue}' در حال حاضر وجود دارد";
+            return $"{_EntityName} با {propertyName} ' {propertyValue} ' در حال حاضر وجود دارد";
         }
 
 

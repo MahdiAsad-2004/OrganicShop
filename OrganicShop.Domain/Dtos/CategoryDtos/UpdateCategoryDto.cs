@@ -28,7 +28,7 @@ namespace OrganicShop.Domain.Dtos.CategoryDtos
         public CategoryType Type { get; set; }
 
         [DisplayName("تصویر دسته")]
-        [FileFormat(new string[] { "jpg", "png", "jpeg" }, FieldName = "تصویر ")]
+        [FileFormat(new string[] { "jpg", "png", "jpeg" })]
         public IFormFile? ImageFile { get; set; }
 
         [DisplayName("سر دسته")]

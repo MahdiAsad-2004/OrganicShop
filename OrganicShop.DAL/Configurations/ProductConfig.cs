@@ -22,7 +22,7 @@ namespace OrganicShop.DAL.Configurations
             builder.HasMany(a => a.CoProducts).WithOne(a => a.Product).HasForeignKey(a => a.ProductId);
             builder.HasOne(a => a.Category).WithMany(a => a.Products).HasForeignKey(a => a.CategoryId);
             builder.HasMany(a => a.DiscountProducts).WithOne(a => a.Product).HasForeignKey(a => a.ProductId).OnDelete(DeleteBehavior.Cascade);
-            builder.HasMany(a => a.Tags).WithMany(a => a.Products);
+            builder.HasMany(a => a.TagProducts).WithOne(a => a.Product).HasForeignKey(a => a.ProductId);
             builder.HasMany(a => a.Properties).WithOne(a => a.Product).HasForeignKey(a => a.ProductId);
 
 

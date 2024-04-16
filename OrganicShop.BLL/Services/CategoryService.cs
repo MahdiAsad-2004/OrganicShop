@@ -13,6 +13,7 @@ using OrganicShop.Domain.Enums;
 using OrganicShop.Domain.Dtos.Combo;
 using OrganicShop.BLL.Extensions;
 using OrganicShop.Domain.Enums.Response;
+using OrganicShop.Domain.Dtos.DiscountDtos;
 
 namespace OrganicShop.BLL.Services
 {
@@ -35,7 +36,9 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse<PageDto<Category, CategoryListDto, int>>> GetAll(FilterCategoryDto? filter = null, PagingDto? paging = null)
         {
-            var query = _CategoryRepository.GetQueryable();
+            var query = _CategoryRepository.GetQueryable()
+                .Include(a => a.Picture)
+                .AsQueryable();
 
             if (filter == null) filter = new FilterCategoryDto();
             if (paging == null) paging = new PagingDto();
@@ -47,7 +50,7 @@ namespace OrganicShop.BLL.Services
             if (filter.Title != null)
                 query = query.Where(q => EF.Functions.Like(q.Title, $"%{filter.Title}%"));
 
-            if (filter.Type != null)
+            if (filter.Type != CategoryType.All)
                 query = query.Where(q => q.Type == filter.Type);
 
             #endregion
@@ -66,6 +69,22 @@ namespace OrganicShop.BLL.Services
         }
 
 
+        public async Task<ServiceResponse<UpdateCategoryDto>> Get(int Id)
+        {
+            if (Id < 1)
+                return new ServiceResponse<UpdateCategoryDto>(ResponseResult.NotFound, null);
+
+            var entity = await _CategoryRepository.GetQueryable()
+                .Include(a => a.Picture)
+                .FirstOrDefaultAsync(a => a.Id.Equals(Id));
+                
+            if (entity == null)
+                return new ServiceResponse<UpdateCategoryDto>(ResponseResult.NotFound, null);
+
+            return new ServiceResponse<UpdateCategoryDto>(ResponseResult.Success, _Mapper.Map<UpdateCategoryDto>(entity));
+        }
+
+
         public async Task<ServiceResponse<Empty>> Create(CreateCategoryDto create)
         {
             //HasPermission(a => a.Categories_Admin);
@@ -78,24 +97,11 @@ namespace OrganicShop.BLL.Services
             Category = _Mapper.Map<Category>(create);
 
             //// Saving Image
-            Category.Picture = await create.ImageFile.SaveFileAsync(PathExtensions.CategoryImage);
+            Category.Picture = await create.ImageFile.SavePictureAsync(PathExtensions.CategoryImage);
             Category.Picture.IsMain = true;
 
             await _CategoryRepository.Add(Category, _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
-        }
-
-
-
-        public async Task<ServiceResponse<UpdateCategoryDto>> Get(int Id)
-        {
-            var entity = await _CategoryRepository
-                .GetAsNoTracking(Id);
-
-            if (entity == null)
-                return new ServiceResponse<UpdateCategoryDto>(ResponseResult.NotFound, null);
-
-            return new ServiceResponse<UpdateCategoryDto>(ResponseResult.Success, _Mapper.Map<UpdateCategoryDto>(entity));
         }
 
 
@@ -106,24 +112,21 @@ namespace OrganicShop.BLL.Services
             if (_CategoryRepository.GetQueryable().Any(a => a.Id != update.Id && EF.Functions.Like(a.Title, update.Title)))
                 return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.EntityExist(update, a => nameof(a.Title)));
 
-            Category = await _CategoryRepository.GetAsTracking(update.Id);
-
-            await Console.Out.WriteLineAsync(Category.BaseEntity.CreateDate.ToString());
-            await Console.Out.WriteLineAsync(Category.BaseEntity.LastModified.ToString());
+            Category = await _CategoryRepository.GetQueryableTracking()
+                .Include(a => a.Picture)
+                .FirstOrDefaultAsync(a => a.Id.Equals(update.Id));
 
             if (Category == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
             if(update.ImageFile != null)
             {
-                Category.Picture = await update.ImageFile.SaveFileAsync(PathExtensions.CategoryImage);
+                Category.Picture = await Category.Picture.SavePictureAsync(update.ImageFile, PathExtensions.CategoryImage);
                 Category.Picture.IsMain = true;
+                Category.Picture.BaseEntity.LastModified = DateTime.Now;
             }
 
             await _CategoryRepository.Update(_Mapper.Map(update,Category), _AppUserProvider.User.Id);
-
-            await Console.Out.WriteLineAsync(Category.BaseEntity.CreateDate.ToString());
-            await Console.Out.WriteLineAsync(Category.BaseEntity.LastModified.ToString());
 
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }

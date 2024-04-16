@@ -1,5 +1,7 @@
 ﻿<!-- latest js -->
 <script src="~/admin/assets/js/jquery-3.6.0.min.js"></script>
+@* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+
 
 <!-- Bootstrap js -->
 <script src="~/admin/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
@@ -31,19 +33,24 @@
 <!-- Theme js -->
 <script src="~/admin/assets/js/script.js"></script>
 
-<script>
 
+<!-- select2 js -->
+<script src="~/admin/assets/js/select2.min.js"></script>
+<script src="~/admin/assets/js/select2-custom.js"></script>
+
+<script>
 
 
     let IsfilterMenuOpen = false;
     let filterMenuHeader = document.getElementsByClassName('filter-menu-header')[0];
-    let filterMenuForm = document.getElementsByClassName('filter-menu-form')[0];
+    let filterMenuForm = document.getElementsByClassName('filter-menu-form');
     let filterMenuSubmit = document.getElementById('filter-menu-submit');
 
     function ToggleFilterMenu() {
         //console.log('toggle');
         //console.log(filterMenuForm);
         //console.log(IsfilterMenuOpen);
+        //e.target.parentElement.('filter-menu-form')[0].style.display = IsfilterMenuOpen ? 'none' : 'flex';
         document.getElementsByClassName('filter-menu-form')[0].style.display = IsfilterMenuOpen ? 'none' : 'flex';
         //filterMenuForm.style.display = IsfilterMenuOpen ? 'none' : 'flex';
         IsfilterMenuOpen = !IsfilterMenuOpen;
@@ -62,15 +69,34 @@
         };
     }
 
-    function GoPage(pageNumber) {
+    function GoPage(pageNumber,formId) {
         if (pageNumber && pageNumber > 0) {
-            document.getElementById('filter-pageNumber').setAttribute('value', pageNumber)
-            filterMenuSubmit.click();
+            document.getElementById('filter-pageNumber').setAttribute('value', pageNumber)            
+            SubmitForm(document.getElementById(formId));
             document.getElementById('filter-pageNumber').setAttribute('value', '1')
         }
-
     }
 
+    function SubmitForm(form) {
+        //console.log(form.querySelector(`[type='submit']`));
+        form.querySelector(`[type='submit']`).click();
+    }
+
+    function PreviewImage(event, imgId) {
+        var output = document.getElementById(imgId);
+        if (event.target.files[0]) {
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.classList.remove('d-none');
+            output.onload = function () {
+                URL.revokeObjectURL(output.src); // free memory
+            }
+        }
+        else { 
+            output.classList.add('d-none');
+        }
+    }
+
+    // console.log(filterMenuForm.querySelector("button[type='submit']"));
 
 </script>
 
@@ -78,31 +104,40 @@
 
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 
+<script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+
 <script src="~/lib/sweetAlert2/sweetalert2.min.js"></script>
 
 <script src="~/lib/custom/ajaxRequest.js"></script>
 
 <script src="~/lib/custom/ajaxResponseHanler.js"></script>
 
+@* <script src="~/lib/datePicker/jalali-datePicker/jalalidatepicker.min.js"></script> *@
+
+<script src="~/lib/datePicker/behzadi-persianDatepicker/js/persianDatepicker.min.js"></script>
 
 
 <script>
 
-    // let loadingBackground = document.getElementById('loading-background');
-    // let loadingSvg = document.getElementById('loading-svg');
 
-    // function ShowLoading(){
-    //     loadingBackground.style.height = '' + document.body.clientHeight + 'px';
-    //     loadingBackground.style.display = 'block';
-    //     loadingSvg.style.display = 'block';
-    //     console.log('show');
-    // }
+    $(document).ready(function () {
+        $('.select-2').select2();
+    });
 
-    // function HideLoading(){
-    //     loadingBackground.style.display = 'none';
-    //     loadingSvg.style.display = 'none';
-    //     console.log('hide');
-    // }
 
+    $(`.p-date-picker`).persianDatepicker({
+        formatDate: "YYYY/MM/DD",
+        cellWidth: 35,
+        cellHeight: 30,
+        fontSize: 15,
+        onSelect: function () {
+            for (var input of document.getElementsByClassName('p-date-picker')){
+                console.log(`${input.getAttribute('name')}: ${$(input).valid()}`);
+            }
+        },
+        onRender: function () {
+            console.log('render');
+        }
+    });
 
 </script>

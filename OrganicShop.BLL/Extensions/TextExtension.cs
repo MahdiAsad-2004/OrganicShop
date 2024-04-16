@@ -16,57 +16,56 @@ namespace OrganicShop.BLL.Extensions
 
         public static string ToToman(this string price)
         {
-            char[] priceArray = price.ToCharArray();
-            string toman = string.Empty;
-            for (int i = 0; i < priceArray.Length; i++)
-            {
-                toman += priceArray[i];
-                if (i == priceArray.Length - 4 || i == priceArray.Length - 7 || i == priceArray.Length - 10 || i == priceArray.Length - 13 || i == priceArray.Length - 16)
-                {
-                    toman += ",";
-                }
-            }
-            return $"{toman} تومان";
+            return $"{price.ToMoney()} تومان";
         }
 
 
         public static string ToToman(this int price)
         {
-            char[] priceArray = price.ToString().ToCharArray();
-            string toman = string.Empty;
-            for (int i = 0; i < priceArray.Length; i++)
-            {
-                toman += priceArray[i];
-                if (i == priceArray.Length - 4 || i == priceArray.Length - 7 || i == priceArray.Length - 10 || i == priceArray.Length - 13 || i == priceArray.Length - 16)
-                {
-                    toman += ",";
-                }
-            }
-            return $"{toman} تومان";
+            return $"{price.ToMoney()} تومان";
         }
 
-        public static string ToToman(this int? price)
+
+
+
+        public static string ToMoney(this string price)
+        {
+            char[] priceArray = price.ToCharArray();
+            StringBuilder toman = new StringBuilder();
+            for (int i = 0; i < priceArray.Length; i++)
+            {
+                toman.Append(priceArray[i]);
+                if (i == priceArray.Length - 4 || i == priceArray.Length - 7 || i == priceArray.Length - 10 || i == priceArray.Length - 13 || i == priceArray.Length - 16)
+                {
+                    toman.Append(",");
+                }
+            }
+            return toman.ToString();
+        }
+        public static string ToMoney(this int price)
         {
             char[] priceArray = price.ToString().ToCharArray();
-            string toman = string.Empty;
+            StringBuilder toman = new StringBuilder();
             for (int i = 0; i < priceArray.Length; i++)
             {
-                toman += priceArray[i];
+                toman.Append(priceArray[i]);
                 if (i == priceArray.Length - 4 || i == priceArray.Length - 7 || i == priceArray.Length - 10 || i == priceArray.Length - 13 || i == priceArray.Length - 16)
                 {
-                    toman += ",";
+                    toman.Append(",");
                 }
             }
-            return $"{toman} تومان";
+            return toman.ToString();
         }
-
 
 
         public static PersianDateTime ToPersianDate(this DateTime dateTime)
         {
             return new PersianDateTime(dateTime);
         }
-
+        public static PersianDateTime ToPersianDate(this DateTime? dateTime)
+        {
+            return new PersianDateTime(dateTime);
+        }
 
 
 

@@ -11,8 +11,8 @@ namespace OrganicShop.BLL.Mappers
         {
 
             CreateMap<CoProduct, CoProductListDto>()
-                .ForMember(m => m.Price , a => a.MapFrom(b => b.Product.Price))
-                .ForMember(m => m.UpdatedPrice , a => a.MapFrom(b => b.Product.UpdatedPrice));
+                .ForMember(m => m.Price, a => a.MapFrom(b => b.Product.Price));
+                //.ForMember(m => m.UpdatedPrice , a => a.MapFrom(b => b.Product.UpdatedPrice));
 
 
             CreateMap<CreateCoProductDto, CoProduct>();

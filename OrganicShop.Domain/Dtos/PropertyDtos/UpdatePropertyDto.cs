@@ -15,6 +15,4 @@ namespace OrganicShop.Domain.Dtos.PropertyDtos
         public int Priority { get; set; }
     }
 
-
-
 }

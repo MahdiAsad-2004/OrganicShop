@@ -29,7 +29,7 @@ namespace OrganicShop.Domain.Dtos.CategoryDtos
 
         [DisplayName("تصویر دسته")]
         [Required(ErrorMessage = "{0} ضروری است")]
-        [FileFormat(new string[] { "jpg","png","jpeg" }, FieldName = "تصویر ")]
+        [FileFormat(new string[] { "jpg","png","jpeg" })]
         public IFormFile ImageFile { get; set; }
 
         [DisplayName("سر دسته")]

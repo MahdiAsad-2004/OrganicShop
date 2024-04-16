@@ -6,11 +6,10 @@ using OrganicShop.Domain.Enums.SortTypes;
 
 namespace OrganicShop.Domain.Dtos.CategoryDtos
 {
-    public class FilterCategoryDto : BaseFilterDto<Entities.Category, int>
+    public class FilterCategoryDto : BaseFilterDto<Category, int>
     {
         public string? Title { get; set; }
-        public string? EnTitle { get; set; }
-        public CategoryType? Type { get; set; }
+        public CategoryType Type { get; set; } = CategoryType.All;
         public CategorySortType SortBy { get; set; } = CategorySortType.None;
 
 

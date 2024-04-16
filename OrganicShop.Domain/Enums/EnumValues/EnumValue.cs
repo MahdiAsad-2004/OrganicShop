@@ -90,7 +90,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case BaseSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case BaseSortType.Newest:
                     return "جدیدترین";
@@ -111,7 +111,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case BasketSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case BasketSortType.Newest:
                     return "جدیدترین";
@@ -138,7 +138,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case CategorySortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case CategorySortType.Newest:
                     return "جدیدترین";
@@ -166,7 +166,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case CommentSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case CommentSortType.Newest:
                     return "جدیدترین";
@@ -194,7 +194,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case CoProductSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case CoProductSortType.Newest:
                     return "جدیدترین";
@@ -228,7 +228,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case DiscountSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case DiscountSortType.Newest:
                     return "جدیدترین";
@@ -268,7 +268,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case PermissionSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case PermissionSortType.Newest:
                     return "جدیدترین";
@@ -302,7 +302,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case PictureSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case PictureSortType.Newest:
                     return "جدیدترین";
@@ -330,7 +330,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case ProductSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case ProductSortType.Newest:
                     return "جدیدترین";
@@ -382,7 +382,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case TagSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case TagSortType.Newest:
                     return "جدیدترین";
@@ -412,7 +412,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case TrackingDescriptionSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case TrackingDescriptionSortType.Newest:
                     return "جدیدترین";
@@ -440,7 +440,7 @@ namespace OrganicShop.Domain.Enums.EnumValues
             switch (sortType)
             {
                 case UserSortType.None:
-                    return "بدون ترتیب";
+                    return " بدون مرتب سازی ";
 
                 case UserSortType.Newest:
                     return "جدیدترین";

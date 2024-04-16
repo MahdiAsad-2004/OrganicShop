@@ -11,7 +11,7 @@ namespace OrganicShop.Domain.Dtos.DiscountDtos
         public long? UserId { get; set; }
         public long? ProductId { get; set; }
         public bool? IsDefault { get; set; }
-        public bool? IsPercent { get; set; }
+        public bool? IsFixDiscount { get; set; }
         public DiscountSortType SortBy { get; set; } = DiscountSortType.None;
 
 
@@ -45,11 +45,11 @@ namespace OrganicShop.Domain.Dtos.DiscountDtos
                     break;
 
                 case DiscountSortType.FixedValue:
-                    query = query.OrderBy(a => a.FixedValue);
+                    query = query.OrderBy(a => a.FixValue);
                     break;
 
                 case DiscountSortType.FixedValueDesc:
-                    query = query.OrderByDescending(a => a.FixedValue);
+                    query = query.OrderByDescending(a => a.FixValue);
                     break;
 
                 case DiscountSortType.Count:

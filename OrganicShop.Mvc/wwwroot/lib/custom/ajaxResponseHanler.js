@@ -1,10 +1,12 @@
 let MessageTypes = [
-    { Icon: 'success', Color: '#D4EBD5' },
-    { Icon: 'error', Color: '#FDD6DA' },
-    { Icon: 'warning', Color: '#FEFAD3' },
-    { Icon: 'info', Color: '#C1EDF3' },
-    { Icon: 'question', Color: '#D2DADE' }
+    { Icon: 'success', Color: '#27a027', BackGround: '#dff9ec' },
+    { Icon: 'error', Color: '#af2727', BackGround: '#ffe5e5' },
+    { Icon: 'warning', Color: '#e3b519', BackGround: '#fff2e1' },
+    { Icon: 'info', Color: '#0e74b4', BackGround: '#d6f7fa' },
+    { Icon: 'question', Color: '#585e64', BackGround: '#e7ebef' }
 ];
+
+
 let MessagePositions = ["top", "top-start", "top-end", "center", "center-start", "center-end", "bottom", "bottom-start", "bottom-end"];
 
 let Message = {
@@ -57,14 +59,14 @@ function HandleResponse(data, jqxhr) {
 
 
 
-function HandleFetchResponse(response) {
+function HandleFetchResponse(response, ev) {
     if (response.ok) {
         ResponseDataType = response.headers.get('ResponseDataType');
         if (ResponseDataType == 'partial') {
-            Partial(response);
+            Partial(response, ev);
         }
         else if (ResponseDataType == 'partial-toast') {
-            PartialThenToast(response);
+            PartialThenToast(response,ev);
         }
         else if (ResponseDataType == 'redirect-toast') {
             RedirectThenToast(response);
@@ -99,7 +101,7 @@ function HandleFetchResponse(response) {
             Toast('Warning', 'Not Found', 2, 5000);
         }
         else if (response.status == 405) {
-            Toast('Warning', 'Not Allowed',2, 5000);
+            Toast('Warning', 'Not Allowed', 2, 5000);
         }
         else if (response.status == 503) {
             Toast('Warning', 'Service Unavailable', 2, 5000);
@@ -112,10 +114,27 @@ function HandleFetchResponse(response) {
 
 
 
-function Partial(response) {
-    TargetElementId = response.headers.get('targetElementId');
-    response.text().then(partial =>
-    {
+function Partial(response, ev) {
+    TargetElementId = ev.target.getAttribute('data-container-id');
+    response.text().then(partial => {
+        if (TargetElementId) {
+
+            console.log(document.getElementById(TargetElementId));
+            document.getElementById(TargetElementId).innerHTML = partial;
+        }
+        else {
+            ViewContainer.innerHTML = partial;
+        }
+    });
+
+}
+
+function PartialThenToast(response, ev) {
+    TargetElementId = ev.target.getAttribute('data-container-id');
+    MessageString = response.headers.get("Message");
+    Message = JSON.parse(MessageString);
+    response.text().then(partial => {
+
         if (TargetElementId) {
             document.getElementById(TargetElementId).innerHTML = partial;
         }
@@ -124,19 +143,6 @@ function Partial(response) {
 
         }
     });
-   
-}
-
-function PartialThenToast(response) {
-    TargetElementId = response.headers.get('targetElementId');
-    if (TargetElementId) {
-        ViewContainer = document.getElementById(TargetElementId);
-    }
-    MessageString = response.headers.get("Message");
-    Message = JSON.parse(MessageString);
-    response.text().then(partial => {
-        ViewContainer.innerHTML = partial;
-    });
 
     HandleMessage(Message);
 }
@@ -144,8 +150,7 @@ function PartialThenToast(response) {
 function ToastThenRedirect(response) {
     MessageString = response.headers.get("Message");
     Message = JSON.parse(MessageString);
-    response.json().then(redirect =>
-    {
+    response.json().then(redirect => {
         HandleMessage(Message);
         setTimeout(function () {
             if (redirect.IsReplace == true) {
@@ -157,7 +162,7 @@ function ToastThenRedirect(response) {
             }
         }, Message.TimeMs)
     })
-  
+
 }
 
 
@@ -174,8 +179,7 @@ function RedirectThenToast(response) {
 }
 
 function ToastThenRefresh(response) {
-    response.json().then(message =>
-    {
+    response.json().then(message => {
         HandleMessage(message);
         setTimeout(function () {
             location.reload();
@@ -278,17 +282,19 @@ function HandleMessage(message) {
     var messageType = MessageTypes[message.Type];
     Swal.fire({
         toast: true,
-        titleText: message.Title,
-        text: message.Text,
+        title: `<span style="color:${messageType.Color}; font-family: 'iransans'!important; font-size:22px; font-weight:600;">${message.Title}</span>`,
+        //titleText: title,
+        //text: text,
+        html: `<span style="color: #000000; font-family: 'iranyekan'!important; font-size: 17px;">${message.Text}</span>`,
         icon: messageType.Icon,
         timer: message.TimeMs == 0 ? undefined : message.TimeMs,
         position: MessagePositions[message.Position],
-        background: messageType.Color,
+        background: messageType.BackGround,
         timerProgressBar: message.TimeMs == 0 ? false : true,
 
         showConfirmButton: false,
         showCloseButton: false,
-        width: '450px',
+        width: '550px',
         allowEscapeKey: false,
         //allowEnterKey: false,
         //confirmButtonText: 'Ok',
@@ -304,18 +310,21 @@ function Toast(title, text, typeIndex, timeMs) {
     console.log(Messagetype);
     Swal.fire({
         toast: true,
-        titleText: title,
-        text: text,
+        title: `<span style="color:${Messagetype.Color}; font-family: 'iransans'!important; font-size:22px; font-weight:600;">${title}</span>`,
+        //titleText: title,
+        //text: text,
+        html: `<span style="color: #000000; font-family: 'iranyekan'!important; font-size: 17px;">${text}</span>`,
         icon: Messagetype.Icon,
         timer: timeMs == 0 ? undefined : timeMs,
         position: 'top-end',
-        background: Messagetype.Color,
+        background: Messagetype.BackGround,
         timerProgressBar: timeMs == 0 ? false : true,
 
         showConfirmButton: false,
-        showCloseButton: true,
-        width: '450px',
-
+        showCloseButton: false,
+        width: '550px',
+        allowEscapeKey: false,
+        //showCloseButton: true,
         //confirmButtonText: 'Ok',
         //showCancelButton:true,
         //cancelButtonText: 'Cancel',

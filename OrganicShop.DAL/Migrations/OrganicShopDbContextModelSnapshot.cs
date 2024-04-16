@@ -306,14 +306,36 @@ namespace OrganicShop.DAL.Migrations
                     b.Property<int?>("Count")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FixedValue")
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("FixValue")
                         .HasColumnType("int");
+
+                    b.Property<bool>("FreeDelivery")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsFixDiscount")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaxPrice")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinPrice")
+                        .HasColumnType("int");
+
                     b.Property<int?>("Percent")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -557,18 +579,10 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Barcode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MainImage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -589,9 +603,6 @@ namespace OrganicShop.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UpdatedPrice")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -607,6 +618,9 @@ namespace OrganicShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BaseId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsBase")
                         .HasColumnType("bit");
 
@@ -621,14 +635,38 @@ namespace OrganicShop.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BaseId");
+
                     b.HasIndex("ProductId");
 
                     b.ToTable("Properties");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountCategories", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DiscountId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("DiscountId");
+
+                    b.ToTable("DiscountCategories");
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountProducts", b =>
@@ -654,29 +692,6 @@ namespace OrganicShop.DAL.Migrations
                     b.ToTable("DiscountProducts");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountUsers", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DiscountId")
-                        .HasColumnType("int");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DiscountId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DiscountUsers");
-                });
-
             modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.PermissionUsers", b =>
                 {
                     b.Property<int>("Id")
@@ -698,6 +713,29 @@ namespace OrganicShop.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PermissionUsers");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.TagProducts", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("TagProducts");
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Tag", b =>
@@ -823,21 +861,6 @@ namespace OrganicShop.DAL.Migrations
                             PhoneNumber = "09331234566",
                             Role = 3
                         });
-                });
-
-            modelBuilder.Entity("ProductTag", b =>
-                {
-                    b.Property<long>("ProductsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("TagsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("ProductTag");
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Address", b =>
@@ -1169,10 +1192,10 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     ContactUsId = (byte)1,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 649, DateTimeKind.Local).AddTicks(2830),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 201, DateTimeKind.Local).AddTicks(6804),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 649, DateTimeKind.Local).AddTicks(2903)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 201, DateTimeKind.Local).AddTicks(6921)
                                 });
                         });
 
@@ -1346,66 +1369,66 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     PermissionId = (byte)1,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(6863),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6742),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(6929)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6802)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)2,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(6940),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6809),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(6962)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6820)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)3,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(6976),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6829),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(6982)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6832)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)4,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(6988),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6835),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(6993)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6837)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)5,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(7003),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6844),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(7008)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6846)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)6,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(7017),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6850),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(7022)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6853)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)7,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(7028),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6856),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(7062)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6873)
                                 },
                                 new
                                 {
                                     PermissionId = (byte)8,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(7068),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6877),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 660, DateTimeKind.Local).AddTicks(7073)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 209, DateTimeKind.Local).AddTicks(6879)
                                 });
                         });
 
@@ -1460,10 +1483,10 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     PictureId = 1L,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 666, DateTimeKind.Local).AddTicks(9396),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 211, DateTimeKind.Local).AddTicks(5675),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 666, DateTimeKind.Local).AddTicks(9473)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 211, DateTimeKind.Local).AddTicks(5728)
                                 });
                         });
 
@@ -1521,6 +1544,10 @@ namespace OrganicShop.DAL.Migrations
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Property", b =>
                 {
+                    b.HasOne("OrganicShop.Domain.Entities.Property", "Base")
+                        .WithMany("Childs")
+                        .HasForeignKey("BaseId");
+
                     b.HasOne("OrganicShop.Domain.Entities.Product", "Product")
                         .WithMany("Properties")
                         .HasForeignKey("ProductId");
@@ -1553,10 +1580,62 @@ namespace OrganicShop.DAL.Migrations
                                 .HasForeignKey("PropertyId");
                         });
 
+                    b.Navigation("Base");
+
                     b.Navigation("BaseEntity")
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountCategories", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.Category", "Category")
+                        .WithMany("DiscountCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrganicShop.Domain.Entities.Discount", "Discount")
+                        .WithMany("DiscountCategories")
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<int>("DiscountCategoriesId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("DiscountCategoriesId");
+
+                            b1.ToTable("DiscountCategories");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DiscountCategoriesId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Discount");
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountProducts", b =>
@@ -1609,56 +1688,6 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.DiscountUsers", b =>
-                {
-                    b.HasOne("OrganicShop.Domain.Entities.Discount", "Discount")
-                        .WithMany("DiscountUsers")
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OrganicShop.Domain.Entities.User", "User")
-                        .WithMany("DiscountUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
-                        {
-                            b1.Property<int>("DiscountUsersId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime>("CreateDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<DateTime?>("DeleteDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsActive")
-                                .HasColumnType("bit");
-
-                            b1.Property<bool>("IsDelete")
-                                .HasColumnType("bit");
-
-                            b1.Property<DateTime>("LastModified")
-                                .HasColumnType("datetime2");
-
-                            b1.HasKey("DiscountUsersId");
-
-                            b1.ToTable("DiscountUsers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DiscountUsersId");
-                        });
-
-                    b.Navigation("BaseEntity")
-                        .IsRequired();
-
-                    b.Navigation("Discount");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.PermissionUsers", b =>
                 {
                     b.HasOne("OrganicShop.Domain.Entities.Permission", "Permission")
@@ -1707,6 +1736,56 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("Permission");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Relations.TagProducts", b =>
+                {
+                    b.HasOne("OrganicShop.Domain.Entities.Product", "Product")
+                        .WithMany("TagProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrganicShop.Domain.Entities.Tag", "Tag")
+                        .WithMany("TagProducts")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("OrganicShop.Domain.Entities.Base.BaseEntity", "BaseEntity", b1 =>
+                        {
+                            b1.Property<int>("TagProductsId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreateDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime?>("DeleteDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsDelete")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("TagProductsId");
+
+                            b1.ToTable("TagProducts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TagProductsId");
+                        });
+
+                    b.Navigation("BaseEntity")
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Tag", b =>
@@ -1860,37 +1939,22 @@ namespace OrganicShop.DAL.Migrations
                                 new
                                 {
                                     UserId = 1L,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 673, DateTimeKind.Local).AddTicks(9732),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 215, DateTimeKind.Local).AddTicks(4811),
                                     IsActive = true,
                                     IsDelete = false,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 673, DateTimeKind.Local).AddTicks(9801)
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 215, DateTimeKind.Local).AddTicks(4862)
                                 },
                                 new
                                 {
                                     UserId = 2L,
-                                    CreateDate = new DateTime(2024, 3, 21, 14, 6, 35, 674, DateTimeKind.Local).AddTicks(91),
+                                    CreateDate = new DateTime(2024, 4, 15, 20, 24, 25, 215, DateTimeKind.Local).AddTicks(4991),
                                     IsActive = true,
-                                    IsDelete = true,
-                                    LastModified = new DateTime(2024, 3, 21, 14, 6, 35, 674, DateTimeKind.Local).AddTicks(104)
+                                    IsDelete = false,
+                                    LastModified = new DateTime(2024, 4, 15, 20, 24, 25, 215, DateTimeKind.Local).AddTicks(4999)
                                 });
                         });
 
                     b.Navigation("BaseEntity")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProductTag", b =>
-                {
-                    b.HasOne("OrganicShop.Domain.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OrganicShop.Domain.Entities.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -1906,6 +1970,8 @@ namespace OrganicShop.DAL.Migrations
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Category", b =>
                 {
+                    b.Navigation("DiscountCategories");
+
                     b.Navigation("Picture")
                         .IsRequired();
 
@@ -1916,9 +1982,9 @@ namespace OrganicShop.DAL.Migrations
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Discount", b =>
                 {
-                    b.Navigation("DiscountProducts");
+                    b.Navigation("DiscountCategories");
 
-                    b.Navigation("DiscountUsers");
+                    b.Navigation("DiscountProducts");
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.Order", b =>
@@ -1946,6 +2012,18 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("Pictures");
 
                     b.Navigation("Properties");
+
+                    b.Navigation("TagProducts");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Property", b =>
+                {
+                    b.Navigation("Childs");
+                });
+
+            modelBuilder.Entity("OrganicShop.Domain.Entities.Tag", b =>
+                {
+                    b.Navigation("TagProducts");
                 });
 
             modelBuilder.Entity("OrganicShop.Domain.Entities.User", b =>
@@ -1957,8 +2035,6 @@ namespace OrganicShop.DAL.Migrations
                     b.Navigation("Baskets");
 
                     b.Navigation("Comments");
-
-                    b.Navigation("DiscountUsers");
 
                     b.Navigation("Operations");
 

@@ -20,7 +20,8 @@ namespace OrganicShop.DAL.Configurations
 
             builder.HasMany(a => a.Subs).WithOne(a => a.Parent).HasForeignKey(a => a.ParentId);
             builder.HasMany(a => a.PermissionUsers).WithOne(a => a.Permission).HasForeignKey(a => a.PermissionId);
-
+            builder.Property(a => a.ParentId).IsRequired(false);
+            builder.Property(a => a.ParentId).HasDefaultValue(null);
 
 
             builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);

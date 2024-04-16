@@ -25,7 +25,7 @@ namespace OrganicShop.Domain.Entities.SeedDatas
 
         public static readonly List<Permission> Permissions = new List<Permission>()
         {
-            new Permission(){ Id = 1, Title = "مدیر سایت", EnTitle = "Main Admin",},
+            new Permission(){ Id = 1, Title = "مدیر سایت", EnTitle = "Main Admin",ParentId = null},
 
             new Permission(){ Id = 2, Title = "مدیریت کاربران", EnTitle = "Users Admin",ParentId = 1, },
 

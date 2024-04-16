@@ -19,7 +19,7 @@ namespace OrganicShop.DAL.Configurations
 
 
             builder.HasMany(a => a.DiscountProducts).WithOne(a => a.Discount).HasForeignKey(a => a.DiscountId).OnDelete(DeleteBehavior.Cascade);
-            builder.HasMany(a => a.DiscountUsers).WithOne(a => a.Discount).HasForeignKey(a => a.DiscountId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(a => a.DiscountCategories).WithOne(a => a.Discount).HasForeignKey(a => a.DiscountId).OnDelete(DeleteBehavior.Cascade);
 
 
 

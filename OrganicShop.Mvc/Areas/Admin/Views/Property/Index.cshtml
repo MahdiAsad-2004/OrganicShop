@@ -1,69 +1,34 @@
 ﻿@using OrganicShop.Domain.Dtos.PropertyDtos
 @model PageDto<Property,PropertyListDto,int>
-
+@{
+    Layout = "_LayoutIndex";
+}
 @section Styles {
     <!-- Data Table css -->
     <link rel="stylesheet" type="text/css" href="~/admin/assets/css/datatables.css">
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card card-table">
-                <div class="card-body">
-                    <div class="title-header option-title">
-                        <h5>لیست ویژگی ها</h5>
-                        <form class="d-inline-flex">
-                            <a href="/Admin/Property/Create" class="align-items-center btn btn-theme d-flex">
-                                <i data-feather="plus-square"></i>افزودن جدید
-                            </a>
-                        </form>
-                    </div>
 
-                    <div class="table-responsive category-table">
-                        <table class="table all-package theme-table" id="table_id">
-                            <thead>
-                                <tr>
-                                    <th>عنوان</th>
-                                    <th>الویت</th>
-                                    <th>تنظیمات</th>
-                                </tr>
-                            </thead>
+@section FilterForm{
 
-                            <tbody>
-                                @foreach (var item in Model.List)
-                                {
-                                    <tr>
-                                        <td>@item.Title</td>
-                                        <td>@item.Priority</td>
-                                        <td>
-                                            <ul>
-                                                <li>
-                                                    <a href="javascript:void(0)">
-                                                        <i class="ri-pencil-line"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                       data-bs-target="#exampleModalToggle" onclick="SetValueOnModal('@item.Id' , '@item.Title')">
-                                                        <i class="ri-delete-bin-line"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <form id="filter-form" class="filter-menu-form row col-12" method="post" href="/Admin/Property/Table" data-container-id="table-container" onsubmit="FetchRequest(event)">
+        <input name="paging.PageNumber" id="filter-pageNumber" hidden value="1" />
+        <div class="form-group col-3 mb-1 ">
+            <label class="form-label filter-menu-label">مرتب سازی</label>
+            <select name="filter.SortBy" class="form-control filter-menu-input">
+                @foreach (var sortType in EnumExtension.GetArray<BaseSortType>())
+                {
+                    <option value="@((byte)sortType)">@sortType.ToStringValue()</option>
+                }
+            </select>
         </div>
-    </div>
-</div>
 
+        <partial name="_FilterDefaults" />
 
+    </form>
+}
+
+<partial name="_Table" model="Model"/>
 
 
 @section Modals {
@@ -84,7 +49,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="modal-button-close" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">خیر</button>
-                    <button type="button" class="btn btn-animation btn-md fw-bold" onclick="Delete()">بله</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold" onclick="DeleteProperty()">بله</button>
                     <button id="success-delete-message" hidden type="button" class="btn btn-animation btn-md fw-bold" data-bs-target="#exampleModalToggle2"
                             data-bs-toggle="modal" data-bs-dismiss="modal"></button>
                 </div>
@@ -92,7 +57,7 @@
         </div>
     </div>
 
-    <form hidden class="ajax-request" id="delete-form" href="/Admin/Property/Delete" method="delete">
+    <form hidden onsubmit="FetchRequest(event)" id="delete-form" data-container-id="table-container" href="/Admin/Property/Delete" method="delete">
         <input hidden name="Id" id="input-id" value="0"/>
         <button type="submit" id="delete-form-submit"></button>
     </form>
@@ -134,7 +99,7 @@
         }
 
 
-        function Delete() {
+        function DeleteProperty() {
             modalButtonClose.click();
             deleteFormSubmit.click();
             ResetSetValueOnModal();
