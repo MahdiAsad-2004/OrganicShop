@@ -9,7 +9,8 @@ namespace OrganicShop.Domain.IRepositories
 {
     public interface IPictureRepository : IRepository,
         IReadRepository<Picture, long>,
-        IWriteRepository<Picture, long>
+        IWriteRepository<Picture, long>,
+        IDeleteRepository<Picture, long>
     {
 
     }

@@ -10,7 +10,7 @@ namespace OrganicShop.Mvc.Models.Toast
         public string Text { get; set; } = "";
         public ToastType Type { get; set; } = ToastType.Success;
         public ToastPosition Position { get; set; } = ToastPosition.TopEnd;
-        public int TimeMs { get; set; } = 5000;
+        public int TimeMs { get; set; } = 6000;
 
 
 

@@ -97,7 +97,7 @@ namespace OrganicShop.BLL.Services
             Category = _Mapper.Map<Category>(create);
 
             //// Saving Image
-            Category.Picture = await create.ImageFile.SavePictureAsync(PathExtensions.CategoryImage);
+            Category.Picture = await create.ImageFile.SavePictureAsync(PathExtensions.CategoryImages);
             Category.Picture.IsMain = true;
 
             await _CategoryRepository.Add(Category, _AppUserProvider.User.Id);
@@ -121,7 +121,7 @@ namespace OrganicShop.BLL.Services
 
             if(update.ImageFile != null)
             {
-                Category.Picture = await Category.Picture.SavePictureAsync(update.ImageFile, PathExtensions.CategoryImage);
+                Category.Picture = await Category.Picture.SavePictureAsync(update.ImageFile, PathExtensions.CategoryImages);
                 Category.Picture.IsMain = true;
                 Category.Picture.BaseEntity.LastModified = DateTime.Now;
             }

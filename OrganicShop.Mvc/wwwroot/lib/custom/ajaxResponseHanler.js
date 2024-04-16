@@ -294,7 +294,7 @@ function HandleMessage(message) {
 
         showConfirmButton: false,
         showCloseButton: false,
-        width: '550px',
+        width: '500px',
         allowEscapeKey: false,
         //allowEnterKey: false,
         //confirmButtonText: 'Ok',
@@ -322,7 +322,7 @@ function Toast(title, text, typeIndex, timeMs) {
 
         showConfirmButton: false,
         showCloseButton: false,
-        width: '550px',
+        width: '500px',
         allowEscapeKey: false,
         //showCloseButton: true,
         //confirmButtonText: 'Ok',

@@ -53,6 +53,33 @@ Console.WriteLine("Hello, World!\n");
 
 
 
+//float x = ((float)378839 / 1024 / 1000);
+
+//Console.WriteLine($"{x}");
+//Console.WriteLine($"{x*1000}");
+//Console.WriteLine((x*1000).ToString("0.00"));
+//Console.WriteLine(x.ToString("0.000"));
+
+//Console.WriteLine("-------------------------------");
+
+
+//Console.WriteLine(x.ToSize());
+//Console.WriteLine(1.26f.ToSize());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //var product = new Product()
 //{
 //    DiscountProducts = new List<DiscountProducts>

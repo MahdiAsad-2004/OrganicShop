@@ -23,5 +23,7 @@ namespace OrganicShop.Domain.Entities
         public User? User { get; set; }
         public Category? Category { get; set; }
 
+
+
     }
 }

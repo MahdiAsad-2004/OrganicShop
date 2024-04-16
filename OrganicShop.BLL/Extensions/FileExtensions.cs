@@ -43,7 +43,7 @@ namespace OrganicShop.BLL.Extensions
             return new Picture
             {
                 Name = fileName,
-                SizeMB = file.Length / 1024 / 1000,
+                SizeMB = (float)file.Length / 1024 / 1000,
                 BaseEntity = new BaseEntity(true),
             };
         }
@@ -60,7 +60,7 @@ namespace OrganicShop.BLL.Extensions
                 await file.CopyToAsync(stream);
             }
             picture.Name = fileName;
-            picture.SizeMB = file.Length / 1024 / 1000;
+            picture.SizeMB = (float)file.Length / 1024 / 1000;
             picture.BaseEntity.LastModified = DateTime.Now;
             return picture;
         }
@@ -105,10 +105,24 @@ namespace OrganicShop.BLL.Extensions
                 await file.CopyToAsync(stream);
             }
             pictures.First(a => a.IsMain).Name = fileName;
-            pictures.First(a => a.IsMain).SizeMB = file.Length / 1024 / 1000;
+            pictures.First(a => a.IsMain).SizeMB = (float)file.Length / 1024 / 1000;
             pictures.First(a => a.IsMain).BaseEntity.LastModified = DateTime.Now;
             return pictures;
         }
+
+
+        public static async Task<bool> DeletePictureFile(this Picture picture)
+        {
+            string filePath = picture.GetPictureFilePath();
+
+            if(File.Exists(filePath))
+            {
+                File.Delete(filePath);
+                return true;
+            }
+            return false;
+        }
+
 
 
     }

@@ -104,5 +104,13 @@ namespace OrganicShop.BLL.Extensions
             Console.Out.WriteLine(stringBuilder.ToString());
         }
 
+        public static string ToSize(this float sizeMb)
+        {
+            if (sizeMb < 1)
+                return $"{(sizeMb * 1000).ToString("0.00")} KB";
+            else
+                return $"{(sizeMb).ToString("0.00")} MB";
+        }
+
     }
 }

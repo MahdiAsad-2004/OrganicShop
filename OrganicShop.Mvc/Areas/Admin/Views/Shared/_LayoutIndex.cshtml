@@ -78,6 +78,13 @@
 
     @await RenderSectionAsync("Scripts", false)
 
+    <script>
+        window.onload = () => {
+            //console.log(document.getElementById('filter-pageNumber').value);
+            SubmitForm(document.getElementById('filter-form'));
+        }
+    </script>
+
 </body>
 </html>
 

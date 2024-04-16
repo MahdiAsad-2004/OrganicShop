@@ -158,14 +158,14 @@ namespace OrganicShop.BLL.Services
             #region pictures
 
             var pictures = new List<Picture>();
-            var pictureMain = await create.MainImageFile.SavePictureAsync(PathExtensions.ProductImage);
+            var pictureMain = await create.MainImageFile.SavePictureAsync(PathExtensions.ProductImages);
             pictureMain.IsMain = true;
             pictures.Add(pictureMain);
             if (create.PictureFiles != null)
             {
                 foreach (var pictureFile in create.PictureFiles)
                 {
-                    pictures.Add(await pictureFile.SavePictureAsync(PathExtensions.ProductImage));
+                    pictures.Add(await pictureFile.SavePictureAsync(PathExtensions.ProductImages));
                 }
             }
             Product.Pictures = pictures;
@@ -286,7 +286,7 @@ namespace OrganicShop.BLL.Services
             if (update.MainPictureFile != null)
             {
                 Product.Pictures.First(a => a.IsMain).BaseEntity.IsDelete = true;
-                var mainPicture = await update.MainPictureFile.SavePictureAsync(PathExtensions.ProductImage);
+                var mainPicture = await update.MainPictureFile.SavePictureAsync(PathExtensions.ProductImages);
                 mainPicture.IsMain = true;
                 Product.Pictures.Add(mainPicture);
                 // = await Product.Pictures.ToList().SaveAndUpdateMainPictureAsync(update.MainPictureFile, PathExtensions.ProductImage);
@@ -296,14 +296,16 @@ namespace OrganicShop.BLL.Services
             {
                 foreach (var picture in Product.Pictures.Where(a => a.IsMain == false))
                 {
-                    Product.Pictures.Remove(picture);
+                    picture.BaseEntity.IsDelete = true;
+                    //Product.Pictures.Remove(picture);
                 }
             }
             else
             {
                 foreach (var picture in Product.Pictures.Where(a => a.IsMain == false).ExceptBy(update.OldPicturesDic.Keys, a => a.Id))
                 {
-                    Product.Pictures.Remove(picture);
+                    //Product.Pictures.Remove(picture);
+                    picture.BaseEntity.IsDelete = true;
                 }
             }
             
@@ -312,7 +314,7 @@ namespace OrganicShop.BLL.Services
             {
                 foreach (var file in update.NewPictureFiles)
                 {
-                    Product.Pictures.Add(await file.SavePictureAsync(PathExtensions.ProductImage));
+                    Product.Pictures.Add(await file.SavePictureAsync(PathExtensions.ProductImages));
                 }
             }
 
@@ -341,28 +343,13 @@ namespace OrganicShop.BLL.Services
 
             #region properties
 
-            //foreach (var propertyDic in update.Properties.ExceptBy(Product.Properties.Select(a => a.Id), a => a.Value.Id))
-            //{
-            //    property = await _PropertyRepository.GetAsNoTracking(propertyDic.Key);
-            //    if (property == null)
-            //        return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.NotFound(typeof(Property)));
-
-            //    Product.Properties.Add(new Property
-            //    {
-            //        ProductId = update.Id,
-            //        Title = property.Title,
-            //        Priority = property.Priority,
-            //        Value = property.Value,
-            //        IsBase = false,
-            //        BaseEntity = new BaseEntity(true),
-            //    });
-            //}
             if (update.PropertiesDic != null)
             {
                 Property? baseProperty = null;
                 foreach (var propperty in Product.Properties.ExceptBy(update.PropertiesDic.Select(a => a.Value.Id), a => a.Id))
                 {
-                    Product.Properties.Remove(propperty);
+                    propperty.BaseEntity.IsDelete = true;
+                    //Product.Properties.Remove(propperty);
                 }
 
                 foreach (var propperty in Product.Properties.IntersectBy(update.PropertiesDic.Select(a => a.Value.Id), a => a.Id))

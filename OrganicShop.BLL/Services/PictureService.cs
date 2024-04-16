@@ -10,6 +10,8 @@ using OrganicShop.Domain.Response;
 using AutoMapper;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Enums;
+using OrganicShop.Domain.Dtos.TagDtos;
+using OrganicShop.BLL.Extensions;
 
 namespace OrganicShop.BLL.Services
 {
@@ -44,6 +46,12 @@ namespace OrganicShop.BLL.Services
             if (filter.Name != null)
                 query = query.Where(q => EF.Functions.Like(q.Name, $"%{filter.Name}%"));
 
+            if(filter.MinSize != null)
+                query = query.Where(a => a.SizeMB >= filter.MinSize);
+
+            if (filter.MaxSize != null)
+                query = query.Where(a => a.SizeMB <= filter.MaxSize);
+
             #endregion
 
             #region sort
@@ -53,8 +61,8 @@ namespace OrganicShop.BLL.Services
             #endregion
 
             PageDto<Picture, PictureListDto,long> pageDto = new();
-            //pageDto.List = pageDto.SetPaging(query , paging).Select(a => a.ToListDto()).ToList();
-            //pageDto.Pager = pageDto.SetPager(query, paging);
+            pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<PictureListDto>(a)).ToList();
+            pageDto.Pager = pageDto.SetPager(query, paging);
 
             return new ServiceResponse<PageDto<Picture, PictureListDto, long>>(ResponseResult.Success,pageDto);
         }
@@ -106,8 +114,13 @@ namespace OrganicShop.BLL.Services
             if (Picture == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.SuccessDelete());
 
-            await _PictureRepository.SoftDelete(Picture, _AppUserProvider.User.Id);
-            return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
+            //await _PictureRepository.SoftDelete(Picture, _AppUserProvider.User.Id);
+            if(await Picture.DeletePictureFile())
+            {
+                await _PictureRepository.Delete(Picture, _AppUserProvider.User.Id);
+                return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessDelete());
+            }
+            return new ServiceResponse<Empty>(ResponseResult.Failed, "فایل مورد نطر یافت نشد !");
         }
     }
 }

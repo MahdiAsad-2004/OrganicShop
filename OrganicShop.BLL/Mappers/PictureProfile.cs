@@ -14,6 +14,8 @@ namespace OrganicShop.BLL.Mappers
 
             CreateMap<Picture, PictureListDto>();
 
+
+
             //CreateMap<CreatePictureDto, Picture>();
 
             //CreateMap<UpdatePictureDto, Picture>();

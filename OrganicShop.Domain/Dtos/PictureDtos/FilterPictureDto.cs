@@ -9,7 +9,8 @@ namespace OrganicShop.Domain.Dtos.PictureDtos
     public class FilterPictureDto : BaseFilterDto<Picture, long>
     {
         public string? Name { get; set; }
-        public int? Size { get; set; }
+        public float? MinSize { get; set; }
+        public float? MaxSize { get; set; }
         public PictureSortType SortBy { get; set; } = PictureSortType.None;
 
 

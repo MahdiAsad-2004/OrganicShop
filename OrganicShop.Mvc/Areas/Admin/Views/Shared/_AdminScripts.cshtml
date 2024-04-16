@@ -71,9 +71,9 @@
 
     function GoPage(pageNumber,formId) {
         if (pageNumber && pageNumber > 0) {
-            document.getElementById('filter-pageNumber').setAttribute('value', pageNumber)            
+            document.getElementById('filter-pageNumber').value = pageNumber;            
             SubmitForm(document.getElementById(formId));
-            document.getElementById('filter-pageNumber').setAttribute('value', '1')
+            //document.getElementById('filter-pageNumber').setAttribute('value', '1')
         }
     }
 
