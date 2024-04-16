@@ -32,7 +32,7 @@ namespace OrganicShop.BLL.Mappers
 
             CreateMap<Product, UpdateProductDto>()
                 .ForMember(m => m.TagIds, a => a.MapFrom(b => b.TagProducts.Select(t => t.TagId).ToArray()))
-                .ForMember(m => m.UpdatedPrice, a => a.MapFrom(b => b.GetDefaultDiscountedPriceProduct() ?? b.Price))
+                .ForMember(m => m.UpdatedPrice, a => a.MapFrom(b => b.GetDefaultDiscountedPriceProduct()))
                 .ForMember(m => m.DiscountCount, a => a.MapFrom(b => b.GetDefaultDiscountProduct() != null ? b.GetDefaultDiscountProduct().Count : null))
                 .ForMember(m => m.DiscountId, a => a.MapFrom(b => b.GetDefaultDiscountProduct() != null ? b.GetDefaultDiscountProduct().Id : default(int?)))
                 .ForMember(m => m.PropertiesDic, a => a.MapFrom(b => b.Properties.ToDictionary(k => k.BaseId.Value,v => new EditPropertyDto {Id = v.Id ,Value = v.Value})))

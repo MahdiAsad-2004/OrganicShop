@@ -75,7 +75,7 @@ namespace OrganicShop.BLL.Services
 
             if (filter.CategoryId != null)
                 query = query.Where(q => q.CategoryId.Equals(filter.CategoryId));
-            
+
 
             #endregion
 
@@ -192,7 +192,7 @@ namespace OrganicShop.BLL.Services
 
             #region properties
 
-            if(create.PropertiesDictionary != null)
+            if (create.PropertiesDictionary != null)
             {
                 Property? property = null;
                 var properties = new List<Property>();
@@ -240,17 +240,25 @@ namespace OrganicShop.BLL.Services
 
             Discount discount;
             DiscountProducts discountProduct;
-            if (update.UpdatedPrice < update.Price)
+            if (update.DiscountId > 0)
             {
-                if(update.DiscountId > 0)
+                discountProduct = Product.DiscountProducts.First(a => a.DiscountId == update.DiscountId);
+                if(update.UpdatedPrice < update.Price)
                 {
-                    discountProduct = Product.DiscountProducts.First(a => a.DiscountId == update.DiscountId);
                     discountProduct.Discount.FixValue = update.UpdatedPrice;
                     discountProduct.Discount.BaseEntity.LastModified = DateTime.Now;
                     if (update.DiscountCount > 0)
                         discountProduct.Discount.Count = update.DiscountCount;
                 }
                 else
+                {
+                    Product.DiscountProducts.Remove(discountProduct);
+                }
+                
+            }
+            else
+            {
+                if (update.UpdatedPrice < update.Price)
                 {
                     discount = new Discount
                     {
@@ -268,8 +276,8 @@ namespace OrganicShop.BLL.Services
                     };
                     Product.DiscountProducts.Add(discountProduct);
                 }
-                
             }
+           
 
             #endregion
 
@@ -284,26 +292,35 @@ namespace OrganicShop.BLL.Services
                 // = await Product.Pictures.ToList().SaveAndUpdateMainPictureAsync(update.MainPictureFile, PathExtensions.ProductImage);
             }
 
-            foreach (var picture in Product.Pictures.ExceptBy(update.OldPicturesDic.Keys,a => a.Id))
+            if(update.OldPicturesDic == null)
             {
-                Product.Pictures.Remove(picture);   
+                foreach (var picture in Product.Pictures.Where(a => a.IsMain == false))
+                {
+                    Product.Pictures.Remove(picture);
+                }
             }
+            else
+            {
+                foreach (var picture in Product.Pictures.Where(a => a.IsMain == false).ExceptBy(update.OldPicturesDic.Keys, a => a.Id))
+                {
+                    Product.Pictures.Remove(picture);
+                }
+            }
+            
 
             if (update.NewPictureFiles != null)
             {
-                var pictures = new List<Picture>();
                 foreach (var file in update.NewPictureFiles)
                 {
-                    pictures.Add(await file.SavePictureAsync(PathExtensions.ProductImage));
+                    Product.Pictures.Add(await file.SavePictureAsync(PathExtensions.ProductImage));
                 }
-                Product.Pictures = pictures;
             }
 
             #endregion
 
             #region tags
 
-            if(update.TagIds != null)
+            if (update.TagIds != null)
             {
                 foreach (var tagId in update.TagIds.ExceptBy(Product.TagProducts.Select(a => a.TagId), a => a))
                 {
@@ -340,27 +357,9 @@ namespace OrganicShop.BLL.Services
             //        BaseEntity = new BaseEntity(true),
             //    });
             //}
-            if(update.PropertiesDic != null)
+            if (update.PropertiesDic != null)
             {
-                Property? property = null;
-                foreach (var propertyDic in update.PropertiesDic.Where(a => a.Value.Id > 0))
-                {
-                    property = await _PropertyRepository.GetAsNoTracking(propertyDic.Key);
-                    if (property == null)
-                        return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.NotFound(typeof(Property)));
-
-                    Product.Properties.Add(new Property
-                    {
-                        ProductId = update.Id,
-                        Title = property.Title,
-                        Priority = property.Priority,
-                        Value = property.Value,
-                        IsBase = false,
-                        BaseEntity = new BaseEntity(true),
-                    });
-                }
-
-
+                Property? baseProperty = null;
                 foreach (var propperty in Product.Properties.ExceptBy(update.PropertiesDic.Select(a => a.Value.Id), a => a.Id))
                 {
                     Product.Properties.Remove(propperty);
@@ -370,11 +369,31 @@ namespace OrganicShop.BLL.Services
                 {
                     propperty.Value = update.PropertiesDic[propperty.BaseId.Value].Value;
                 }
+
+                foreach (var propertyDic in update.PropertiesDic.Where(a => a.Value.Id <= 0))
+                {
+                    baseProperty = await _PropertyRepository.GetAsNoTracking(propertyDic.Key);
+                    if (baseProperty == null)
+                        return new ServiceResponse<Empty>(ResponseResult.Failed, _Message.NotFound(typeof(Property)));
+
+                    Product.Properties.Add(new Property
+                    {
+                        ProductId = update.Id,
+                        Title = baseProperty.Title,
+                        Priority = baseProperty.Priority,
+                        Value = propertyDic.Value.Value,
+                        IsBase = false,
+                        BaseId = baseProperty.Id,
+                        BaseEntity = new BaseEntity(true),
+                    });
+                }
+
+
             }
 
             #endregion
 
-            await _ProductRepository.Update(_Mapper.Map(update , Product), _AppUserProvider.User.Id);
+            await _ProductRepository.Update(_Mapper.Map(update, Product), _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 

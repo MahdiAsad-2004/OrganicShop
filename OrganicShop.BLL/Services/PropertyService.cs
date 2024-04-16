@@ -138,7 +138,7 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse<List<ComboDto<Property>>>> GetCombos(FilterPropertyDto? filter = null)
         {
-            filter = new();
+            if(filter == null) filter = new();
             var query = _PropertyRepository.GetQueryable();
 
             #region filter

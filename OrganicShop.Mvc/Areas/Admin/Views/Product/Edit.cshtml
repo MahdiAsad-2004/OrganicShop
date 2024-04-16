@@ -26,7 +26,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <form class="row" action="/Admin/Product/Edit" method="post">
+            <form class="row" action="/Admin/Product/Edit" method="post" enctype="multipart/form-data">
                 <input hidden asp-for="Id" />
                 <div class="col-sm-12 m-auto">
 
@@ -157,7 +157,7 @@
                                 <div class="mb-3 row align-items-center">
                                     <label asp-for="NewPictureFiles" class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
                                     <div class="col-md-9 col-lg-10">
-                                        <input asp-for="NewPictureFiles" class="form-control" type="file" multiple>
+                                        <input onchange="PreviewImages(event)" asp-for="NewPictureFiles" class="form-control" type="file" multiple>
                                         <span asp-validation-for="NewPictureFiles" class="mt-1 text-danger"></span>
                                     </div>
                                 </div>
@@ -174,13 +174,7 @@
 
                                 </div>
                                 <hr />
-                                <div onchange="PreviewImages(event)" id="new-images-container" style="display:flex; flex-direction:row; justify-content:flex-start; align-items:center; flex-wrap:wrap;">
-
-                                    @for (int i = 1; i < 5; i++)
-                                    {
-                                        @*  <img class="col-sm-2 image-fluid rounded-2" src="~/media/images/picture/p@(i).jpg" style="border:solid 2px black;
-                                    margin-left:6px; margin-right:6px; margin-top:14px;" alt="" /> *@
-                                    }
+                                <div id="new-images-container" style="display:flex; flex-direction:row; justify-content:flex-start; align-items:center; flex-wrap:wrap;">
 
                                 </div>
 
@@ -397,7 +391,7 @@
 
             PropertyRowElem = document.getElementById(`property-row-${propertyId}`);
             PropertyRowElem.classList.add('d-none');
-            PropertyRowElem.querySelectorAll('input').forEach(x => x.disabled = false);
+            PropertyRowElem.querySelectorAll('input').forEach(x => x.disabled = true);
             //PropertyRowElem.querySelector('input').disabled = true;
         }
 
@@ -407,7 +401,7 @@
         function PreviewImages(e) {
             var imageUrl = '';
             var imgElem = null;
-            ImagesContainer.innerHTML = '';
+            NewImagesContainer.innerHTML = '';
             e.target.files.forEach(file => {
                 ImageCounter++;
                 imageUrl = URL.createObjectURL(file);
