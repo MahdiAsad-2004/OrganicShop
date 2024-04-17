@@ -46,7 +46,7 @@ namespace OrganicShop.BLL.Extensions
                 case PictureType.User:
                     return $"/media/images/userr/{picture.Name}";
 
-                default: throw new Exception("Invalid enum");
+                default: throw new Exception("Invalid picture type");
             }
             throw new Exception("Picture url not found");
         }
