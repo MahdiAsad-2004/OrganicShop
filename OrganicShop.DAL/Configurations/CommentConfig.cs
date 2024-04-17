@@ -17,6 +17,7 @@ namespace OrganicShop.DAL.Configurations
            
 
             builder.HasOne(a => a.User).WithMany(a => a.Comments).HasForeignKey(a => a.UserId);
+            builder.HasOne(a => a.Product).WithMany(a => a.Comments).HasForeignKey(a => a.ProductId);
 
 
             builder.HasQueryFilter(a => a.BaseEntity.IsDelete == false);

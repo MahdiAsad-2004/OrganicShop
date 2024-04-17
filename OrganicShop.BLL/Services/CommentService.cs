@@ -10,6 +10,7 @@ using AutoMapper;
 using OrganicShop.Domain.Dtos.AddressDtos;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Enums.Response;
+using Microsoft.EntityFrameworkCore;
 
 namespace OrganicShop.BLL.Services
 {
@@ -20,7 +21,7 @@ namespace OrganicShop.BLL.Services
         private readonly IMapper _Mapper;
         private readonly ICommentRepository _CommentRepository;
 
-        public CommentService(IApplicationUserProvider provider,IMapper mapper,ICommentRepository CommentRepository) : base(provider)
+        public CommentService(IApplicationUserProvider provider, IMapper mapper, ICommentRepository CommentRepository) : base(provider)
         {
             _Mapper = mapper;
             this._CommentRepository = CommentRepository;
@@ -31,7 +32,10 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse<PageDto<Comment, CommentListDto, long>>> GetAll(FilterCommentDto? filter = null, PagingDto? paging = null)
         {
-            var query = _CommentRepository.GetQueryable();
+            var query = _CommentRepository.GetQueryable()
+                .Include(a => a.User)
+                .Include(a => a.Product)
+                .AsQueryable();
 
             if (filter == null) filter = new FilterCommentDto();
             if (paging == null) paging = new PagingDto();
@@ -58,16 +62,29 @@ namespace OrganicShop.BLL.Services
             pageDto.List = pageDto.SetPaging(query, paging).Select(a => _Mapper.Map<CommentListDto>(a)).ToList();
             pageDto.Pager = pageDto.SetPager(query, paging);
 
-            return new ServiceResponse<PageDto<Comment, CommentListDto, long>>(ResponseResult.Success,pageDto);
+            return new ServiceResponse<PageDto<Comment, CommentListDto, long>>(ResponseResult.Success, pageDto);
         }
 
+
+        public async Task<ServiceResponse<CommentListDto>> Get(long Id)
+        {
+            if (Id < 1)
+                return new ServiceResponse<CommentListDto>(ResponseResult.NotFound, null);
+
+            var comment = await _CommentRepository.GetAsNoTracking(Id);
+
+            if (comment != null)
+                return new ServiceResponse<CommentListDto>(ResponseResult.Success, _Mapper.Map<CommentListDto>(comment));
+
+            return new ServiceResponse<CommentListDto>(ResponseResult.NotFound, null);
+        }
 
 
         public async Task<ServiceResponse<Empty>> Create(CreateCommentDto create)
         {
             Comment Comment = _Mapper.Map<Comment>(create);
             Comment.Status = CommentStatus.Unread;
-            await _CommentRepository.Add(Comment,_AppUserProvider.User.Id);
+            await _CommentRepository.Add(Comment, _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
 
@@ -76,7 +93,7 @@ namespace OrganicShop.BLL.Services
         public async Task<ServiceResponse<Empty>> Update(UpdateCommentDto update)
         {
             Comment? Comment = await _CommentRepository.GetAsTracking(update.Id);
-            
+
             if (Comment == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 

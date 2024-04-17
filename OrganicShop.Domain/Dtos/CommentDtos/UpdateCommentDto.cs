@@ -13,7 +13,7 @@ namespace OrganicShop.Domain.Dtos.CommentDtos
     public class UpdateCommentDto : BaseListDto<long>
     {
         public CommentStatus Status { get; set; }
-        public long UserId { get; set; }
+
 
     }
 

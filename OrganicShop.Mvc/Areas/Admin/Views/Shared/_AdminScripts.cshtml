@@ -38,8 +38,22 @@
 <script src="~/admin/assets/js/select2.min.js"></script>
 <script src="~/admin/assets/js/select2-custom.js"></script>
 
+
+<!-- ck editor js -->
+<script src="~/admin/assets/js/ckeditor.js"></script>
+
+
 <script>
 
+    let CkEditor;
+
+    ClassicEditor.create(document.querySelector('#ckeditor'))
+        .then(editor => {
+            CkEditor = editor;
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
     let IsfilterMenuOpen = false;
     let filterMenuHeader = document.getElementsByClassName('filter-menu-header')[0];

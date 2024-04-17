@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace OrganicShop.Domain.Entities
 {
-    [DisplayName("ارتباظ با ما")]
+    [DisplayName("ارتباط با ما")]
     public class ContactUs : EntityId<byte>
     {
         public string Address { get; set; }
+        public string ShortDescription { get; set; }
         public string Description { get; set; }
         public string Email1 { get; set; }
         public string? Email2 { get; set; }

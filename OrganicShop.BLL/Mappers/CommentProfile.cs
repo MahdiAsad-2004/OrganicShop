@@ -13,8 +13,9 @@ namespace OrganicShop.BLL.Mappers
         public CommentProfile()
         {
             CreateMap<Comment, CommentListDto>()
-                .ForMember(m => m.Date, a => a.MapFrom(b => b.BaseEntity.CreateDate))
-                .ForMember(m => m.Status, a => a.MapFrom(b => b.Status.ToStringValue()));
+                .ForMember(m => m.Date, a => a.MapFrom(b => b.BaseEntity.CreateDate.ToPersianDate()))
+                .ForMember(m => m.UserName, a => a.MapFrom(b => b.User.Name))
+                .ForMember(m => m.ProductName, a => a.MapFrom(b => b.Product.Title));
 
 
             CreateMap<CreateCommentDto, Comment>();

@@ -24,6 +24,7 @@ namespace OrganicShop.DAL.Configurations
             {
                 Id = 1,
                 Address = "Address",
+                ShortDescription = "ShorDescriptions",
                 Description = "Descriptions",
                 Email1 = "OrganicShop@gmail.com",
                 Email2 = null,

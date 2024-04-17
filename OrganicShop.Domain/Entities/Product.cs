@@ -30,6 +30,7 @@ namespace OrganicShop.Domain.Entities
         public ICollection<CoProduct> CoProducts { get; set; }
         public ICollection<TagProducts> TagProducts { get; set; }
         public ICollection<Property> Properties { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
     }
 }

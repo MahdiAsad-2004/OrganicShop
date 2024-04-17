@@ -135,16 +135,22 @@ As.forEach(function (element) {
 let fetchResponse = null;
 let formElem = document.createElement('form');
 let formMethod;
+let CkEditorElement = document.getElementById('ckeditor');
+            
 async function FetchRequest(e) {
     e.preventDefault();
     formElem = e.target;
     if ($(formElem).valid()) {
         ShowLoading();
         try {
+            formData = new FormData(formElem);
+            if (CkEditorElement) {
+                formData.set(CkEditorElement.name, `${CkEditor.getData()}`);
+            }
             formMethod = formElem.getAttribute('method').toLowerCase();
             fetchResponse = await fetch(formElem.getAttribute('href'), {
                 method: formMethod,
-                body: formMethod == 'get' ? null : new FormData(formElem),
+                body: formMethod == 'get' ? null : formData,
             });
             HandleFetchResponse(fetchResponse, e);
         }
@@ -181,6 +187,31 @@ async function LoadPartial(e) {
         }
     }
 }
+
+//async function LoadPartial(e) {
+
+//    e.preventDefault();
+//    containerId = e.target.getAttribute('data-container-id');
+//    if (containerId) {
+//        containerElement = document.getElementById(containerId);
+//        if (containerElement) {
+//            $.ajax({
+//                url: element.getAttribute('href'),
+//                method: 'get',
+//                data: {},
+//                success: function (result, textStatus, jqxhr) {
+//                    targetElement.innerHTML = result;
+//                },
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    console.log(jqXHR);
+//                    console.log(textStatus);
+//                    console.log(errorThrown);
+//                },
+//            });
+
+//        }
+//    }
+//}
 
 
 

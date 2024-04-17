@@ -39,12 +39,15 @@ namespace OrganicShop.BLL.Services
 
         public async Task<ServiceResponse<Empty>> Update(UpdateContactUsDto update)
         {
-            ContactUs? ContactUs = await _ContactUsRepository.GetQueryable().FirstAsync();
+            ContactUs? ContactUs = await _ContactUsRepository.GetQueryableTracking()
+                .FirstAsync();
 
             if (ContactUs == null)
                 return new ServiceResponse<Empty>(ResponseResult.NotFound, _Message.NotFound());
 
-            await _ContactUsRepository.Update(_Mapper.Map<ContactUs>(update), _AppUserProvider.User.Id);
+            var x = _Mapper.Map(update, ContactUs);
+
+            await _ContactUsRepository.Update(x, _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessUpdate());
         }
 
