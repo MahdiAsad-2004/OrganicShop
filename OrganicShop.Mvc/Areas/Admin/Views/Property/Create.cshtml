@@ -9,9 +9,6 @@
     <link rel="stylesheet" type="text/css" href="~/admin/assets/css/vendors/chartist.css">
     <link rel="stylesheet" type="text/css" href="~/admin/assets/css/vendors/date-picker.css">
 
-    <!-- Select2 css -->
-    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/select2.min.css">
-
     <!--Dropzon css -->
     <link rel="stylesheet" type="text/css" href="~/admin/assets/css/vendors/dropzone.css">
 }
@@ -28,7 +25,7 @@
                                 <h5>افزودن ویژگی جدید</h5>
                             </div>
 
-                            <form class="theme-form theme-form-2 mega-form" onsubmit="FetchRequest(event)" method="post" href="/Admin/Property/Create">
+                            <form class="theme-form theme-form-2 mega-form" onsubmit="FetchRequest(event)" method="post" action="/Admin/Property/Create">
                                 <div class="mb-4 row align-items-center">
                                     @* <label class="form-label-title col-sm-3 mb-0">عنوان ویژگی</label> *@
                                     <label class="form-label-title col-sm-3 mb-0" asp-for="Title"></label>
@@ -58,10 +55,6 @@
 
 
 @section Scripts{
-
-    <!-- select2 js -->
-    <script src="~/admin/assets/js/select2.min.js"></script>
-    <script src="~/admin/assets/js/select2-custom.js"></script>
 
     <!--Dropzon js -->
     <script src="~/admin/assets/js/dropzone/dropzone.js"></script>

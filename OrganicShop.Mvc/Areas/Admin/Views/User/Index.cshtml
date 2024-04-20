@@ -1,89 +1,59 @@
 ﻿@using OrganicShop.Domain.Dtos.UserDtos
 @model PageDto<User,UserListDto,long>
-
-
+@{
+    Layout = "_LayoutIndex";
+}
 @section Styles {
     <!-- Data Table css -->
     <link rel="stylesheet" type="text/css" href="~/admin/assets/css/datatables.css">
 }
 
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <div id="filter-menu" style="margin-bottom:20px !important">
-                <p class="text-center p-2 filter-menu-header" onclick="ToggleFilterMenu()" onselectstart="return false">
-                    <i class="fa-regular fa-filter-list" style="color: #ffffff; font-size:30px;"></i>
-                </p>
-                <form class="filter-menu-form row col-12" method="post" href="/Admin/User/UsersTable" onsubmit="FetchRequest(event)">
-                    <input name="paging.PageNumber" id="filter-pageNumber" hidden value="1"/>
-                    <div class="form-group col-3 mb-1 ">
-                        <label class="form-label filter-menu-label">نام کاربر</label>
-                        <input name="filter.Name" class="form-control filter-menu-input" type="number" />
-                    </div>
-                    <div class="form-group col-3 mb-1 ">
-                        <label class="form-label filter-menu-label">ایمیل</label>
-                        <input name="filter.Email" class="form-control filter-menu-input" type="text" />
-                    </div>
-                    <div class="form-group col-3 mb-1 ">
-                        <label class="form-label filter-menu-label">شماره همراه</label>
-                        <input name="filter.PhoneNumber" class="form-control filter-menu-input" type="text" />
-                    </div>
-                    <div class="form-group col-3 mb-1 ">
-                        <label class="form-label filter-menu-label">نقش</label>
-                        <select name="filter.Role" class="form-control filter-menu-input">
-                            <option value=" ">---------- همه ----------</option>
-                            @foreach (var role in EnumExtension.GetArray<Role>())
-                            {
-                                <option value="@((byte)role)">@role.ToStringValue()</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="form-group col-3 mb-1 ">
-                        <label class="form-label filter-menu-label">وضعیت</label>
-                        <select name="filter.ActiveFilter" class="form-control filter-menu-input">
-                            <option value=" ">---------- همه ----------</option>
-                            @foreach (var isActiveFilter in EnumExtension.GetArray<IsActiveFilter>())
-                            {
-                                <option value="@((byte)isActiveFilter)">@isActiveFilter.ToStringValue()</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="form-group col-3 mb-1 ">
-                        <label class="form-label filter-menu-label">مرتب سازی</label>
-                        <select name="filter.SortBy" class="form-control filter-menu-input">
-                            <option value=" ">---- بدون مرتب سازی -----</option>
-                            @foreach (var sortType in EnumExtension.GetArray<UserSortType>())
-                            {
-                                <option value="@((byte)sortType)">@sortType.ToStringValue()</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="form-group col-3 mb-1 ">
-                        <label class="form-label filter-menu-label">تعداد در صفحه</label>
-                        <select name="paging.PageItemsCount" class="form-control filter-menu-input">
-                            <option value=" ">------------- پیشفرض -------------</option>
-                            <option value="12">12</option>
-                            <option value="24">24</option>
-                            <option value="48">48</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-3 mt-2 mr-3">
-                        <label class="form-label filter-menu-label"></label>
-                        <button type="submit" id="filter-menu-submit" class="btn btn-primary form-control">اعمال</button>
-                    </div>
-                </form>
-            </div>
-            <div id="table-container" class="card card-table">
-                
-                <partial name="_UsersTable" model="Model" />
 
+@section FilterForm{
 
-            </div>
+    <form id="filter-form" class="filter-menu-form row col-12" method="post" action="/Admin/User/UsersTable" data-container-id="table-container" onsubmit="FetchRequest(event)">
+        <input name="paging.PageNumber" id="filter-pageNumber" hidden value="1" />
+        <div class="form-group col-3 mb-1 ">
+            <label class="form-label filter-menu-label">نام کاربر</label>
+            <input name="filter.Name" class="form-control filter-menu-input" type="text" />
         </div>
-    </div>
-</div>
+        <div class="form-group col-3 mb-1 ">
+            <label class="form-label filter-menu-label">ایمیل</label>
+            <input name="filter.Email" class="form-control filter-menu-input" type="text" />
+        </div>
+        <div class="form-group col-3 mb-1 ">
+            <label class="form-label filter-menu-label">شماره همراه</label>
+            <input name="filter.PhoneNumber" class="form-control filter-menu-input" type="text" />
+        </div>
+        <div class="form-group col-3 mb-1 ">
+            <label class="form-label filter-menu-label">نقش</label>
+            <select name="filter.Role" class="form-control filter-menu-input">
+                <option value=" ">---------- همه ----------</option>
+                @foreach (var role in EnumExtension.GetArray<Role>())
+                {
+                    <option value="@((byte)role)">@role.ToStringValue()</option>
+                }
+            </select>
+        </div>
+        <div class="form-group col-3 mb-1 ">
+            <label class="form-label filter-menu-label">مرتب سازی</label>
+            <select name="filter.SortBy" class="form-control filter-menu-input">
+                @foreach (var sortType in EnumExtension.GetArray<UserSortType>())
+                {
+                    <option value="@((byte)sortType)">@sortType.ToStringValue()</option>
+                }
+            </select>
+        </div>
+      
+        <partial name="_FilterDefaults"/>
+
+    </form>
+}
+
+
+<partial name="_UsersTable" model="Model" />
+
 
 
 @section Modals {
@@ -113,7 +83,7 @@
     </div>
     <!-- Delete Modal Box End -->
 
-    <form href="/Admin/User/Delete" method="delete" onsubmit="FetchRequest(event)">
+    <form action="/Admin/User/Delete" method="delete" onsubmit="FetchRequest(event)">
         <input id="input-id" hidden value="0" name="Id" />
         <button type="submit" hidden id="delete-from-submit"></button>
     </form>

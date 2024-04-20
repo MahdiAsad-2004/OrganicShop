@@ -11,7 +11,7 @@
 
 @section FilterForm {
 
-    <form id="filter-form" class="filter-menu-form row col-12" method="post" href="/Admin/Comment/Table" data-container-id="table-container" onsubmit="FetchRequest(event)">
+    <form id="filter-form" class="filter-menu-form row col-12" method="post" action="/Admin/Comment/Table" data-container-id="table-container" onsubmit="FetchRequest(event)">
         <input name="paging.PageNumber" id="filter-pageNumber" hidden value="1" />
 
         <div class="form-group col-3 mb-1 ">
@@ -65,7 +65,7 @@
         </div>
     </div>
 
-    <form hidden onsubmit="FetchRequest(event)" id="delete-comment-form" data-container-id="table-container" href="/Admin/Comment/Delete" method="delete">
+    <form hidden onsubmit="FetchRequest(event)" id="delete-comment-form" data-container-id="table-container" action="/Admin/Comment/Delete" method="delete">
         <input hidden name="Id" id="comment-id-input" value="0" />
         <button type="submit" id="delete-comment-form-submit"></button>
     </form>

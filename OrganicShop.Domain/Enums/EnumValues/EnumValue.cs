@@ -492,6 +492,40 @@ namespace OrganicShop.Domain.Enums.EnumValues
                     throw new Exception("Enum value not found");
             }
         }
+        
+
+        public static string ToStringValue(this UnitType unitType)
+        {
+            switch (unitType)
+            {
+                case UnitType.None:
+                    return "هیچ";
+
+                case UnitType.KiloGram:
+                    return "کیلوگرم";
+                
+                case UnitType.Gram:
+                    return "گرم";
+                
+                case UnitType.Liter:
+                    return "لیتر";
+                
+                case UnitType.MilliLiter:
+                    return "میلی لیتر";
+                
+                case UnitType.Piece:
+                    return "قطعه";
+                
+                case UnitType.Packet:
+                    return "بسته";
+                
+                case UnitType.Box:
+                    return "جعبه";
+                
+                default:
+                    throw new Exception("Enum value not found");
+            }
+        }
 
 
 

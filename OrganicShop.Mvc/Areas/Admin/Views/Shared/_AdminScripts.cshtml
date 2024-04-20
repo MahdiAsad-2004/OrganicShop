@@ -43,16 +43,30 @@
 <script src="~/admin/assets/js/ckeditor.js"></script>
 
 
+
+<script src="~/lib/SlimSelect-2.8.2/slimselect.min.js"></script>
+
+
 <script>
+    
+    new SlimSelect({
+        select: '.slim-select',
+        settings: {
+            placeholderText: 'لطفا انتخاب کنید ', 
+            searchText: 'موردی یافت نشد',
+            searchPlaceholder: 'جست و جو کنید',
+        }
+    });
+
 
     let CkEditor;
-
-    ClassicEditor.create(document.querySelector('#ckeditor'))
-        .then(editor => {
-            CkEditor = editor;
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(editorr => { 
+            CkEditor = editorr; 
         })
-        .catch(error => {
-            console.error(error);
+        .catch(eee => {
+            //console.error(eee);
         });
 
     let IsfilterMenuOpen = false;

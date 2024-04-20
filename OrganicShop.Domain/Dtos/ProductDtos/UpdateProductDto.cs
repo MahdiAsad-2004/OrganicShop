@@ -7,6 +7,7 @@ using System.ComponentModel;
 using OrganicShop.Domain.Dtos.Combo;
 using OrganicShop.Domain.Dtos.PictureDtos;
 using OrganicShop.Domain.Dtos.PropertyDtos;
+using OrganicShop.Domain.Enums;
 
 namespace OrganicShop.Domain.Dtos.ProductDtos
 {
@@ -79,6 +80,13 @@ namespace OrganicShop.Domain.Dtos.ProductDtos
 
 
         public Dictionary<long,string> OldPicturesDic { get; set; }
+
+
+        [DisplayName("واحد")]
+        public UnitType UnitType { get; set; }
+
+
+        public float[] UnitValuesArray { get; set; }
 
     }
 

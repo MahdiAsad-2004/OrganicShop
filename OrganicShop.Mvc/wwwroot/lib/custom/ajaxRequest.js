@@ -148,7 +148,7 @@ async function FetchRequest(e) {
                 formData.set(CkEditorElement.name, `${CkEditor.getData()}`);
             }
             formMethod = formElem.getAttribute('method').toLowerCase();
-            fetchResponse = await fetch(formElem.getAttribute('href'), {
+            fetchResponse = await fetch(formElem.action, {
                 method: formMethod,
                 body: formMethod == 'get' ? null : formData,
             });

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using OrganicShop.Domain.Dtos.Base;
+using OrganicShop.Domain.Dtos.UnitDtos;
+using OrganicShop.Domain.Enums;
 using OrganicShop.Mvc.ValidationsAttributes;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -67,6 +69,13 @@ namespace OrganicShop.Domain.Dtos.ProductDtos
         [DisplayName("ویژگی ها")]
         public Dictionary<int, string>? PropertiesDictionary { get; set; }
 
+
+
+        [DisplayName("واحد")]
+        public UnitType UnitType { get; set; }
+
+        public float[] UnitValuesArray { get; set; }
+        //public Dictionary<int,CreateUnitValueDto> UnitValuesDictionary { get; set; }
     }
 
 

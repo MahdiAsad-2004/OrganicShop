@@ -15,7 +15,7 @@
 
 
 @section FilterForm {
-    <form id="filter-form" class="filter-menu-form row col-12" method="post" href="/Admin/Product/Table" data-container-id="table-container" onsubmit="FetchRequest(event)">
+    <form id="filter-form" class="filter-menu-form row col-12" method="post" action="/Admin/Product/Table" data-container-id="table-container" onsubmit="FetchRequest(event)">
         <div class="form-group col-3 mb-1 ">
             <label class="form-label filter-menu-label">عنوان</label>
             <input name="filter.Title" class="form-control filter-menu-input" type="text" />
@@ -92,7 +92,7 @@
         </div>
     </div>
 
-    <form hidden method="delete" href="/Admin/Product/Delete" data-container-id="table-container" id="delete-product-form" onsubmit="FetchRequest(event)">
+    <form hidden method="delete" action="/Admin/Product/Delete" data-container-id="table-container" id="delete-product-form" onsubmit="FetchRequest(event)">
         <input name="Id" id="product-id" value="0" />
         <button id="delete-product-submit" hidden></button>
     </form>

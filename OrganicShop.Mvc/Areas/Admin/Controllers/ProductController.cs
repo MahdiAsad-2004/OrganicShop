@@ -74,6 +74,8 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductDto create)
         {
+            //return _ClientHandleResult.Json(HttpContext, create);
+            //return Json(create);
             var response = await _ProductService.Create(create);
 
             if (response.Result == ResponseResult.Success)

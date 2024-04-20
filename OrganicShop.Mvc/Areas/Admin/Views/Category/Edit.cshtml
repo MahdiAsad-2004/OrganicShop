@@ -12,8 +12,6 @@
     <!-- Bootstrap-tag input css -->
     <link rel="stylesheet" type="text/css" href="~/admin/assets/css/vendors/bootstrap-tagsinput.css">
 
-    <!-- Select2 css -->
-    <link rel="stylesheet" type="text/css" href="~/admin/assets/css/select2.min.css">
 }
 
 <div class="container-fluid">
@@ -27,7 +25,7 @@
                                 <h5>ویرایش دسته بندی </h5>
                             </div>
 
-                            <form class="theme-form theme-form-2 mega-form" onsubmit="FetchRequest(event)" method="put" href="/Admin/Category/Edit" >
+                            <form class="theme-form theme-form-2 mega-form" onsubmit="FetchRequest(event)" method="put" action="/Admin/Category/Edit" >
                                 <input asp-for="Id" hidden/>
 
                                 <div class="mb-4 row align-items-center">

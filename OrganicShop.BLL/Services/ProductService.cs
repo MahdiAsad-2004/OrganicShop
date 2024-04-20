@@ -107,6 +107,7 @@ namespace OrganicShop.BLL.Services
                 .Include(a => a.TagProducts)
                 .Include(a => a.Properties)
                 .Include(a => a.Pictures)
+                .Include(a => a.UnitValues)
                 .Include(a => a.DiscountProducts)
                     .ThenInclude(a => a.Discount)
                 .FirstOrDefaultAsync(a => a.Id.Equals(Id));
@@ -217,6 +218,28 @@ namespace OrganicShop.BLL.Services
 
             #endregion
 
+            #region unitValue
+
+            if((byte)create.UnitType > 1)
+            {
+                if(create.UnitValuesArray != null)
+                {
+                    List<UnitValue> unitValues = new List<UnitValue>();
+                    foreach (var value in create.UnitValuesArray)
+                    {
+                        unitValues.Add(new UnitValue
+                        {
+                            UnitType = create.UnitType,
+                            Value = value,
+                            BaseEntity = new BaseEntity(true),
+                        });
+                    }
+                    Product.UnitValues = unitValues;
+                }
+            }
+
+            #endregion
+
             await _ProductRepository.Add(Product, _AppUserProvider.User.Id);
             return new ServiceResponse<Empty>(ResponseResult.Success, _Message.SuccessCreate());
         }
@@ -229,6 +252,7 @@ namespace OrganicShop.BLL.Services
                 .Include(a => a.TagProducts)
                 .Include(a => a.Properties)
                 .Include(a => a.Pictures)
+                .Include(a => a.UnitValues)
                 .Include(a => a.DiscountProducts)
                     .ThenInclude(a => a.Discount)
                 .FirstOrDefaultAsync(a => a.Id.Equals(update.Id));
@@ -351,6 +375,7 @@ namespace OrganicShop.BLL.Services
                 foreach (var propperty in Product.Properties.IntersectBy(update.PropertiesDic.Select(a => a.Value.Id), a => a.Id))
                 {
                     propperty.Value = update.PropertiesDic[propperty.BaseId.Value].Value;
+                    propperty.BaseEntity.LastModified = DateTime.Now;
                 }
 
                 foreach (var propertyDic in update.PropertiesDic.Where(a => a.Value.Id <= 0))
@@ -372,6 +397,27 @@ namespace OrganicShop.BLL.Services
                 }
 
 
+            }
+
+            #endregion
+
+            #region unitValue
+
+            if ((byte)update.UnitType > 1)
+            {
+                Product.UnitValues.Clear();
+                if (update.UnitValuesArray != null)
+                {
+                    foreach (var value in update.UnitValuesArray)
+                    {
+                        Product.UnitValues.Add(new UnitValue
+                        {
+                            UnitType = update.UnitType,
+                            Value = value,
+                            BaseEntity = new BaseEntity(true),
+                        });
+                    }
+                }
             }
 
             #endregion

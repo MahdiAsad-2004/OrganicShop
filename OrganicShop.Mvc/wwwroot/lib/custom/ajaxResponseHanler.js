@@ -60,7 +60,7 @@ function HandleResponse(data, jqxhr) {
 
 
 function HandleFetchResponse(response, ev) {
-    if (response.ok) {
+    if (response.status < 400) {
         ResponseDataType = response.headers.get('ResponseDataType');
         if (ResponseDataType == 'partial') {
             Partial(response, ev);

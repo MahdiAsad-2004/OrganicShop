@@ -66,22 +66,40 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3 row align-items-center">
-                                    <label class="col-lg-2 col-md-3 col-form-label form-label-title">واحد</label>
-                                    <div class="col-md-9 col-lg-10">
-                                        <select class="form-select">
-                                            <option disabled>منو واحد</option>
-                                            <option>کیلو گرم</option>
-                                            <option>قطعه</option>
+                                <div class="mb-5 row align-items-center">
+                                    <label asp-for="UnitType" class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
+                                    <div class="col-md-7 col-lg-9">
+                                        <select id="unit-type-select" asp-for="UnitType" class="form-select">
+                                            @foreach (var unitType in EnumExtension.GetArray<UnitType>())
+                                            {
+                                                <option value="@((byte)unitType)">@unitType.ToStringValue()</option>
+                                            }
                                         </select>
                                         <span class="mt-1 text-danger"></span>
+                                    </div>
+                                    <button type="button" id="add-unit-value-button" class="col-md-2 col-lg-1 btn btn-primary mb-3">افزودن مقدار</button>
+                                    <div class="row align-items-center col-12 mt-1" id="units-container">
+                                        @{
+                                            int unitCounter = -1;
+                                        }
+                                        @foreach (var value in Model.UnitValuesArray)
+                                        {
+                                            <div class="mt-1 col-4" id="unit-group-@(unitCounter)">
+                                                <div class="input-group">
+                                                    <input value="@value" data-val="true" type="number" min="0" step="0.1" name="UnitValuesArray" type="text" class="form-control" />
+                                                    <span class="input-group-text unit-type-text">@Model.UnitType.ToStringValue()</span>
+                                                    <button onclick="DeleteUnitGroup('@(unitCounter)')" type="button" style="background-color:#dd0000;" class="btn btn-sm"><i class="fa-solid fa-xmark" style="color: white; font-size:22px;"></i></button>
+                                                </div>
+                                            </div>
+                                            unitCounter--;
+                                        }    
                                     </div>
                                 </div>
 
                                 <div class="mb-3 row align-items-center">
                                     <label asp-for="TagIds" class="col-lg-2 col-md-3 col-form-label form-label-title"></label>
                                     <div class="col-md-9 col-lg-10">
-                                        <select class="select-2" asp-for="TagIds" multiple>
+                                        <select class="slim-select" asp-for="TagIds" multiple>
                                             <option disabled>--انتخاب کنید--</option>
                                             @foreach (var tagCombo in tagCombos)
                                             {
@@ -350,15 +368,13 @@
     <script src="~/admin/assets/js/dropzone/dropzone.js"></script>
     <script src="~/admin/assets/js/dropzone/dropzone-script.js"></script>
 
-    <!-- ck editor js -->
-    <script src="~/admin/assets/js/ckeditor.js"></script>
-    <script src="~/admin/assets/js/ckeditor-custom.js"></script>
-
 
     <partial name="_ValidationScriptsPartial" />
 
 
-    <script>
+    <script src="~/admin/views/product/edit.js"></script>
+
+  @*   <script>
 
         let SelectPropertiesElem = document.getElementById('select-properties');
         let PropertiesContainerDiv = document.getElementById('properties-container');
@@ -441,6 +457,6 @@
 
         }
 
-    </script>
+    </script> *@
 
 }
