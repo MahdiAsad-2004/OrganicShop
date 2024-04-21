@@ -106,26 +106,26 @@ namespace OrganicShop.Domain.Enums.EnumValues
             }
         }
 
-        public static string ToStringValue(this BasketSortType sortType)
+        public static string ToStringValue(this CartSortType sortType)
         {
             switch (sortType)
             {
-                case BasketSortType.None:
+                case CartSortType.None:
                     return " بدون مرتب سازی ";
 
-                case BasketSortType.Newest:
+                case CartSortType.Newest:
                     return "جدیدترین";
 
-                case BasketSortType.LatestChange:
+                case CartSortType.LatestChange:
                     return "آخرین تغییر";
 
-                case BasketSortType.Oldest:
+                case CartSortType.Oldest:
                     return "قدیمی ترین";
 
-                case BasketSortType.TotalPrice:
+                case CartSortType.TotalPrice:
                     return "ارزش کمترین";
 
-                case BasketSortType.TotalPriceDesc:
+                case CartSortType.TotalPriceDesc:
                     return "ارزش بیشترین";
 
                 default:
@@ -189,32 +189,32 @@ namespace OrganicShop.Domain.Enums.EnumValues
         }
 
 
-        public static string ToStringValue(this CoProductSortType sortType)
+        public static string ToStringValue(this ProductItemSortType sortType)
         {
             switch (sortType)
             {
-                case CoProductSortType.None:
+                case ProductItemSortType.None:
                     return " بدون مرتب سازی ";
 
-                case CoProductSortType.Newest:
+                case ProductItemSortType.Newest:
                     return "جدیدترین";
 
-                case CoProductSortType.LatestChange:
+                case ProductItemSortType.LatestChange:
                     return "آخرین تغییر";
 
-                case CoProductSortType.Oldest:
+                case ProductItemSortType.Oldest:
                     return "قدیمی ترین";
 
-                case CoProductSortType.Price:
+                case ProductItemSortType.Price:
                     return "قیمت کمترین";
 
-                case CoProductSortType.PriceDesc:
+                case ProductItemSortType.PriceDesc:
                     return "قیمت بیشترین";
 
-                case CoProductSortType.Count:
+                case ProductItemSortType.Count:
                     return "تعداد کمترین";
 
-                case CoProductSortType.CountDesc:
+                case ProductItemSortType.CountDesc:
                     return "تعداد بیشترین";
 
                 default:

@@ -22,18 +22,18 @@ namespace OrganicShop.BLL.Services
         private readonly IMapper _Mapper;
         private readonly IOrderRepository _OrderRepository;
         private readonly IAddressRepository _AddressRepository;
-        private readonly ICoProductRepository _CoProductRepository;
-        private readonly IBasketRepository _BasketRepository;
+        private readonly IProductItemRepository _ProductItemRepository;
+        private readonly ICartRepository _CartRepository;
         private readonly ITrackingStatusService _TrackingStatusesService;
 
         public OrderService(IApplicationUserProvider provider,IMapper mapper,IOrderRepository OrderRepository, IAddressRepository AddressRepository,
-            ICoProductRepository coProductRepository, IBasketRepository basketRepository, ITrackingStatusService trackingStatusesService) : base(provider)
+            IProductItemRepository ProductItemRepository, ICartRepository CartRepository, ITrackingStatusService trackingStatusesService) : base(provider)
         {
             _Mapper = mapper;
             _OrderRepository = OrderRepository;
             _AddressRepository = AddressRepository;
-            _CoProductRepository = coProductRepository;
-            _BasketRepository = basketRepository;
+            _ProductItemRepository = ProductItemRepository;
+            _CartRepository = CartRepository;
             _TrackingStatusesService = trackingStatusesService;
         }
 
@@ -96,33 +96,33 @@ namespace OrganicShop.BLL.Services
             Order.Address = Address;
             long orderId = await _OrderRepository.Add(Order, _AppUserProvider.User.Id);
 
-            #region transfer coProdutcs from basket to order
+            #region transfer coProdutcs from Cart to order
 
-            var coProducts = _CoProductRepository.GetQueryable()
-                .Where(a => a.BasketId == create.BasketId)
+            var ProductItems = _ProductItemRepository.GetQueryable()
+                .Where(a => a.CartId == create.CartId)
                 .AsTracking();
-            foreach (var item in coProducts)
+            foreach (var item in ProductItems)
             {
-                item.BasketId = null;
+                item.CartId = null;
                 item.OrderId = orderId;
                 item.IsOrdered = true;
-                await _CoProductRepository.Update(item, _AppUserProvider.User.Id);
+                await _ProductItemRepository.Update(item, _AppUserProvider.User.Id);
             }
 
             #endregion
 
 
-            #region transfer nextBasket coProducts to mainBasket
+            #region transfer nextCart ProductItems to mainCart
 
-            var nextBasket = await _BasketRepository.GetQueryable()
-                .Include(a => a.CoProducts)
-                .FirstOrDefaultAsync(a => a.IsMain == false && a.UserId == create.UserId);
-            if (nextBasket != null)
+            var nextCart = await _CartRepository.GetQueryable()
+                .Include(a => a.ProductItems)
+                .FirstOrDefaultAsync(a => a.UserId == create.UserId);
+            if (nextCart != null)
             {
-                foreach (var item in nextBasket.CoProducts)
+                foreach (var item in nextCart.ProductItems)
                 {
-                    item.BasketId = create.BasketId;
-                    await _CoProductRepository.Update(item, _AppUserProvider.User.Id);
+                    item.CartId = create.CartId;
+                    await _ProductItemRepository.Update(item, _AppUserProvider.User.Id);
                 }
             }
 

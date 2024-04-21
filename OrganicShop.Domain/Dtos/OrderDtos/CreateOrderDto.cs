@@ -9,7 +9,7 @@ namespace OrganicShop.Domain.Dtos.OrderDtos
         public PaymentMethod PaymentMethod { get; set; }
         public long UserId { get; set; }
         public long AddressId { get; set; }
-        public long BasketId { get; set; }
+        public long CartId { get; set; }
     }
 
 

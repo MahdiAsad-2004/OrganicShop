@@ -61,5 +61,11 @@ namespace OrganicShop.Mvc.Controllers
             return Content($"Name: {name} ---- Number: {number}");
         }
 
+
+        [HttpGet("qwe")]
+        public IActionResult test()
+        {
+            return PartialView("_Error404");
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace OrganicShop.Mvc.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
+
             return View("SiteFooter");
         }
     }

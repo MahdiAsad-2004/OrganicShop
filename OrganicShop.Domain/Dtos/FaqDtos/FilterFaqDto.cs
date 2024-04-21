@@ -14,10 +14,10 @@ namespace OrganicShop.Domain.Dtos.FaqDtos
 
 
 
-        public IQueryable<Faq> ApplySortType(BaseSortType sortType, IQueryable<Faq> query)
+        public IQueryable<Faq> ApplySortType(IQueryable<Faq> query)
         {
 
-            switch (sortType)
+            switch (SortBy)
             {
                 case BaseSortType.None:
                     break;

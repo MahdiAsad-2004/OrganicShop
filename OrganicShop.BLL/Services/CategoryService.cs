@@ -51,6 +51,12 @@ namespace OrganicShop.BLL.Services
             if (filter.Title != null)
                 query = query.Where(q => EF.Functions.Like(q.Title, $"%{filter.Title}%"));
 
+            if (filter.ParentId != null)
+            {
+                if(filter.ParentId != 0) query = query.Where(q => q.ParentId == filter.ParentId);
+                else query = query.Where(q => q.ParentId == null);
+            }
+
             if (filter.Type != CategoryType.All)
                 query = query.Where(q => q.Type == filter.Type);
 

@@ -9,6 +9,7 @@ namespace OrganicShop.Domain.Dtos.CategoryDtos
     public class FilterCategoryDto : BaseFilterDto<Category, int>
     {
         public string? Title { get; set; }
+        public int? ParentId { get; set; }
         public CategoryType Type { get; set; } = CategoryType.All;
         public CategorySortType SortBy { get; set; } = CategorySortType.None;
 

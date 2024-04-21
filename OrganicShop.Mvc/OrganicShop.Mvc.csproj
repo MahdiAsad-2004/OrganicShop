@@ -448,6 +448,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Shared\Partial\" />
     <Folder Include="wwwroot\media\images\category\" />
     <Folder Include="wwwroot\media\images\user\" />
     <Folder Include="wwwroot\media\images\product\" />

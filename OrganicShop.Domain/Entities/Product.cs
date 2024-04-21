@@ -27,7 +27,7 @@ namespace OrganicShop.Domain.Entities
         public Category Category { get; set; }
         public ICollection<Picture> Pictures { get; set; }
         public ICollection<DiscountProducts> DiscountProducts { get; set; }
-        public ICollection<CoProduct> CoProducts { get; set; }
+        public ICollection<ProductItem> ProductItems { get; set; }
         public ICollection<TagProducts> TagProducts { get; set; }
         public ICollection<Property> Properties { get; set; }
         public ICollection<Comment> Comments { get; set; }

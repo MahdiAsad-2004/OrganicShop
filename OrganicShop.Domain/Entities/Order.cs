@@ -29,7 +29,7 @@ namespace OrganicShop.Domain.Entities
         public Address Address { get; set; } 
         public ICollection<TrackingStatus> TrackingStatuses { get; set; }
         public ICollection<TrackingDescription> TrackingDescriptions { get; set; }
-        public ICollection<CoProduct> CoProducts { get; set; }
+        public ICollection<ProductItem> ProductItems { get; set; }
     }
 
 }

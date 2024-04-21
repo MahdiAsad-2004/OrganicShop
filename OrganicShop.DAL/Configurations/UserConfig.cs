@@ -3,12 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Entities.Base;
 using OrganicShop.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace OrganicShop.DAL.Configurations
 {
     public class UserConfig : IEntityTypeConfiguration<User>
@@ -20,10 +14,11 @@ namespace OrganicShop.DAL.Configurations
             builder.HasMany(a => a.Addresses).WithOne(a => a.User).HasForeignKey(a => a.UserId);
             builder.HasMany(a => a.Comments).WithOne(a => a.User).HasForeignKey(a => a.UserId);
             builder.HasMany(a => a.BankCards).WithOne(a => a.User).HasForeignKey(a => a.UserId);
-            builder.HasMany(a => a.Baskets).WithOne(a => a.User).HasForeignKey(a => a.UserId);
             builder.HasMany(a => a.Operations).WithOne(a => a.User).HasForeignKey(a => a.UserId);
             builder.HasMany(a => a.Orders).WithOne(a => a.Receiver).HasForeignKey(a => a.ReceiverId).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(a => a.PermissionUsers).WithOne(a => a.User).HasForeignKey(a => a.UserId);
+            //builder.HasOne(a => a.Cart).WithOne(a => a.User).HasForeignKey<Cart>(a => a.UserId);
+            //builder.HasOne(a => a.NextCart).WithOne(a => a.User).HasForeignKey<Cart>(a => a.UserId);
 
 
 
