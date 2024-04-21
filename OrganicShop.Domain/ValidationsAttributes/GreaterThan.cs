@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 
-namespace OrganicShop.Mvc.ValidationsAttributes
+namespace OrganicShop.Domain.ValidationsAttributes
 {
     public class GreaterThan : Attribute, IClientModelValidator
     {

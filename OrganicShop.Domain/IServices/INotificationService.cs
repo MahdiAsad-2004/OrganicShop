@@ -18,6 +18,5 @@ namespace OrganicShop.Domain.IServices
         
         Task<ServiceResponse<Empty>> Delete(int delete);
 
-
     }
 }

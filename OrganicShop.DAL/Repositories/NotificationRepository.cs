@@ -1,4 +1,5 @@
-﻿using OrganicShop.Domain.Entities;
+﻿using OrganicShop.DAL.Context;
+using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IRepositories;
 using System;
 using System.Collections.Generic;

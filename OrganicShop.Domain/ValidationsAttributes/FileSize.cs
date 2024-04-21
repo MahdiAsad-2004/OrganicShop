@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace OrganicShop.Mvc.ValidationsAttributes
+namespace OrganicShop.Domain.ValidationsAttributes
 {
     public class FileSize : ValidationAttribute, IClientModelValidator
     {

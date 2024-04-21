@@ -1,6 +1,6 @@
 ﻿using OrganicShop.Domain.Dtos.Base;
 using OrganicShop.Domain.Entities;
-using OrganicShop.Domain.Enums;
+using OrganicShop.Domain.Enums.SortTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

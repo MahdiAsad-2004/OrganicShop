@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using OrganicShop.Domain.Enums;
 
-namespace OrganicShop.Domain.Dtos.UnitDtos
+namespace OrganicShop.Domain.Dtos.UnitValueDtos
 {
     public class CreateUnitValueDto : BaseDto
     {

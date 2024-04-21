@@ -1,7 +1,7 @@
 ﻿using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Domain.Models;
-using OrganicShop.Domain.Response;
+using OrganicShop.Domain.Response.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -31,12 +31,11 @@ namespace OrganicShop.Domain.Dtos.NotificationDtos
                     query = query.OrderBy(a => a.Id);
                     break;
             }
-
             return query;
         }
-    }
 
-}
+
+    }
 
 
 

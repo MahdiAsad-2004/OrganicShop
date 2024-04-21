@@ -1,6 +1,5 @@
 //using StructureMap.TypeRules;
 using OrganicShop.Domain;
-using OrganicShop.DAL;
 using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
 using OrganicShop.Ioc;
@@ -11,6 +10,7 @@ using OrganicShop.BLL.Providers;
 using OrganicShop.Domain.IProviders;
 using OrganicShop.Mvc.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
+using OrganicShop.DAL.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 

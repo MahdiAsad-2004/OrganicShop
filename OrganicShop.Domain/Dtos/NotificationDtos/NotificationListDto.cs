@@ -7,7 +7,7 @@ namespace OrganicShop.Domain.Dtos.NotificationDtos
         public string TextHtml { get; set; }
 
         public bool IsActive { get; set; }
-    
+
     }
 
 

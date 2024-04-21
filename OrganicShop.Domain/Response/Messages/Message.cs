@@ -4,7 +4,7 @@ using OrganicShop.Domain.Enums.Response;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace OrganicShop.Domain.Response
+namespace OrganicShop.Domain.Response.Messages
 {
     public class Message<Entity> where Entity : IAggregateRoot
     {
@@ -44,8 +44,8 @@ namespace OrganicShop.Domain.Response
 
         //}
 
-   
-     
+
+
 
 
         public Message()
@@ -65,7 +65,7 @@ namespace OrganicShop.Domain.Response
         public string NotFound(Type? type)
         {
             var displayAttribute = type.GetCustomAttribute<DisplayNameAttribute>();
-            string entityName = _EntityName = displayAttribute != null ? displayAttribute.DisplayName : type.Name;    
+            string entityName = _EntityName = displayAttribute != null ? displayAttribute.DisplayName : type.Name;
             return $"{entityName} مورد نظر یافت نشد !";
         }
         public string NoAccess()

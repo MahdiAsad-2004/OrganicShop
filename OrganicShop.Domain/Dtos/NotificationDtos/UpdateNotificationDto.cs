@@ -15,6 +15,8 @@ namespace OrganicShop.Domain.Dtos.NotificationDtos
         [DisplayName("وضعیت")]
         [Required(ErrorMessage = "{0} ضروری است")]
         public bool IsActive { get; set; }
+    
+    
     }
 
 
