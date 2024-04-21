@@ -1,4 +1,5 @@
-﻿    
+﻿@using OrganicShop.Domain.Dtos.TagDtos
+@model List<NotificationListDto>    
 
 <div class="header-top">
     <div class="container-fluid-lg">
@@ -28,13 +29,14 @@
                             </div>
                         </div>
 
-                        <div>
-                            <div class="timer-notification">
-                                <h6>
-                                    بهترین قیمت ها در ارگانیک شاپ
-                                </h6>
+                        @foreach (var item in Model)
+                        {
+                            <div>
+                                <div class="timer-notification">
+                                    @Html.Raw(item.TextHtml)
+                                </div>
                             </div>
-                        </div>
+                        }
 
                     </div>
                 </div>

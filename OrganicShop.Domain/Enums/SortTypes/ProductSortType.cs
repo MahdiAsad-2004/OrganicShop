@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrganicShop.Domain.Enums
+namespace OrganicShop.Domain.Enums.SortTypes
 {
     public enum ProductSortType
     {

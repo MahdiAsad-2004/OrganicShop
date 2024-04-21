@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace OrganicShop.Mvc.ValidationsAttributes
+namespace OrganicShop.Domain.ValidationsAttributes
 {
     public class FilesCount : ValidationAttribute, IClientModelValidator
     {
         public int MaxCount { get; set; }
         public int MinCount { get; set; }
 
-        public FilesCount(int minCount,int maxCount)
+        public FilesCount(int minCount, int maxCount)
         {
             MaxCount = maxCount;
             MinCount = minCount;

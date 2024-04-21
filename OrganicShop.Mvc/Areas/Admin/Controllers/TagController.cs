@@ -66,7 +66,7 @@ namespace OrganicShop.Mvc.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateTagDto? createTag)
+        public async Task<IActionResult> Create(CreateNotificationDto? createTag)
         {
             var response = await _TagService.Create(createTag);
             if (response.Result == ResponseResult.Success)

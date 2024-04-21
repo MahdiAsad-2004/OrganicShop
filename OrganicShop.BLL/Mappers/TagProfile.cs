@@ -11,10 +11,10 @@ namespace OrganicShop.BLL.Mappers
         public TagProfile()
         {
 
-            CreateMap<Tag, TagListDto>();
+            CreateMap<Tag, NotificationListDto>();
 
 
-            CreateMap<CreateTagDto, Tag>();
+            CreateMap<CreateNotificationDto, Tag>();
 
 
             CreateMap<UpdateTagDto, Tag>() //;

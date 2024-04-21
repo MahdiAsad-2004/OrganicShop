@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OrganicShop.DAL.Context;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Entities.Relations;
 using OrganicShop.Domain.IRepositories;

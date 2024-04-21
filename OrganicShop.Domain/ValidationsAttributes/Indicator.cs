@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace OrganicShop.Mvc.ValidationsAttributes
+namespace OrganicShop.Domain.ValidationsAttributes
 {
     public class Indicator : Attribute, IClientModelValidator
     {
@@ -13,7 +13,7 @@ namespace OrganicShop.Mvc.ValidationsAttributes
 
         public void AddValidation(ClientModelValidationContext context)
         {
-            context.Attributes.Add($"data-indicator-{context.ModelMetadata.PropertyName}","");
+            context.Attributes.Add($"data-indicator-{context.ModelMetadata.PropertyName}", "");
         }
 
     }

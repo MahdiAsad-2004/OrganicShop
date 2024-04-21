@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace OrganicShop.Mvc.ValidationsAttributes
+namespace OrganicShop.Domain.ValidationsAttributes
 {
-    public class DuplicateEmail : ValidationAttribute,IClientModelValidator
+    public class DuplicateEmail : ValidationAttribute, IClientModelValidator
     {
         public void AddValidation(ClientModelValidationContext context)
         {

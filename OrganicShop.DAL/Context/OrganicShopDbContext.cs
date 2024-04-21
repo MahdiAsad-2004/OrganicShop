@@ -3,14 +3,8 @@ using OrganicShop.DAL.Configurations;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Entities.Base;
 using OrganicShop.Domain.Entities.Relations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace OrganicShop.DAL
+namespace OrganicShop.DAL.Context
 {
     public class OrganicShopDbContext : DbContext
     {
@@ -28,6 +22,7 @@ namespace OrganicShop.DAL
         public DbSet<DiscountCategories> DiscountCategories { get; set; }
         public DbSet<DiscountProducts> DiscountProducts { get; set; }
         public DbSet<Faq> Faqs { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public DbSet<Operation> Operations { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<TrackingStatus> TrackingStatuses { get; set; }
@@ -60,7 +55,7 @@ namespace OrganicShop.DAL
         }
 
 
-   
+
     }
 
 }

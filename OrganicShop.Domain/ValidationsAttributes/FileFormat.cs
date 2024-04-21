@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace OrganicShop.Mvc.ValidationsAttributes
+namespace OrganicShop.Domain.ValidationsAttributes
 {
     public class FileFormat : ValidationAttribute, IClientModelValidator
     {
@@ -11,7 +11,7 @@ namespace OrganicShop.Mvc.ValidationsAttributes
 
         public FileFormat(string[] formats)
         {
-            if(formats.Any(a => string.IsNullOrWhiteSpace(a)) || !formats.Any())
+            if (formats.Any(a => string.IsNullOrWhiteSpace(a)) || !formats.Any())
             {
                 throw new ArgumentException("formats is empty.");
             }

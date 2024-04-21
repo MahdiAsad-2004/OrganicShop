@@ -1,7 +1,6 @@
 ﻿using OrganicShop.Domain.Dtos.Base;
 using OrganicShop.Domain.Entities;
 using OrganicShop.Domain.Entities.Base;
-using OrganicShop.Domain.Enums;
 using OrganicShop.Domain.Enums.SortTypes;
 
 namespace OrganicShop.Domain.Dtos.PermissionDtos
